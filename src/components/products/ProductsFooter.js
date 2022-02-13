@@ -27,7 +27,7 @@ const ProductsFooter = ({ distributor }) => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customerDetails } = customerState;
+  const { customer } = customerState;
 
   const { products, productsToOder } = productsState;
 
@@ -43,19 +43,19 @@ const ProductsFooter = ({ distributor }) => {
   }));
 
   const payload = {
-    buyerCompanyId: customerDetails?.SF_Code,
+    buyerCompanyId: customer?.SF_Code,
     sellerCompanyId: distributor?.DIST_Code,
     routeName: "shopNow",
     referenceId: "shopNow",
     emptiesReturned: 0,
     costOfEmptiesReturned: 0,
     datePlaced: new Date(new Date().getTime()),
-    shipToCode: customerDetails?.SF_Code,
-    billToCode: customerDetails?.SF_Code,
+    shipToCode: customer?.SF_Code,
+    billToCode: customer?.SF_Code,
     buyerDetails: {
-      buyerName: customerDetails?.CUST_Name,
-      buyerPhoneNumber: customerDetails?.phoneNumber,
-      buyerAddress: customerDetails?.address,
+      buyerName: customer?.CUST_Name,
+      buyerPhoneNumber: customer?.phoneNumber,
+      buyerAddress: customer?.address,
     },
 
     orderItems,

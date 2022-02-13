@@ -4,7 +4,7 @@ import { RadioButton } from "react-native-paper";
 
 import appTheme from "../../constants/theme";
 
-const DeliveryMethod = () => {
+const DeliveryMethod = ({ deliveryType }) => {
   const [checked, setChecked] = React.useState(false);
 
   const filters = [
@@ -57,7 +57,7 @@ const DeliveryMethod = () => {
             <RadioButton
               value={filter.value}
               color={appTheme.COLORS.mainYellow}
-              status={checked === filter.key ? "checked" : "unchecked"}
+              status={deliveryType === filter.key ? "checked" : "unchecked"}
               onPress={() => {
                 setChecked(filter.key);
               }}

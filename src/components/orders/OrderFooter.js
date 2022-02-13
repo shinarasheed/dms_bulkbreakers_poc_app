@@ -27,7 +27,7 @@ const OrderFooter = ({ distributor }) => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customerDetails } = customerState;
+  const { customer } = customerState;
 
   const fetchInventory = async () => {
     try {
@@ -162,8 +162,8 @@ const OrderFooter = ({ distributor }) => {
           >
             {getDistanceApart(
               {
-                lat: customerDetails?.latitude,
-                lon: customerDetails?.longitude,
+                lat: customer?.latitude,
+                lon: customer?.longitude,
               },
               { lat: distributor?.lat, lon: distributor?.long }
             )}

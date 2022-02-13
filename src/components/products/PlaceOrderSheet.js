@@ -32,6 +32,9 @@ const BottomFilter = ({
   const navigation = useNavigation();
 
   const { orderPlaced, placedOrder, loading } = createOrderState;
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
   const filters = [
     {
       key: "Van-Delivery",
@@ -194,11 +197,17 @@ const BottomFilter = ({
               onPress={() => {
                 dispatch(toggleOrderPlaced());
 
-                navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
-                  productsToOder,
-                  theDistributor: distributor,
-                  item: placedOrder,
-                });
+                customer?.CUST_Type === "Bulkbreaker"
+                  ? navigation.navigate(Routes.PLACED_ORDER_DETAILS, {
+                      productsToOder,
+                      theDistributor: distributor,
+                      item: placedOrder,
+                    })
+                  : navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
+                      productsToOder,
+                      theDistributor: distributor,
+                      item: placedOrder,
+                    });
               }}
               style={{
                 backgroundColor: appTheme.COLORS.mainRed,

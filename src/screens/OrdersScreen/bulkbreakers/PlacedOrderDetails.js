@@ -302,7 +302,7 @@ const PlacedOrderDetails = () => {
 
         {/* delivery method */}
 
-        <DeliveryMethodPlaced />
+        <DeliveryMethodPlaced deliveryType={singleOrder[0]?.deliveryType} />
 
         {/* footer */}
 

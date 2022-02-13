@@ -114,7 +114,7 @@ const OrderDetails = () => {
         flex: 1,
       }}
     >
-      {/* <Header single orderId={orderId} /> */}
+      <Header single orderId={orderId} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
