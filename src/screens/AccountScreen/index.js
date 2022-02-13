@@ -15,7 +15,7 @@ const AccountScreen = () => {
 
   const handleLogout = async () => {
     await adService.logoutAsync();
-    await AsyncStorage.clear();
+    await AsyncStorage.removeItem("token");
     dispatch(logOut());
   };
 

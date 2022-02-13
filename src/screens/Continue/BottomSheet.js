@@ -1,19 +1,22 @@
 import React, { useState } from "react";
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { BottomSheet } from "react-native-btr";
 import { RadioButton } from "react-native-paper";
-
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { placeOrder } from "../../redux/actions/orderActions";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
-import { Routes } from "../../navigation/Routes";
+import { getDistributors } from "../../redux/actions/customerActions";
 
 const SelectBottomSheet = ({ visible, toggle }) => {
-  const navigation = useNavigation();
-
   const filters = [
     {
       icon: require("../../../assets/icons/shop.png"),
@@ -28,10 +31,31 @@ const SelectBottomSheet = ({ visible, toggle }) => {
       value: "Start buying from distributors around you",
     },
   ];
-  const [deliveryType, setDeliveryType] = useState(null);
+  const [action, setAction] = useState(null);
   const [checked, setChecked] = React.useState(false);
 
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { isLoading, customer } = customerState;
+
+  const handleNextAction = async () => {
+    console.log(action);
+    // save customer in asyncstorage
+    let theCustomer = { ...customer, isFirstTime: true };
+    await AsyncStorage.setItem("customer", JSON.stringify(theCustomer));
+    try {
+      if (action === "buy") {
+        dispatch(getDistributors(navigation));
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <BottomSheet
@@ -88,7 +112,6 @@ const SelectBottomSheet = ({ visible, toggle }) => {
 
           {filters.map((filter, index) => (
             <TouchableOpacity
-              // onPress={() => setSelectedCustomer(customer)}
               key={index}
               style={{
                 marginTop: 30,
@@ -130,7 +153,7 @@ const SelectBottomSheet = ({ visible, toggle }) => {
                     color={appTheme.COLORS.mainRed}
                     status={checked === filter.key ? "checked" : "unchecked"}
                     onPress={() => {
-                      setDeliveryType(filter.key);
+                      setAction(filter.key);
                       setChecked(filter.key);
                     }}
                   />
@@ -162,31 +185,39 @@ const SelectBottomSheet = ({ visible, toggle }) => {
 
         <View
           style={{
-            paddingHorizontal: 30,
+            paddingHorizontal: 20,
           }}
         >
           <TouchableOpacity
-            onPress={() => {
-              dispatch(placeOrder({ ...payload, deliveryType }));
-            }}
+            onPress={() => handleNextAction()}
             style={{
               backgroundColor: appTheme.COLORS.mainRed,
               justifyContent: "center",
-              borderRadius: 5,
               alignItems: "center",
-              justifyContent: "center",
-              paddingVertical: 14,
-              paddingHorizontal: 15,
+              height: 50,
+              borderRadius: 4,
             }}
           >
             <Text
               style={{
                 color: appTheme.COLORS.white,
-                fontSize: 17,
                 fontFamily: "Gilroy-Medium",
+                fontSize: 18,
               }}
             >
-              Continue
+              {isLoading ? (
+                <ActivityIndicator
+                  color={
+                    Platform.OS === "android"
+                      ? appTheme.COLORS.white
+                      : undefined
+                  }
+                  animating={isLoading}
+                  size="large"
+                />
+              ) : (
+                "Continue"
+              )}
             </Text>
           </TouchableOpacity>
         </View>

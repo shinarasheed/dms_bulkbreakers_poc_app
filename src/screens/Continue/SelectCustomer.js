@@ -1,31 +1,16 @@
-import React, { useState } from "react";
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StatusBar, Text, TouchableOpacity, View, Image } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { RadioButton } from "react-native-paper";
 
-import {
-  getDistributor,
-  getDistributors,
-} from "../../redux/actions/customerActions";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
-import { Routes } from "../../navigation/Routes";
 import SelectBottomSheet from "./BottomSheet";
 
 const SelectCustomer = () => {
+  const [savedCustomer, setSavedCustomer] = useState(null);
   const navigation = useNavigation();
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [checked, setChecked] = React.useState(false);
 
   const [visible, setVisible] = useState(false);
 
@@ -33,23 +18,19 @@ const SelectCustomer = () => {
     setVisible((visible) => !visible);
   }
 
-  const dispatch = useDispatch();
-
   const customerState = useSelector((state) => state.customer);
 
-  const { error, isLoading, customer } = customerState;
+  const { isLoading, customer } = customerState;
 
-  const handleGetDistributor = async () => {
-    //save customer in asyncstorage
-    await AsyncStorage.setItem("customer", JSON.stringify(customer));
-    try {
-      dispatch(getDistributors(navigation));
-    } catch (error) {
-      console.log(error);
-    }
-
-    // toggle();
+  const getSavedCustomer = async () => {
+    let theCustomer = await AsyncStorage.getItem("customer");
+    theCustomer = JSON.parse(theCustomer);
+    setSavedCustomer(theCustomer);
   };
+
+  useEffect(() => {
+    getSavedCustomer();
+  }, []);
 
   return (
     <View
@@ -103,33 +84,14 @@ const SelectCustomer = () => {
               />
               <Text
                 style={{
-                  fontFamily: "Gilroy-Bold",
-                  fontSize: 15,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 18,
                   marginLeft: 18,
-                  textTransform: "uppercase",
+                  textTransform: "capitalize",
                 }}
               >
                 {customer?.CUST_Name}
               </Text>
-
-              <View
-                style={{
-                  position: "absolute",
-                  right: 20,
-                }}
-              >
-                <RadioButton
-                  value={customer.CUST_Name}
-                  color={appTheme.COLORS.mainRed}
-                  status={
-                    checked === customer.CUST_Name ? "checked" : "unchecked"
-                  }
-                  onPress={() => {
-                    setSelectedCustomer(customer);
-                    setChecked(customer.CUST_Name);
-                  }}
-                />
-              </View>
             </View>
 
             <View
@@ -156,39 +118,29 @@ const SelectCustomer = () => {
 
         <View
           style={{
-            paddingHorizontal: 20,
+            paddingHorizontal: 30,
           }}
         >
           <TouchableOpacity
-            onPress={() => handleGetDistributor()}
+            onPress={() => toggle()}
             style={{
               backgroundColor: appTheme.COLORS.mainRed,
               justifyContent: "center",
+              borderRadius: 5,
               alignItems: "center",
-              height: 50,
-              borderRadius: 4,
+              justifyContent: "center",
+              paddingVertical: 14,
+              paddingHorizontal: 15,
             }}
           >
             <Text
               style={{
                 color: appTheme.COLORS.white,
+                fontSize: 17,
                 fontFamily: "Gilroy-Medium",
-                fontSize: 18,
               }}
             >
-              {isLoading ? (
-                <ActivityIndicator
-                  color={
-                    Platform.OS === "android"
-                      ? appTheme.COLORS.white
-                      : undefined
-                  }
-                  animating={isLoading}
-                  size="large"
-                />
-              ) : (
-                "Continue"
-              )}
+              Continue
             </Text>
           </TouchableOpacity>
         </View>
