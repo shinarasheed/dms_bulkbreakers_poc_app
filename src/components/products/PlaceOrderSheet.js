@@ -38,7 +38,7 @@ const BottomFilter = ({
   const filters = [
     {
       key: "Van-Delivery",
-      value: "Store Delivery",
+      value: "Van Delivery",
     },
     {
       key: "Pick-Up",

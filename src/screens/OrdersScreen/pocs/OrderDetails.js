@@ -78,19 +78,19 @@ const OrderDetails = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const action = setInterval(() => {
-  //     getSingleOrder(orderId);
-  //     console.log("checking for status...");
-  //   }, 10000);
-  //   return () => {
-  //     clearInterval(action);
-  //   };
-  // }, []);
-
   useEffect(() => {
-    getSingleOrder(orderId);
+    const action = setInterval(() => {
+      getSingleOrder(orderId);
+      console.log("checking for status...");
+    }, 10000);
+    return () => {
+      clearInterval(action);
+    };
   }, []);
+
+  // useEffect(() => {
+  //   getSingleOrder(orderId);
+  // }, []);
 
   const productDetails = (productId) => {
     const x = allCompanyProducts?.filter(

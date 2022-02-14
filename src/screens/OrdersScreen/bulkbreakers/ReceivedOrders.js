@@ -32,7 +32,7 @@ export default function RecievedOrders() {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customerDetails } = customerState;
+  const { customer } = customerState;
 
   const myOrdersState = useSelector((state) => state.myOrders);
 
@@ -44,7 +44,7 @@ export default function RecievedOrders() {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getMyOrders(customerDetails?.SF_Code));
+      dispatch(getMyOrders(customer?.SF_Code));
     }, [navigation])
   );
 

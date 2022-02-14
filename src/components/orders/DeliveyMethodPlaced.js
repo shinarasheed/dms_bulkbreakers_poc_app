@@ -10,7 +10,7 @@ const DeliveryMethod = ({ deliveryType }) => {
   const filters = [
     {
       key: "Van-Delivery",
-      value: "Store delivery",
+      value: "Van delivery",
     },
     {
       key: "Pick-Up",

@@ -1,7 +1,14 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from "react-native";
 import { adService } from "ad-b2c-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -30,8 +37,8 @@ const AccountScreen = () => {
         const { id, icon, title, description, route } = section;
         return (
           <TouchableOpacity
+            onPress={() => navigation.navigate(route)}
             key={id}
-            onPress={() => handleLogout()}
             style={{
               backgroundColor: appTheme.COLORS.white,
               justifyContent: "space-between",
@@ -82,6 +89,33 @@ const AccountScreen = () => {
           </TouchableOpacity>
         );
       })}
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Pressable
+          onPress={() => handleLogout()}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Image source={icons.logoutIcon} />
+          <Text
+            style={{
+              fontSize: 15,
+              fontFamily: "Gilroy-Medium",
+              color: appTheme.COLORS.mainRed,
+            }}
+          >
+            Sign Out
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 };

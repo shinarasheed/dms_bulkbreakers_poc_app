@@ -11,8 +11,6 @@ import ContinueScreen from "./ContinueScreen";
 import SelectCustomer from "./ContinueScreen/SelectCustomer";
 import Loading from "../components/Loading";
 import SingleDistributor from "./ProductsScreen/SingleDistributor";
-import ProductScreenAssigned from "./ProductScreenSingle";
-import AccountAssigned from "./AccountAssigned";
 
 import OrdersScreen from "./OrdersScreen";
 import OrdersBulkbreakers from "./OrdersScreen/bulkbreakers";
@@ -37,8 +35,6 @@ export {
   SignupScreen,
   Loading,
   SingleDistributor,
-  ProductScreenAssigned,
-  AccountAssigned,
   OrdersScreen,
   OrdersBulkbreakers,
   OrdersPocs,
