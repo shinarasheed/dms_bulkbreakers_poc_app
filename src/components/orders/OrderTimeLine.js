@@ -9,7 +9,6 @@ import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { Routes } from "../../navigation/Routes";
 import moment from "moment";
-import { sin } from "react-native-reanimated";
 
 const OrderTimeLine = ({
   item,

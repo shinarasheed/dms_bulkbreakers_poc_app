@@ -138,9 +138,7 @@ export const updateOrderStatus = (status, orderId) => async (dispatch) => {
       status,
     };
 
-    const {
-      data: { data },
-    } = await axios.post(
+    await axios.patch(
       `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
       body,
       config

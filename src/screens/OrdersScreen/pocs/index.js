@@ -26,7 +26,7 @@ export default function Index() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const categories = ["open orders", "delivered orders"];
+  const categories = ["open orders", "completed orders"];
   const [searchTerm, setSearchTerm] = useState("");
 
   const customerState = useSelector((state) => state.customer);

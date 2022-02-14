@@ -7,7 +7,7 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-virtualized-view";
 
@@ -23,12 +23,14 @@ import { Routes } from "../../navigation/Routes";
 
 import { Rating, AirbnbRating } from "react-native-ratings";
 import { updateOrderStatus } from "../../redux/actions/orderActions";
+import { ORDER_BASE_URL } from "../../confg";
 
 const Ratings = () => {
   const navigation = useNavigation();
   const [comment, setComment] = useState(null);
   const [ratingValue, setRatingValue] = useState(null);
 
+  const dispatch = useDispatch();
   const route = useRoute();
 
   const { productsToOder, theDistributor, item } = route.params;
@@ -78,7 +80,7 @@ const Ratings = () => {
       };
 
       const body = {
-        stars: ratingValue,
+        // stars: ratingValue,
         comment,
         companyId: theDistributor?.DIST_Code,
         reviewerId: customerDetails?.SF_Code,
@@ -102,7 +104,7 @@ const Ratings = () => {
         flex: 1,
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <View showsVerticalScrollIndicator={false}>
         <View>
           <View
             style={{
@@ -177,7 +179,7 @@ const Ratings = () => {
             <TouchableOpacity
               onPress={() => {
                 rateDistributor();
-                updateOrderStatus("Delivered", orderId);
+                dispatch(updateOrderStatus("Delivered", orderId));
                 toggle();
               }}
               style={{
@@ -278,7 +280,7 @@ const Ratings = () => {
             )}
           />
         </View>
-      </ScrollView>
+      </View>
 
       <OrderCompleteSheet
         productsToOder={productsToOder}
