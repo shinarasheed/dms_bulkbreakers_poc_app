@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, Image } from "react-native";
-import { icons, images } from "../constants";
-import appTheme from "../constants/theme";
+import { icons, images } from "../../constants";
+import appTheme from "../../constants/theme";
 
 const Loading = () => {
   return (

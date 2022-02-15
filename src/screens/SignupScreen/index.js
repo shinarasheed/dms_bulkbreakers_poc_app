@@ -6,7 +6,7 @@ import { SafeAreaView, ActivityIndicator } from "react-native";
 
 import { register } from "../../redux/actions/authActions";
 import appTheme from "../../constants/theme";
-import Loading from "../../components/Loading";
+import Loading from "../../components/Loaders/Loading";
 import { Routes } from "../../navigation/Routes";
 
 class SignupScreen extends React.PureComponent {

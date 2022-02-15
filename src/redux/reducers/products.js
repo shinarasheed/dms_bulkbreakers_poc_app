@@ -18,6 +18,7 @@ const initialState = {
   productsToOder: [],
   allProducts: [],
   allCompanyProducts: [],
+  loading: false,
 };
 
 export const productReducer = (state = initialState, action) => {

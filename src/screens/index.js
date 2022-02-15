@@ -8,7 +8,7 @@ import LoginScreen from "./LoginScreen";
 import SignupScreen from "./SignupScreen";
 import ContinueScreen from "./ContinueScreen";
 import SelectCustomer from "./ContinueScreen/SelectCustomer";
-import Loading from "../components/Loading";
+import Loading from "../components/Loaders/Loading";
 
 import OrdersScreen from "./OrdersScreen";
 import OrdersBulkbreakers from "./OrdersScreen/bulkbreakers";
@@ -22,7 +22,7 @@ import DistributorScreen from "./DistributorScreen";
 import ProfileScreen from "./AccountScreen/Profile";
 import SupportScreen from "./AccountScreen/Support";
 import LegalScreen from "./AccountScreen/Legal";
-import ProductsScreen from "./AccountScreen/Products";
+import AddProductsScreen from "./AccountScreen/AddProducts";
 
 export {
   LocationScreen,
@@ -48,5 +48,5 @@ export {
   ProfileScreen,
   SupportScreen,
   LegalScreen,
-  ProductsScreen,
+  AddProductsScreen,
 };

@@ -14,6 +14,7 @@ import {
   UPDATE_ORDER_STATUS_FAIL,
 } from "../constants/orderConstants";
 import { ORDER_BASE_URL } from "../../confg";
+import moment from "moment";
 
 export const placeOrder = (payload) => async (dispatch) => {
   try {
@@ -68,6 +69,12 @@ export const getMyOrders = (salesForceCode) => async (dispatch) => {
       `${ORDER_BASE_URL}/GetOrder/GetOrderByBuyerCompanyId/${salesForceCode}`,
       config
     );
+
+    // const result = order.sort(
+    //   (orderA, orderB) =>
+    //     moment(orderA.orderStatus[0].datePlaced).format("MMM Do, YYYY") -
+    //     moment(orderB.orderStatus[0].datePlaced).format("MMM Do, YYYY")
+    // );
 
     dispatch({
       type: GET_MYORDERS_SUCCESS,

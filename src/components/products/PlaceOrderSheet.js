@@ -197,7 +197,7 @@ const BottomFilter = ({
               onPress={() => {
                 dispatch(toggleOrderPlaced());
 
-                customer?.CUST_Type === "Bulkbreaker"
+                customer?.CUST_Type === "BulkBreaker"
                   ? navigation.navigate(Routes.PLACED_ORDER_DETAILS, {
                       productsToOder,
                       theDistributor: distributor,

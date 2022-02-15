@@ -1,5 +1,5 @@
 export const Routes = {
-  PRODUCTS_SCREEN: "ProductsScreen",
+  ADDPRODUCTS_SCREEN: "AddProductsScreen",
   DISTRIBUTORS_SCREEN: "DistributorsScreen",
   ORDER_DETAILS_SCREEN: "OrderDetails",
   LOCATION_SCREEN: "LocationScreen",

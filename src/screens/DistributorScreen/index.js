@@ -9,17 +9,18 @@ import {
   Pressable,
   StatusBar,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import LottieView from "lottie-react-native";
 
 import { getProducts } from "../../redux/actions/productActions";
-import Products from "../../components/products/Products";
+import ProductCard from "../../components/products/ProductCard";
 import ProductsFooter from "../../components/products/ProductsFooter";
 import ProductsBottomSheet from "../../components/products/ProductsBottomSheet";
+import { LottieLoader } from "../../components/Loaders/LottieLoader";
 
 const DistributorScreen = () => {
   const [visible, setVisible] = useState(false);
@@ -47,20 +48,7 @@ const DistributorScreen = () => {
     product?.brand.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
-  if (loading)
-    return (
-      <View style={styles.animationContainer}>
-        <LottieView
-          style={{
-            width: 150,
-            height: 150,
-          }}
-          source={require("../../assets/loader-animation.json")}
-          autoPlay
-          loop
-        />
-      </View>
-    );
+  if (loading) return <LottieLoader />;
 
   return (
     <View
@@ -112,7 +100,12 @@ const DistributorScreen = () => {
       </View>
 
       {products?.length > 0 ? (
-        <Products products={filteredProducts} />
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={filteredProducts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <ProductCard theProduct={item} />}
+        />
       ) : (
         <View
           style={{

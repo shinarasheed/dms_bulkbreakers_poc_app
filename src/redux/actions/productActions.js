@@ -145,7 +145,10 @@ export const fetchAllProductsIntheCompany = () => async (dispatch) => {
     console.log(error);
     dispatch({
       type: GET_ALL_COMPANY_PRODUCTS_FAIL,
-      payload: "There was an error",
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     });
   }
 };

@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { getDistributors } from "../../redux/actions/customerActions";
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import SelectBottomSheet from "./BottomSheet";
 
 const SelectCustomer = () => {
-  const [savedCustomer, setSavedCustomer] = useState(null);
+  // const [savedCustomer, setSavedCustomer] = useState(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
 
@@ -22,15 +31,23 @@ const SelectCustomer = () => {
 
   const { isLoading, customer } = customerState;
 
-  const getSavedCustomer = async () => {
-    let theCustomer = await AsyncStorage.getItem("customer");
-    theCustomer = JSON.parse(theCustomer);
-    setSavedCustomer(theCustomer);
-  };
+  // const getSavedCustomer = async () => {
+  //   let theCustomer = await AsyncStorage.getItem("customer");
+  //   theCustomer = JSON.parse(theCustomer);
+  //   setSavedCustomer(theCustomer);
+  // };
 
-  useEffect(() => {
-    getSavedCustomer();
-  }, []);
+  // useEffect(() => {
+  //   getSavedCustomer();
+  // }, []);
+
+  const handleGetDistributors = async () => {
+    try {
+      dispatch(getDistributors(navigation));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View
@@ -116,34 +133,75 @@ const SelectCustomer = () => {
           </TouchableOpacity>
         )}
 
-        <View
-          style={{
-            paddingHorizontal: 30,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => toggle()}
+        {customer?.CUST_Type === "BulkBreaker" ? (
+          <View
             style={{
-              backgroundColor: appTheme.COLORS.mainRed,
-              justifyContent: "center",
-              borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingVertical: 14,
-              paddingHorizontal: 15,
+              paddingHorizontal: 30,
             }}
           >
-            <Text
+            <TouchableOpacity
+              onPress={() => toggle()}
               style={{
-                color: appTheme.COLORS.white,
-                fontSize: 17,
-                fontFamily: "Gilroy-Medium",
+                backgroundColor: appTheme.COLORS.mainRed,
+                justifyContent: "center",
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 14,
+                paddingHorizontal: 15,
               }}
             >
-              Continue
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontSize: 17,
+                  fontFamily: "Gilroy-Medium",
+                }}
+              >
+                Continue
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View
+            style={{
+              paddingHorizontal: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => handleGetDistributors()}
+              style={{
+                backgroundColor: appTheme.COLORS.mainRed,
+                justifyContent: "center",
+                alignItems: "center",
+                height: 50,
+                borderRadius: 4,
+              }}
+            >
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 18,
+                }}
+              >
+                {isLoading ? (
+                  <ActivityIndicator
+                    color={
+                      Platform.OS === "android"
+                        ? appTheme.COLORS.white
+                        : undefined
+                    }
+                    animating={isLoading}
+                    size="large"
+                  />
+                ) : (
+                  "Continue..."
+                )}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <SelectBottomSheet toggle={toggle} visible={visible} />
