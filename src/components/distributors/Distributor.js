@@ -53,7 +53,7 @@ export const Distributor = ({ distributor }) => {
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate(Routes.PRODUCTS_SCREEN, { distributor })
+        navigation.navigate(Routes.DISTRIBUTOR_SCREEN, { distributor })
       }
     >
       <View

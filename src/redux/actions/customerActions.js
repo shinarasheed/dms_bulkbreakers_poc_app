@@ -108,8 +108,6 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
     });
 
     console.log(distributor);
-
-    // navigation.navigate(Routes.PRODUCTS_SCREEN, { distributor });
   } catch (error) {
     console.log(error);
     dispatch({

@@ -138,7 +138,7 @@ const ReOrder = ({
           >
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate(Routes.PRODUCTS_SCREEN, { distributor })
+                navigation.navigate(Routes.DISTRIBUTOR_SCREEN, { distributor })
               }
               style={{
                 justifyContent: "center",

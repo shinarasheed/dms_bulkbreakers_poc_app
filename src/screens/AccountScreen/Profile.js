@@ -1,20 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const SingleDistributor = () => {
+const Profile = () => {
   return (
     <View
       style={{
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        flex: 1,
       }}
     >
-      <Text>SingleDistributor</Text>
+      <Text>Profile</Text>
     </View>
   );
 };
 
-export default SingleDistributor;
+export default Profile;
 
 const styles = StyleSheet.create({});

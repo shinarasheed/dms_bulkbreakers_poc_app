@@ -12,7 +12,8 @@ import { Routes } from "../../navigation/Routes";
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
-  const { RECEIVED_ORDERS } = Routes;
+  const { PRODUCTS_SCREEN, PROFILE_SCREEN, SUPPORT_SCREEN, LEGAL_SCREEN } =
+    Routes;
 
   const customerState = useSelector((state) => state.customer);
 
@@ -37,7 +38,7 @@ const AccountScreen = () => {
           <AccountSection
             title="Products"
             description="Manage the products you sell"
-            destination={RECEIVED_ORDERS}
+            destination={PRODUCTS_SCREEN}
             icon={require("../../../assets/icons/Profile.png")}
           />
         )}
@@ -46,7 +47,7 @@ const AccountScreen = () => {
         <AccountSection
           icon={require("../../../assets/icons/Profile.png")}
           title="Profile"
-          destination={RECEIVED_ORDERS}
+          destination={PROFILE_SCREEN}
           description="View your account details"
         />
 
@@ -54,7 +55,7 @@ const AccountScreen = () => {
         <AccountSection
           icon={require("../../../assets/icons/Support.png")}
           title="Support"
-          destination={RECEIVED_ORDERS}
+          destination={SUPPORT_SCREEN}
           description="For help and enquiries"
         />
 
@@ -62,7 +63,7 @@ const AccountScreen = () => {
         <AccountSection
           icon={require("../../../assets/icons/Legal.png")}
           title="Legal"
-          destination={RECEIVED_ORDERS}
+          destination={LEGAL_SCREEN}
           description="Terms of use and policies"
         />
       </View>

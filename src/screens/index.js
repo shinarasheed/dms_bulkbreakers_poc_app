@@ -1,7 +1,6 @@
 import LocationScreen from "./LocationScreen";
 import HomeScreen from "./HomeScreen";
 import AccountScreen from "./AccountScreen";
-import ProductsScreen from "./ProductsScreen";
 import DistributorsScreen from "./DistributorsScreen";
 import SearchScreen from "./SearchScreen";
 import RatingScreen from "./RatingScreen";
@@ -10,7 +9,6 @@ import SignupScreen from "./SignupScreen";
 import ContinueScreen from "./ContinueScreen";
 import SelectCustomer from "./ContinueScreen/SelectCustomer";
 import Loading from "../components/Loading";
-import SingleDistributor from "./ProductsScreen/SingleDistributor";
 
 import OrdersScreen from "./OrdersScreen";
 import OrdersBulkbreakers from "./OrdersScreen/bulkbreakers";
@@ -20,12 +18,16 @@ import ReceivedOrderDetails from "./OrdersScreen/bulkbreakers/ReceivedOrderDetai
 import PlacedOrders from "./OrdersScreen/bulkbreakers/PlacedOrders";
 import PlacedOrderDetails from "./OrdersScreen/bulkbreakers/PlacedOrderDetails";
 import OrderDetails from "./OrdersScreen/pocs/OrderDetails";
+import DistributorScreen from "./DistributorScreen";
+import ProfileScreen from "./AccountScreen/Profile";
+import SupportScreen from "./AccountScreen/Support";
+import LegalScreen from "./AccountScreen/Legal";
+import ProductsScreen from "./AccountScreen/Products";
 
 export {
   LocationScreen,
   HomeScreen,
   AccountScreen,
-  ProductsScreen,
   DistributorsScreen,
   SearchScreen,
   RatingScreen,
@@ -34,7 +36,6 @@ export {
   SelectCustomer,
   SignupScreen,
   Loading,
-  SingleDistributor,
   OrdersScreen,
   OrdersBulkbreakers,
   OrdersPocs,
@@ -43,4 +44,9 @@ export {
   ReceivedOrderDetails,
   PlacedOrderDetails,
   OrderDetails,
+  DistributorScreen,
+  ProfileScreen,
+  SupportScreen,
+  LegalScreen,
+  ProductsScreen,
 };

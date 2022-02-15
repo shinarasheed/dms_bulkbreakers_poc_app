@@ -21,7 +21,7 @@ import Products from "../../components/products/Products";
 import ProductsFooter from "../../components/products/ProductsFooter";
 import ProductsBottomSheet from "../../components/products/ProductsBottomSheet";
 
-const ProductsScreen = () => {
+const DistributorScreen = () => {
   const [visible, setVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -143,7 +143,7 @@ const ProductsScreen = () => {
   );
 };
 
-export default ProductsScreen;
+export default DistributorScreen;
 
 const styles = StyleSheet.create({
   searchInputContainer: {

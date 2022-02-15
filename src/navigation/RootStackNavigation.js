@@ -5,7 +5,6 @@ import {
   LocationScreen,
   SearchScreen,
   DistributorsScreen,
-  ProductsScreen,
   RatingScreen,
   OrdersBulkbreakers,
   OrdersPocs,
@@ -14,6 +13,11 @@ import {
   ReceivedOrderDetails,
   PlacedOrderDetails,
   OrderDetails,
+  DistributorScreen,
+  ProductsScreen,
+  ProfileScreen,
+  SupportScreen,
+  LegalScreen,
 } from "../screens";
 import { BottomTabs } from "./BottomTabNavigation";
 import appTheme from "../constants/theme";
@@ -57,12 +61,19 @@ export const RootStackNavigation = () => {
         }}
       />
       <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="SupportScreen" component={SupportScreen} />
+      <Stack.Screen name="LegalScreen" component={LegalScreen} />
+
+      <Stack.Screen name="DistributorScreen" component={DistributorScreen} />
       <Stack.Screen name="OrdersBulkbreakers" component={OrdersBulkbreakers} />
       <Stack.Screen name="OrdersPocs" component={OrdersPocs} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
+
       <Stack.Screen name="PlacedOrders" component={PlacedOrders} />
       <Stack.Screen name="ReceivedOrders" component={ReceivedOrders} />
       <Stack.Screen name="PlacedOrderDetails" component={PlacedOrderDetails} />
+
       <Stack.Screen
         name="ReceivedOrderDetails"
         component={ReceivedOrderDetails}
