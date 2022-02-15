@@ -33,7 +33,6 @@ const AccountScreen = () => {
     >
       <View>
         {/* products */}
-
         {customer?.CUST_Type === "Bulkbreaker" && (
           <AccountSection
             title="Products"
@@ -44,7 +43,6 @@ const AccountScreen = () => {
         )}
 
         {/* Profile */}
-
         <AccountSection
           icon={require("../../../assets/icons/Profile.png")}
           title="Profile"
