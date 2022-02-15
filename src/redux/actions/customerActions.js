@@ -157,7 +157,7 @@ export const getDistributors = (navigation) => async (dispatch, getState) => {
     }));
 
     distributors = distributors
-      .filter((distributor) => distributor.byFar <= 5)
+      .filter((distributor) => distributor.byFar <= 475)
       .sort(
         (distributorA, distributorB) => distributorA.byFar - distributorB.byFar
       );

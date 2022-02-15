@@ -153,6 +153,8 @@ export const Order = ({ item }) => {
                 ? "Dispatched"
                 : item.orderStatus[0].status === "Completed"
                 ? "Delivered"
+                : item.orderStatus[0].status === "Delivered"
+                ? "Completed"
                 : item.orderStatus[0].status}
             </Text>
           </View>

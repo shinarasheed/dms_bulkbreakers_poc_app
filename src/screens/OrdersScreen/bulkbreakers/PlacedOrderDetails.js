@@ -212,6 +212,8 @@ const PlacedOrderDetails = () => {
                   ? "Dispatched"
                   : singleOrder[0]?.orderStatus[0].status === "Completed"
                   ? "Delivered"
+                  : singleOrder[0]?.orderStatus[0].status === "Delivered"
+                  ? "Completed"
                   : singleOrder[0]?.orderStatus[0].status}
               </Text>
             </View>

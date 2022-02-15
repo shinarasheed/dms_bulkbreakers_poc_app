@@ -21,23 +21,28 @@ export const Order = ({ item }) => {
 
   const productsToOder = item.orderItems;
 
-  const getTheDistributor = async () => {
-    try {
-      setLoadingDistributor(true);
+  useEffect(() => {
+    let componentMounted = true;
+
+    const getTheDistributor = async () => {
+      // setLoadingDistributor(true);
       const {
         data: { result },
       } = await axios.get(
         `${COMPANY_BASE_URL}/company/code/${item?.sellerCompanyId}`
       );
-      setTheDistributor(result);
-      setLoadingDistributor(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      // setLoadingDistributor(false);
 
-  useEffect(() => {
+      if (componentMounted) {
+        setTheDistributor(result);
+      }
+    };
+
     getTheDistributor();
+
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   return (

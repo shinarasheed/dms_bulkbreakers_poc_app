@@ -1,24 +1,18 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Pressable,
-} from "react-native";
+import { Text, View, Image, Pressable } from "react-native";
 import { adService } from "ad-b2c-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { logOut } from "../../redux/actions/customerActions";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
-import { SECTIONS } from "../../components/account/data";
+import Section from "../../components/account/Section";
+import { Routes } from "../../navigation/Routes";
+
 const AccountScreen = () => {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { RECEIVED_ORDERS } = Routes;
 
   const handleLogout = async () => {
     await adService.logoutAsync();
@@ -33,62 +27,40 @@ const AccountScreen = () => {
         flex: 1,
       }}
     >
-      {SECTIONS.map((section) => {
-        const { id, icon, title, description, route } = section;
-        return (
-          <TouchableOpacity
-            onPress={() => navigation.navigate(route)}
-            key={id}
-            style={{
-              backgroundColor: appTheme.COLORS.white,
-              justifyContent: "space-between",
-              flexDirection: "row",
-              elevation: appTheme.STYLES.elevation,
-              alignItems: "center",
-              paddingHorizontal: 10,
-              marginBottom: 15,
-              paddingTop: 30,
-              paddingBottom: 20,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Image source={icon} />
+      <View>
+        {/* products */}
+        <Section
+          title="Products"
+          description="Manage the products you sell"
+          destination={RECEIVED_ORDERS}
+          icon={require("../../../assets/icons/Profile.png")}
+        />
 
-              <View
-                style={{
-                  marginLeft: 15,
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    fontSize: 17,
-                    color: appTheme.COLORS.black,
-                  }}
-                >
-                  {title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontFamily: "Gilroy-Light",
-                    marginTop: 4,
-                    color: appTheme.COLORS.textGray,
-                  }}
-                >
-                  {description}
-                </Text>
-              </View>
-            </View>
+        {/* Profile */}
 
-            <Image source={icons.chevRonRight} />
-          </TouchableOpacity>
-        );
-      })}
+        <Section
+          icon={require("../../../assets/icons/Profile.png")}
+          title="Profile"
+          destination={RECEIVED_ORDERS}
+          description="View your account details"
+        />
+
+        {/* Support */}
+        <Section
+          icon={require("../../../assets/icons/Support.png")}
+          title="Support"
+          destination={RECEIVED_ORDERS}
+          description="For help and enquiries"
+        />
+
+        {/* Legal */}
+        <Section
+          icon={require("../../../assets/icons/Legal.png")}
+          title="Legal"
+          destination={RECEIVED_ORDERS}
+          description="Terms of use and policies"
+        />
+      </View>
 
       <View
         style={{
@@ -121,5 +93,3 @@ const AccountScreen = () => {
 };
 
 export default AccountScreen;
-
-const styles = StyleSheet.create({});

@@ -55,7 +55,7 @@ export const listMyOrdersReducer = (state = {}, action) => {
         myorders: action.payload,
         orderPlaced: true,
         openOrders: action.payload.filter(
-          (order) => order.orderStatus[0].status !== "Completed"
+          (order) => order.orderStatus[0].status !== "Delivered"
         ),
         deliveredOrders: action.payload.filter(
           (order) => order.orderStatus[0].status === "Delivered"

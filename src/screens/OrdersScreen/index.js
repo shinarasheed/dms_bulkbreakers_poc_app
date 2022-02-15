@@ -11,7 +11,7 @@ const OrdersScreen = () => {
   const { customer } = customerState;
   return (
     <>
-      {customer?.CUST_Type === "Bulkbreaker" ? (
+      {customer?.CUST_Type === "BulkBreaker" ? (
         <OrdersBulkbreakers />
       ) : (
         <OrdersPocs />
