@@ -23,4 +23,5 @@ export const Routes = {
   LEGAL_SCREEN: "LegalScreen",
   NOINVENTORY_SCREEN: "NoInventory",
   PRODUCTS_SCREEN: "ProductsScreen",
+  PRODUCTS: "Products",
 };
