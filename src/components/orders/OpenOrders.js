@@ -15,5 +15,3 @@ const OpenOrders = ({ myorders }) => {
 };
 
 export default OpenOrders;
-
-const styles = StyleSheet.create({});
