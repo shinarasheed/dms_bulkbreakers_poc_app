@@ -34,6 +34,7 @@ const receivedOrders = require("../../assets/icons/ReceivedOrders.png");
 const placedOrders = require("../../assets/icons/PlacedOrders.png");
 const chevRonRight = require("../../assets/icons/chevron-right.png");
 const locationIconRed = require("../../assets/icons/location-red.png");
+const NoProductIcon = require("../../assets/icons/Noproducts.png");
 
 export default {
   home,
@@ -72,4 +73,5 @@ export default {
   placedOrders,
   chevRonRight,
   locationIconRed,
+  NoProductIcon,
 };

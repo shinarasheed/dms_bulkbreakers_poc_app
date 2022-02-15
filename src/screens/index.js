@@ -23,6 +23,8 @@ import ProfileScreen from "./AccountScreen/Profile";
 import SupportScreen from "./AccountScreen/Support";
 import LegalScreen from "./AccountScreen/Legal";
 import AddProductsScreen from "./AccountScreen/AddProducts";
+import NoInventory from "./AccountScreen/NoInventory";
+import ProductsScreen from "./ProductsScreen";
 
 export {
   LocationScreen,
@@ -49,4 +51,6 @@ export {
   SupportScreen,
   LegalScreen,
   AddProductsScreen,
+  NoInventory,
+  ProductsScreen,
 };

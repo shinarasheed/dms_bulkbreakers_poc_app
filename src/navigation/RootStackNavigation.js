@@ -18,6 +18,8 @@ import {
   SupportScreen,
   LegalScreen,
   AddProductsScreen,
+  NoInventory,
+  ProductsScreen,
 } from "../screens";
 import { BottomTabs } from "./BottomTabNavigation";
 import appTheme from "../constants/theme";
@@ -61,6 +63,8 @@ export const RootStackNavigation = () => {
         }}
       />
       <Stack.Screen name="AddProductsScreen" component={AddProductsScreen} />
+      <Stack.Screen name="NoInventory" component={NoInventory} />
+      <Stack.Screen name="ProductsScreen" component={ProductsScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="SupportScreen" component={SupportScreen} />
       <Stack.Screen name="LegalScreen" component={LegalScreen} />

@@ -12,7 +12,7 @@ import { Routes } from "../../navigation/Routes";
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
-  const { ADDPRODUCTS_SCREEN, PROFILE_SCREEN, SUPPORT_SCREEN, LEGAL_SCREEN } =
+  const { PRODUCTS_SCREEN, PROFILE_SCREEN, SUPPORT_SCREEN, LEGAL_SCREEN } =
     Routes;
 
   const customerState = useSelector((state) => state.customer);
@@ -38,7 +38,7 @@ const AccountScreen = () => {
           <AccountSection
             title="Products"
             description="Manage the products you sell"
-            destination={ADDPRODUCTS_SCREEN}
+            destination={PRODUCTS_SCREEN}
             icon={require("../../../assets/icons/Profile.png")}
           />
         )}
