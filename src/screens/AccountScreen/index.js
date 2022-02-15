@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Text, View, Image, Pressable } from "react-native";
 import { adService } from "ad-b2c-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,12 +7,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logOut } from "../../redux/actions/customerActions";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
-import Section from "../../components/account/Section";
+import AccountSection from "../../components/account/AccountSection";
 import { Routes } from "../../navigation/Routes";
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
   const { RECEIVED_ORDERS } = Routes;
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
 
   const handleLogout = async () => {
     await adService.logoutAsync();
@@ -29,16 +33,19 @@ const AccountScreen = () => {
     >
       <View>
         {/* products */}
-        <Section
-          title="Products"
-          description="Manage the products you sell"
-          destination={RECEIVED_ORDERS}
-          icon={require("../../../assets/icons/Profile.png")}
-        />
+
+        {customer?.CUST_Type === "Bulkbreaker" && (
+          <AccountSection
+            title="Products"
+            description="Manage the products you sell"
+            destination={RECEIVED_ORDERS}
+            icon={require("../../../assets/icons/Profile.png")}
+          />
+        )}
 
         {/* Profile */}
 
-        <Section
+        <AccountSection
           icon={require("../../../assets/icons/Profile.png")}
           title="Profile"
           destination={RECEIVED_ORDERS}
@@ -46,7 +53,7 @@ const AccountScreen = () => {
         />
 
         {/* Support */}
-        <Section
+        <AccountSection
           icon={require("../../../assets/icons/Support.png")}
           title="Support"
           destination={RECEIVED_ORDERS}
@@ -54,7 +61,7 @@ const AccountScreen = () => {
         />
 
         {/* Legal */}
-        <Section
+        <AccountSection
           icon={require("../../../assets/icons/Legal.png")}
           title="Legal"
           destination={RECEIVED_ORDERS}
