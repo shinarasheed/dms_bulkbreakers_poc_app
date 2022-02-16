@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import appTheme from "../../constants/theme";
+import { ToggleButton } from "react-native-paper";
 
 const ProductCard = ({ theProduct }) => {
   const { id, brand, imageUrl, price, sku } = theProduct;
@@ -106,10 +107,11 @@ const ProductCard = ({ theProduct }) => {
                 fontFamily: "Gilroy-Medium",
               }}
             >
-              Price not set
+              {/* Price not set */}
             </Text>
 
             <TouchableOpacity
+              onPress={() => toggle()}
               style={{
                 flexDirection: "row",
                 alignItems: "center",

@@ -216,8 +216,8 @@ const AddProductsScreen = () => {
                             alignItems: "center",
                           }}
                           onPress={() => {
-                            toggle();
                             setTempProduct(thisProduct);
+                            toggle();
                           }}
                         >
                           <View

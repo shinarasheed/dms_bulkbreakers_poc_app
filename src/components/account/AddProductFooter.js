@@ -14,24 +14,29 @@ import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
 
+import ProductsSummarySheet from "./ProductSummarySheet";
+
 const ProductsFooter = () => {
+  const [visible, setVisible] = useState(false);
   const products_tosell = useSelector((state) => state.product.products_tosell);
+
+  function toggle() {
+    setVisible((visible) => !visible);
+  }
 
   return (
     <View style={styles.footerContainer}>
-      <Pressable>
+      <Pressable onPress={() => toggle()}>
         <View style={[styles.orderSummay]}>
           <View
             style={{
               position: "absolute",
               left: 14,
               bottom: 10,
-              width: 20,
-              height: 20,
+              width: 22,
+              height: 22,
               borderRadius: 50,
               backgroundColor: appTheme.COLORS.mainRed,
-              // justifyContent: "center",
-              alignItems: "center",
               borderWidth: 1.5,
               borderColor: "#FFFFFF",
             }}
@@ -42,6 +47,7 @@ const ProductsFooter = () => {
                 fontWeight: "bold",
                 fontSize: 12,
                 marginTop: 1.5,
+                alignSelf: "center",
               }}
             >
               {products_tosell.length}
@@ -88,6 +94,8 @@ const ProductsFooter = () => {
           {`Confirm \u20A6${formatPrice(3000)}`}
         </Text>
       </TouchableOpacity>
+
+      <ProductsSummarySheet visible={visible} toggle={toggle} />
     </View>
   );
 };

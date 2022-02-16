@@ -31,7 +31,7 @@ export const Distributor = ({ distributor, customer }) => {
         data: { data },
       } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
 
-      let availableProducts = data.filter((product) => product.quantity > 0);
+      let availableProducts = data?.filter((product) => product.quantity > 0);
       // setLoading(false);
       if (componentMounted) {
         setProducts(availableProducts);
