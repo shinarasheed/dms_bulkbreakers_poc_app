@@ -164,7 +164,6 @@ export const addProductsToSave =
   };
 
   export const productsToSell = (item) => (dispatch) => {
-    console.log(item);
     dispatch({
       type: ADD_PRODUCTS_TOSELL,
       products_tosell: item,

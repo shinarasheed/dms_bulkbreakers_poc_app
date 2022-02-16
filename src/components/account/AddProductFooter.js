@@ -15,6 +15,8 @@ import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
 
 const ProductsFooter = () => {
+  const products_tosell = useSelector((state) => state.product.products_tosell);
+
   return (
     <View style={styles.footerContainer}>
       <Pressable>
@@ -30,6 +32,8 @@ const ProductsFooter = () => {
               backgroundColor: appTheme.COLORS.mainRed,
               // justifyContent: "center",
               alignItems: "center",
+              borderWidth: 1.5,
+              borderColor: "#FFFFFF",
             }}
           >
             <Text
@@ -40,14 +44,14 @@ const ProductsFooter = () => {
                 marginTop: 1.5,
               }}
             >
-              3
+              {products_tosell.length}
             </Text>
           </View>
           <Image
             style={{
               marginRight: 10,
             }}
-            source={icons.productIcon}
+            source={icons.ProductsCart}
           />
           <Text
             style={{
@@ -59,8 +63,6 @@ const ProductsFooter = () => {
           >
             View added products
           </Text>
-
-          <Image source={icons.chevronIcon} />
         </View>
       </Pressable>
 

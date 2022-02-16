@@ -21,9 +21,13 @@ import { BottomSheet } from "react-native-btr";
 import AddProductFooter from "../../components/account/AddProductFooter";
 import BulkProductCard from "../../components/products/BulkProductCard";
 
-import { fetchAllProductsIntheCompany } from "../../redux/actions/productActions";
+import {
+  fetchAllProductsIntheCompany,
+  productsToSell,
+} from "../../redux/actions/productActions";
 import { LottieLoader } from "../../components/Loaders/LottieLoader";
 import AddProductBottomSheet from "../../components/account/AddProductBottomSheet";
+import { findIndex, cloneDeep, pullAt } from "lodash";
 
 const AddProductsScreen = () => {
   const [visible, setVisible] = useState(false);
@@ -33,6 +37,9 @@ const AddProductsScreen = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
+
+  const products_tosell = useSelector((state) => state.product.products_tosell);
+  const array = cloneDeep(products_tosell);
 
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
@@ -44,7 +51,7 @@ const AddProductsScreen = () => {
 
   const { allCompanyProducts, loading } = productsState;
 
-  const [productsToSell, setProductsToSell] = useState([]);
+  // const [productsToSell, setProductsToSell] = useState([]);
 
   const filteredProducts = allCompanyProducts?.filter((product) =>
     product?.brand.toLowerCase().includes(searchTerm.toLocaleLowerCase())
@@ -57,6 +64,11 @@ const AddProductsScreen = () => {
   function toggle() {
     setVisible((visible) => !visible);
   }
+
+  const deleteItem = (index) => {
+    pullAt(array, [index]);
+    dispatch(productsToSell(array));
+  };
 
   if (loading) return <LottieLoader />;
 
@@ -116,6 +128,10 @@ const AddProductsScreen = () => {
       <ScrollView>
         {filteredProducts?.map((thisProduct, index) => {
           const { id, brand, imageUrl, price, sku } = thisProduct;
+          const indexx = findIndex(products_tosell, {
+            productId: id,
+          });
+
           return (
             <View
               key={index}
@@ -124,6 +140,7 @@ const AddProductsScreen = () => {
                 paddingHorizontal: 20,
                 borderBottomWidth: 1,
                 borderBottomColor: appTheme.COLORS.borderGRey,
+                backgroundColor: indexx >= 0 ? "#ECEFF4" : "#FFFFFF",
                 alignItems: "center",
                 paddingVertical: 20,
               }}
@@ -192,45 +209,51 @@ const AddProductsScreen = () => {
                           ? " Price not set"
                           : "\u20A6" + price + "/" + "case"}
                       </Text>
-                      <TouchableOpacity
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                        onPress={() => {
-                          toggle();
-                          setTempProduct(thisProduct);
-                        }}
-                      >
-                        <Pressable
+                      {indexx < 0 ? (
+                        <TouchableOpacity
                           style={{
-                            width: 20,
-                            height: 20,
-                            backgroundColor: appTheme.COLORS.mainRed,
-                            borderRadius: 5,
-                            justifyContent: "center",
+                            flexDirection: "row",
                             alignItems: "center",
-                            marginRight: 5,
+                          }}
+                          onPress={() => {
+                            toggle();
+                            setTempProduct(thisProduct);
                           }}
                         >
-                          <Text
+                          <View
                             style={{
-                              color: appTheme.COLORS.white,
+                              width: 20,
+                              height: 20,
+                              backgroundColor: appTheme.COLORS.mainRed,
+                              borderRadius: 5,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              marginRight: 5,
                             }}
                           >
-                            +
-                          </Text>
-                        </Pressable>
+                            <Text
+                              style={{
+                                color: appTheme.COLORS.white,
+                              }}
+                            >
+                              +
+                            </Text>
+                          </View>
 
-                        <Text
-                          style={{
-                            color: appTheme.COLORS.mainRed,
-                            fontFamily: "Gilroy-Bold",
-                          }}
-                        >
-                          ADD
-                        </Text>
-                      </TouchableOpacity>
+                          <Text
+                            style={{
+                              color: appTheme.COLORS.mainRed,
+                              fontFamily: "Gilroy-Bold",
+                            }}
+                          >
+                            ADD
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity onPress={() => deleteItem(indexx)}>
+                          <Image source={icons.deleteIcon} />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                 </View>

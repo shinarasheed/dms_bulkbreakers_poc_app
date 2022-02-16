@@ -20,6 +20,7 @@ import { productsToSell } from "../../redux/actions/productActions";
 import ProductCard2 from "../products/ProductCard2";
 
 const AddProductBottomSheet = ({ visible, toggle, product }) => {
+  const [isVisible, SetIsVisible] = useState(visible);
   const dispatch = useDispatch();
   const [price, SetPrice] = useState(0);
   const [error, SetError] = useState(null);
@@ -56,17 +57,9 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
     }
   }
 
-  const showDelete = (targetDiv, i, quantity) => {
-    if (quantity > parseInt(0)) {
-      return (targetDiv.style.visibility = "visible");
-    } else {
-      return (targetDiv.style.visibility = "hidden");
-    }
-  };
-
   return (
     <BottomSheet
-      visible={visible}
+      visible={isVisible}
       onBackButtonPress={toggle}
       onBackdropPress={toggle}
     >
@@ -180,9 +173,10 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
             elevation: 50,
           }}
           disabled={disabled}
-          onPress={() =>
-            save(product.id, product.brand + " " + product.sku, price)
-          }
+          onPress={() => {
+            save(product.id, product.brand + " " + product.sku, price);
+            SetIsVisible(!isVisible);
+          }}
         >
           <Text
             style={{
