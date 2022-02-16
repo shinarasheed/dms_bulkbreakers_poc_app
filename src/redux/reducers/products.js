@@ -12,7 +12,11 @@ import {
   GET_ALL_COMPANY_PRODUCTS_SUCCESS,
   GET_ALL_COMPANY_PRODUCTS_FAIL,
   UNSAVED_CHANGES,
-  ADD_PRODUCTS_TOSELL,
+  ADD_PRODUCT_TOSELL,
+  DELETE_PRODUCT_TO_SELL,
+  SAVE_PRODUCTS_FAIL,
+  SAVE_PRODUCTS_SUCCESS,
+  SAVE_PRODUCTS_REQUEST,
 } from "../constants/products";
 
 const initialState = {
@@ -131,9 +135,38 @@ export const productReducer = (state = initialState, action) => {
         ),
       };
 
-    case ADD_PRODUCTS_TOSELL: {
-      return { ...state, products_tosell: action.products_tosell };
+    case ADD_PRODUCT_TOSELL: {
+      return {
+        ...state,
+        products_tosell: [...state.products_tosell, action.product_tosell],
+      };
     }
+    case DELETE_PRODUCT_TO_SELL:
+      return {
+        ...state,
+        products_tosell: state.products_tosell.filter(
+          (item) => item.productId !== payload
+        ),
+      };
+
+    case SAVE_PRODUCTS_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case SAVE_PRODUCTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        // products: action.payload,
+      };
+
+    case SAVE_PRODUCTS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      };
 
     default:
       return state;

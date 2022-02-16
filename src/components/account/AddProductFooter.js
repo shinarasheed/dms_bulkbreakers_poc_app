@@ -15,13 +15,43 @@ import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
 
 import ProductsSummarySheet from "./ProductSummarySheet";
+import ProductsAdded from "./ProductsAdded";
+import { saveProductsToSell } from "../../redux/actions/productActions";
 
 const ProductsFooter = () => {
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
   const products_tosell = useSelector((state) => state.product.products_tosell);
+  const customerState = useSelector((state) => state.customer);
+  const { customer } = customerState;
 
   function toggle() {
     setVisible((visible) => !visible);
+  }
+
+  const toggle2 = () => {
+    setVisible2((visible2) => !visible2);
+  }
+
+  const saveAction = () => {
+    let processedArray = products_tosell.map(item => (
+      { 
+        productId: item.productId, 
+        productSku: item.productSku, 
+        price: parseInt(item.price),
+        instock: true
+      }
+
+    ))
+    let toDB = {};
+    toDB["bulkBreakerId"] = customer.id.toString();
+    toDB["products"] = processedArray;
+
+    // console.log(toDB);
+    
+    dispatch(saveProductsToSell(toDB));
+    // toggle2();
   }
 
   return (
@@ -50,7 +80,7 @@ const ProductsFooter = () => {
                 alignSelf: "center",
               }}
             >
-              {products_tosell.length}
+              {products_tosell?.length ? products_tosell.length : 0}
             </Text>
           </View>
           <Image
@@ -69,6 +99,10 @@ const ProductsFooter = () => {
           >
             View added products
           </Text>
+          <Image
+            source={icons.ArrowDown}
+            style={{ height: 20, width: 20, marginLeft: 15 }}
+          />
         </View>
       </Pressable>
 
@@ -83,6 +117,8 @@ const ProductsFooter = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
+        onPress={() => saveAction()
+        }
       >
         <Text
           style={{
@@ -91,11 +127,12 @@ const ProductsFooter = () => {
             fontFamily: "Gilroy-Bold",
           }}
         >
-          {`Confirm \u20A6${formatPrice(3000)}`}
+          Done
         </Text>
       </TouchableOpacity>
 
       <ProductsSummarySheet visible={visible} toggle={toggle} />
+      <ProductsAdded visible2={visible2} toggle2={toggle2} />
     </View>
   );
 };

@@ -1,3 +1,7 @@
+import axios from "axios";
+// export const INVENTORY_BASE_URL = axios.create({
+//   baseURL: "http://20.87.34.168/api/v1",
+// });
 export const INVENTORY_BASE_URL = "http://20.87.34.168/api/v1";
 export const CUSTOMER_BASE_URL = "http://20.87.38.134";
 // export const CUSTOMER_BASE_URL = "https://dmsdev20.azure-api.net";

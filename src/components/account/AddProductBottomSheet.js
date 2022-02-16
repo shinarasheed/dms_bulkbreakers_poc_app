@@ -15,7 +15,7 @@ import { BottomSheet } from "react-native-btr";
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
-import { productsToSell } from "../../redux/actions/productActions";
+import { productToSell } from "../../redux/actions/productActions";
 
 import ProductCard2 from "../products/ProductCard2";
 
@@ -26,21 +26,20 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
   const [error, SetError] = useState(null);
   const [disabled, SetDisabled] = useState(null);
   const [productsToSellArray, setProductsToSellArray] = useState([]);
+  const products_tosell = useSelector((state) => state.product.products_tosell);
+
 
   const save = (productID, productSku, productPrice, imageUrl) => {
-    const index = findIndex(productsToSellArray, { productId: productID });
+    // const index = findIndex(productsToSellArray, { productId: productID });
     const item = {
       productId: productID,
       productSku: productSku,
       price: productPrice,
       imageUrl,
     };
-    if (index < 0) {
-      productsToSellArray.push(item);
-    } else {
-      productsToSellArray[index] = item;
-    }
-    dispatch(productsToSell(productsToSellArray));
+
+    dispatch(productToSell(item));
+
   };
 
   function between(x, min, max) {

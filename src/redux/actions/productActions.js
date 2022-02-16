@@ -13,7 +13,11 @@ import {
   GET_ALL_COMPANY_PRODUCTS_SUCCESS,
   GET_ALL_COMPANY_PRODUCTS_FAIL,
   UNSAVED_CHANGES,
-  ADD_PRODUCTS_TOSELL,
+  ADD_PRODUCT_TOSELL,
+  DELETE_PRODUCT_TO_SELL,
+  SAVE_PRODUCTS_REQUEST,
+  SAVE_PRODUCTS_SUCCESS,
+  SAVE_PRODUCTS_FAIL,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 
@@ -163,9 +167,50 @@ export const addProductsToSave =
     });
   };
 
-  export const productsToSell = (item) => (dispatch) => {
+  export const productToSell = (item) => (dispatch) => {
     dispatch({
-      type: ADD_PRODUCTS_TOSELL,
-      products_tosell: item,
+      type: ADD_PRODUCT_TOSELL,
+      product_tosell: item,
     });
   };
+
+  export const deleteProductToSell = (productId) => (dispatch) => {
+    dispatch({
+      type: DELETE_PRODUCT_TO_SELL,
+      payload: productId,
+    });
+  };
+
+  export const saveProductsToSell = (payload) => async (dispatch) => {
+    try {
+      dispatch({
+        type: SAVE_PRODUCTS_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const {
+        data: { data },
+      } = await axios.post(`${INVENTORY_BASE_URL}/bb/add`, payload, config);
+
+      dispatch({
+        type: SAVE_PRODUCTS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: SAVE_PRODUCTS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+  
+
+  

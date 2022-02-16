@@ -37,6 +37,7 @@ const locationIconRed = require("../../assets/icons/location-red.png");
 const NoProductIcon = require("../../assets/icons/Noproducts.png");
 const ErrorIcon = require("../../assets/icons/error.png");
 const ProductsCart = require("../../assets/icons/ProductsCart.png");
+const ArrowDown = require("../../assets/icons/ArrowDown.png");
 
 export default {
   home,
@@ -78,4 +79,5 @@ export default {
   NoProductIcon,
   ErrorIcon,
   ProductsCart,
+  ArrowDown
 };

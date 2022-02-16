@@ -22,6 +22,7 @@ import AddProductFooter from "../../components/account/AddProductFooter";
 import BulkProductCard from "../../components/products/BulkProductCard";
 
 import {
+  deleteProductToSell,
   fetchAllProductsIntheCompany,
   productsToSell,
 } from "../../redux/actions/productActions";
@@ -65,9 +66,8 @@ const AddProductsScreen = () => {
     setVisible((visible) => !visible);
   }
 
-  const deleteItem = (index) => {
-    pullAt(array, [index]);
-    dispatch(productsToSell(array));
+  const deleteItem = (productID) => {
+    dispatch(deleteProductToSell(productID));
   };
 
   if (loading) return <LottieLoader />;
@@ -250,7 +250,7 @@ const AddProductsScreen = () => {
                           </Text>
                         </TouchableOpacity>
                       ) : (
-                        <TouchableOpacity onPress={() => deleteItem(indexx)}>
+                        <TouchableOpacity onPress={() => deleteItem(id)}>
                           <Image source={icons.deleteIcon} />
                         </TouchableOpacity>
                       )}

@@ -1,6 +1,6 @@
 import React from "react";
-import { Text, View, TouchableOpacity, FlatList, Image } from "react-native";
-import { useSelector } from "react-redux";
+import { Text, View, TouchableOpacity, FlatList, Image, Pressable } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native-virtualized-view";
 
 import { BottomSheet } from "react-native-btr";
@@ -10,10 +10,19 @@ import { formatPrice } from "../../utils/formatPrice";
 
 import ProductCard2 from "../products/ProductCard2";
 import { icons } from "../../constants";
+import { cloneDeep, findIndex, pullAt } from "lodash"
+import { deleteProductToSell, productsToSell } from "../../redux/actions/productActions";
 
 const ProductsSummarySheet = ({ visible, toggle }) => {
+  const dispatch =  useDispatch()
   const products_tosell = useSelector((state) => state.product.products_tosell);
-  console.log(products_tosell);
+  const array = cloneDeep(products_tosell);
+
+  const deleteItem = (productID) => {
+    dispatch(deleteProductToSell(productID));
+    
+
+  };
 
   //   const totalAmount = products_tosell?.reduce(
   //     (accumulator, item) => accumulator + item?.price * item?.,
@@ -21,76 +30,57 @@ const ProductsSummarySheet = ({ visible, toggle }) => {
   //   );
 
   const ProductCard = ({ theProduct }) => {
-    const { productSku, price, imageUrl } = theProduct;
+    const { productId, productSku, price, imageUrl } = theProduct;
+    const indexx = findIndex(products_tosell, {
+      productId: productId,
+    });
 
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          paddingHorizontal: 20,
-          borderBottomWidth: 1,
-          borderBottomColor: appTheme.COLORS.borderGRey,
-          backgroundColor: appTheme.COLORS.white,
-          alignItems: "center",
-          paddingVertical: 20,
-        }}
-      >
-        <Image style={{ width: 30, height: 60 }} source={{ uri: imageUrl }} />
-        <View style={{ marginLeft: 20, flex: 1 }}>
-          <View style={{ flexDirection: "row" }}>
-            <Text
-              style={{
-                fontSize: 15,
-                textTransform: "capitalize",
-                marginBottom: 5,
-                marginRight: 5,
-                color: appTheme.COLORS.black,
-                fontFamily: "Gilroy-Medium",
-              }}
-            >
-              {productSku}
-            </Text>
-            <Text
-              style={{
-                fontSize: 15,
-                textTransform: "capitalize",
-                marginBottom: 5,
-                color: appTheme.COLORS.black,
-                fontFamily: "Gilroy-Medium",
-              }}
-            >
-              {price}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <View
+      <>
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: 20,
+            borderBottomWidth: 1,
+            borderBottomColor: appTheme.COLORS.borderGRey,
+            backgroundColor: appTheme.COLORS.white,
+            alignItems: "center",
+            paddingVertical: 20,
+          }}
+        >
+          <Image style={{ width: 30, height: 60 }} source={{ uri: imageUrl }} />
+          <View style={{ marginLeft: 20, flex: 1 }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
                 style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  fontSize: 15,
+                  textTransform: "capitalize",
+                  marginBottom: 5,
+                  marginRight: 5,
+                  color: appTheme.COLORS.black,
+                  fontFamily: "Gilroy-Medium",
                 }}
               >
-                <TouchableOpacity onPress={() => deleteItem(indexx)}>
-                  <Image source={icons.deleteIcon} />
-                </TouchableOpacity>
-              </View>
+                {productSku}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  textTransform: "capitalize",
+                  marginBottom: 5,
+                  color: appTheme.COLORS.black,
+                  fontFamily: "Gilroy-Medium",
+                }}
+              >
+                {price}
+              </Text>
             </View>
           </View>
+          <TouchableOpacity onPress={() => deleteItem(productId)}>
+            <Image source={icons.deleteIcon} />
+          </TouchableOpacity>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -108,11 +98,33 @@ const ProductsSummarySheet = ({ visible, toggle }) => {
           borderTopLeftRadius: 10,
         }}
       >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 17,
+            paddingHorizontal: 16,
+          }}
+        >
+          <Text
+            style={{
+              color: "#090B17",
+              fontSize: 24,
+              fontFamily: "Gilroy-Medium",
+            }}
+          >
+            Added Products
+          </Text>
+          <Pressable onPress={() => toggle()}>
+            <Image source={icons.cancelIcon} />
+          </Pressable>
+        </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={products_tosell}
           keyExtractor={(item) => item.productId.toString()}
           renderItem={({ item }) => <ProductCard theProduct={item} />}
+          extraData={products_tosell}
         />
       </View>
 
@@ -137,16 +149,15 @@ const ProductsSummarySheet = ({ visible, toggle }) => {
             elevation: 50,
           }}
         >
-          {/* <Text
+          <Text
             style={{
               color: appTheme.COLORS.white,
               fontSize: 16,
               fontFamily: "Gilroy-Bold",
             }}
           >
-            {totalAmount !== undefined &&
-              `Confirm \u20A6${formatPrice(totalAmount)}`}
-          </Text> */}
+            Done
+          </Text>
         </TouchableOpacity>
       </View>
     </BottomSheet>
