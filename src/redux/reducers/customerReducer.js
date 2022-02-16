@@ -12,6 +12,9 @@ import {
   RESTORE_TOKEN,
   RETRIVE_CUSTOMER,
   SORT_DISTRIBUTORS,
+  GET_CUSTOMER_INVENTORY_REQUEST,
+  GET_CUSTOMER_INVENTORY_SUCCESS,
+  GET_CUSTOMER_INVENTORY_FAIL,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -24,6 +27,7 @@ const initialState = {
   isAuthenticated: false,
   assigned: false,
   customerDetails: null,
+  myInventory: [],
 };
 
 export default (state = initialState, action) => {
@@ -35,10 +39,29 @@ export default (state = initialState, action) => {
       };
     case GET_CUSTOMER_SUCCESS:
       return {
+        ...state,
         isLoading: false,
         customer: action.payload,
       };
     case GET_CUSTOMER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+
+    case GET_CUSTOMER_INVENTORY_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case GET_CUSTOMER_INVENTORY_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        myInventory: action.payload,
+      };
+    case GET_CUSTOMER_INVENTORY_FAIL:
       return {
         ...state,
         error: action.payload,

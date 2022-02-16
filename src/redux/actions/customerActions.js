@@ -13,8 +13,11 @@ import {
   SORT_DISTRIBUTORS,
   RESTORE_TOKEN,
   LOGOUT,
+  GET_CUSTOMER_INVENTORY_REQUEST,
+  GET_CUSTOMER_INVENTORY_SUCCESS,
+  GET_CUSTOMER_INVENTORY_FAIL,
 } from "../constants/customerConstants";
-import { CUSTOMER_BASE_URL } from "../../confg";
+import { CUSTOMER_BASE_URL, INVENTORY_BASE_URL } from "../../confg";
 import { Routes } from "../../navigation/Routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistanceApart } from "../../utils/calCulateDistance";
@@ -217,4 +220,39 @@ export const sortDistributors = (sortBy) => async (dispatch) => {
     type: SORT_DISTRIBUTORS,
     payload: sortBy,
   });
+};
+
+export const getMyInventory = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_CUSTOMER_INVENTORY_REQUEST,
+    });
+
+    const {
+      customer: { id },
+    } = getState().customer;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { data },
+    } = await axios.get(`${INVENTORY_BASE_URL}/bb/${id}`, config);
+
+    dispatch({
+      type: GET_CUSTOMER_INVENTORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: GET_CUSTOMER_INVENTORY_FAIL,
+      payload:
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.msg,
+    });
+  }
 };

@@ -17,7 +17,7 @@ import {
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["customer", "distributors"],
+  whitelist: ["customer"],
 };
 
 const reducer = combineReducers({

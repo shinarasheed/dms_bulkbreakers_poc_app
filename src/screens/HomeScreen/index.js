@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
+import { ActivityIndicator, Image, Pressable, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -15,10 +15,11 @@ import { Distributor } from "../../components/home/Distributor";
 import BottomFilter from "../../components/home/BottomFilter";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  getCustomerDetails,
   getDistributors,
+  getMyInventory,
 } from "../../redux/actions/customerActions";
 import { Header } from "../../components/home/Header";
+import { icons } from "../../constants";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -29,7 +30,8 @@ const HomeScreen = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { error, isLoading, distributors, customer } = customerState;
+  const { error, isLoading, distributors, myInventory, customer } =
+    customerState;
 
   const topDistributors = distributors?.slice(0, 3);
 
@@ -37,9 +39,9 @@ const HomeScreen = () => {
     setVisible((visible) => !visible);
   }
 
-  // useEffect(() => {
-  //   getCustomerDetails();
-  // }, []);
+  useEffect(() => {
+    dispatch(getMyInventory());
+  }, []);
 
   useEffect(() => {
     dispatch(getDistributors());
@@ -75,6 +77,47 @@ const HomeScreen = () => {
             Search for products or distributors
           </Text>
         </Pressable>
+
+        {myInventory?.length === 0 && (
+          <TouchableOpacity
+            style={{
+              backgroundColor: appTheme.COLORS.countDownYellow,
+              borderRadius: 10,
+              paddingVertical: 10,
+              paddingHorizontal: 10,
+              flexDirection: "row",
+              marginHorizontal: 10,
+              marginVertical: 20,
+              borderColor: appTheme.COLORS.mainYellow,
+              borderWidth: 1,
+            }}
+          >
+            <Image source={icons.InfoIcon} />
+
+            <View
+              style={{
+                marginLeft: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "Gilroy-Light",
+                }}
+              >
+                You have not added products to your store
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "Gilroy-Light",
+                }}
+              >
+                Tap here to add products
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
 
         {distributors?.length > 0 ? (
           <View
