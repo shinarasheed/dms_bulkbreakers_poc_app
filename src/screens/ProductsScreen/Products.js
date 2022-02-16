@@ -29,8 +29,13 @@ export default function Index() {
   const { customer, myInventory, isLoading } = customerState;
 
   const [allInventory, setAllInventory] = useState([]);
-  const [inStockInventory, setInStockInventory] = useState([]);
-  const [outOfStcokInventory, setOutOfStockInventory] = useState([]);
+  // const [inStockInventory, setInStockInventory] = useState([]);
+  // const [outOfStcokInventory, setOutOfStockInventory] = useState([]);
+
+  const inStockInventory = myInventory.filter((item) => item.instock === true);
+  const outOfStcokInventory = myInventory.filter(
+    (item) => item.instock === false
+  );
 
   // i should not have need for this
   // useEffect(() => {
@@ -45,10 +50,10 @@ export default function Index() {
         return <Products inventory={myInventory} />;
 
       case 1:
-        return <Products inventory={myInventory} />;
+        return <Products inventory={inStockInventory} />;
 
       default:
-        return <Products inventory={myInventory} />;
+        return <Products inventory={outOfStcokInventory} />;
     }
   };
 

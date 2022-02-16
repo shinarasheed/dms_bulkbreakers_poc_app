@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Image, Text, View } from "react-native";
 import { Switch } from "react-native-elements";
 
+import { getMyInventory } from "../../redux/actions//customerActions";
 import appTheme from "../../constants/theme";
 import { updateProductStatus } from "../../redux/actions//customerActions";
 import { formatPrice } from "../../utils/formatPrice";

@@ -282,8 +282,6 @@ export const updateProductStatus =
         config
       );
 
-      console.log(data);
-
       dispatch({
         type: UPDATE_PRODUCT_STATUS,
       });

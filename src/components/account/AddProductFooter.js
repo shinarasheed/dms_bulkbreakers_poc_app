@@ -19,7 +19,7 @@ import ProductsAdded from "./ProductsAdded";
 import { saveProductsToSell } from "../../redux/actions/productActions";
 
 const ProductsFooter = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const products_tosell = useSelector((state) => state.product.products_tosell);
@@ -32,27 +32,24 @@ const ProductsFooter = () => {
 
   const toggle2 = () => {
     setVisible2((visible2) => !visible2);
-  }
+  };
 
   const saveAction = () => {
-    let processedArray = products_tosell.map(item => (
-      { 
-        productId: item.productId, 
-        productSku: item.productSku, 
-        price: parseInt(item.price),
-        instock: true
-      }
-
-    ))
+    let processedArray = products_tosell.map((item) => ({
+      productId: item.productId,
+      productSku: item.productSku,
+      price: parseInt(item.price),
+      instock: true,
+    }));
     let toDB = {};
     toDB["bulkBreakerId"] = customer.id.toString();
     toDB["products"] = processedArray;
 
     // console.log(toDB);
-    
+
     dispatch(saveProductsToSell(toDB));
     // toggle2();
-  }
+  };
 
   return (
     <View style={styles.footerContainer}>
@@ -117,8 +114,7 @@ const ProductsFooter = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onPress={() => saveAction()
-        }
+        onPress={() => saveAction()}
       >
         <Text
           style={{
