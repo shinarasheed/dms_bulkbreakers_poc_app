@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import React from "react";
 import NoInventory from "../AccountScreen/NoInventory";

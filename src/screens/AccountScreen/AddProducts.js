@@ -29,6 +29,10 @@ const AddProductsScreen = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchAllProductsIntheCompany());
+  }, []);
+
   const productsState = useSelector((state) => state.product);
 
   const { allCompanyProducts, loading } = productsState;
@@ -36,10 +40,6 @@ const AddProductsScreen = () => {
   const filteredProducts = allCompanyProducts?.filter((product) =>
     product?.brand.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
-
-  useEffect(() => {
-    dispatch(fetchAllProductsIntheCompany());
-  }, []);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -69,7 +69,7 @@ const AddProductsScreen = () => {
             flexDirection: "row",
             alignItems: "center",
           }}
-          onPress={() => navigation.goBack()}
+          // onPress={() => navigation.goBack()}
         >
           <Image source={icons.backIcon} style={{ marginRight: 18 }} />
           <Text
@@ -79,7 +79,7 @@ const AddProductsScreen = () => {
               fontSize: 15,
             }}
           >
-            Add Products
+            {/* Add Products */}
           </Text>
         </Pressable>
       </View>
@@ -103,7 +103,7 @@ const AddProductsScreen = () => {
 
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={filteredProducts}
+        data={allCompanyProducts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <BulkProductCard theProduct={item} />}
       />
