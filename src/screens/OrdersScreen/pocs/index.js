@@ -94,7 +94,7 @@ export default function Index() {
             fontSize: 15,
             paddingLeft: 5,
             flex: 1,
-            fontFamily: "Gilroy-Light",
+            fontFamily: "Gilroy-Medium",
             color: appTheme.COLORS.black,
           }}
           onChangeText={(textValue) => setSearchTerm(textValue)}
