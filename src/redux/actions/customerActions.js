@@ -16,6 +16,7 @@ import {
   GET_CUSTOMER_INVENTORY_REQUEST,
   GET_CUSTOMER_INVENTORY_SUCCESS,
   GET_CUSTOMER_INVENTORY_FAIL,
+  UPDATE_PRODUCT_STATUS,
 } from "../constants/customerConstants";
 import { CUSTOMER_BASE_URL, INVENTORY_BASE_URL } from "../../confg";
 import { Routes } from "../../navigation/Routes";
@@ -256,3 +257,37 @@ export const getMyInventory = () => async (dispatch, getState) => {
     });
   }
 };
+
+export const updateProductStatus =
+  (customerId, productId, value) => async (dispatch, getState) => {
+    try {
+      const {
+        customer: { id },
+      } = getState().customer;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const payload = {
+        bulkBreakerId: customerId.toString(),
+        productId: parseInt(productId),
+        status: value,
+      };
+
+      const { data } = await axios.put(
+        `${INVENTORY_BASE_URL}/bb/update-stock-status`,
+        payload,
+        config
+      );
+
+      console.log(data);
+
+      dispatch({
+        type: UPDATE_PRODUCT_STATUS,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };

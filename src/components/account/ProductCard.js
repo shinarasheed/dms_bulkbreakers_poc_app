@@ -1,26 +1,20 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import {
-  StyleSheet,
-  Image,
-  Pressable,
-  Text,
-  View,
-  TextInput,
-  Switch,
-} from "react-native";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, Image, Text, View } from "react-native";
+import { Switch } from "react-native-elements";
 
 import appTheme from "../../constants/theme";
-import {
-  decrementQuantity,
-  incrementQuantity,
-  incrementQuantityByTyping,
-} from "../../redux/actions/productActions";
+import { updateProductStatus } from "../../redux/actions//customerActions";
 import { formatPrice } from "../../utils/formatPrice";
 import { icons } from "../../constants";
 
 const ProductCard = ({ theProduct }) => {
+  const [checked, setChecked] = useState(true);
   const dispatch = useDispatch();
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
 
   const {
     instock,
@@ -104,7 +98,8 @@ const ProductCard = ({ theProduct }) => {
                 }}
               >
                 {"\u20A6"}
-                {price}/case
+                {formatPrice(price)}
+                /case
               </Text>
 
               <Image source={icons.deleteIcon} />
@@ -138,7 +133,14 @@ const ProductCard = ({ theProduct }) => {
               </Text>
             </View>
 
-            <Switch />
+            <Switch
+              color={appTheme.COLORS.mainGreen}
+              value={instock ? checked : !checked}
+              onValueChange={(value) => {
+                setChecked(value);
+                dispatch(updateProductStatus(customer.id, productId, value));
+              }}
+            />
           </View>
         </View>
       </View>

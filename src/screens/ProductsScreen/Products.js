@@ -33,22 +33,22 @@ export default function Index() {
   const [outOfStcokInventory, setOutOfStockInventory] = useState([]);
 
   // i should not have need for this
-  useEffect(() => {
-    setAllInventory(myInventory);
-    setInStockInventory(myInventory);
-    setOutOfStockInventory(myInventory);
-  }, [myInventory, navigation]);
+  // useEffect(() => {
+  //   setAllInventory(myInventory);
+  //   setInStockInventory(myInventory);
+  //   setOutOfStockInventory(myInventory);
+  // }, [myInventory, navigation]);
 
   const ShowProducts = (index) => {
     switch (index) {
       case 0:
-        return <Products inventory={allInventory} />;
+        return <Products inventory={myInventory} />;
 
       case 1:
-        return <Products inventory={inStockInventory} />;
+        return <Products inventory={myInventory} />;
 
       default:
-        return <Products inventory={outOfStcokInventory} />;
+        return <Products inventory={myInventory} />;
     }
   };
 
