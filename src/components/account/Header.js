@@ -12,6 +12,7 @@ import {
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
+import { Routes } from "../../navigation/Routes";
 
 export const Header = ({ title }) => {
   const navigation = useNavigation();
@@ -49,6 +50,7 @@ export const Header = ({ title }) => {
       </View>
 
       <TouchableOpacity
+        onPress={() => navigation.navigate(Routes.ADDPRODUCTS_SCREEN)}
         style={{
           flexDirection: "row",
           alignItems: "center",
