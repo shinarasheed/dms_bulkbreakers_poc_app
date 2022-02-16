@@ -17,6 +17,7 @@ import {
   GET_CUSTOMER_INVENTORY_SUCCESS,
   GET_CUSTOMER_INVENTORY_FAIL,
   UPDATE_PRODUCT_STATUS,
+  DELETE_INVENTORY_PRODUCT,
 } from "../constants/customerConstants";
 import { CUSTOMER_BASE_URL, INVENTORY_BASE_URL } from "../../confg";
 import { Routes } from "../../navigation/Routes";
@@ -259,11 +260,8 @@ export const getMyInventory = () => async (dispatch, getState) => {
 };
 
 export const updateProductStatus =
-  (customerId, productId, value) => async (dispatch, getState) => {
+  (customerId, productId, value) => async (dispatch) => {
     try {
-      const {
-        customer: { id },
-      } = getState().customer;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -284,6 +282,35 @@ export const updateProductStatus =
 
       dispatch({
         type: UPDATE_PRODUCT_STATUS,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const deleteInventoryProduct =
+  (customerId, productId) => async (dispatch) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const payload = {
+        bulkBreakerId: customerId.toString(),
+        productId: parseInt(productId),
+      };
+
+      await axios.delete(
+        `${INVENTORY_BASE_URL}/bb/delete-product`,
+        payload,
+        config
+      );
+
+      dispatch({
+        type: DELETE_INVENTORY_PRODUCT,
+        payload: productId,
       });
     } catch (error) {
       console.log(error);
