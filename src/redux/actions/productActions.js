@@ -12,6 +12,8 @@ import {
   GET_ALL_COMPANY_PRODUCTS_REQUEST,
   GET_ALL_COMPANY_PRODUCTS_SUCCESS,
   GET_ALL_COMPANY_PRODUCTS_FAIL,
+  UNSAVED_CHANGES,
+  ADD_PRODUCTS_TOSELL,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 
@@ -152,3 +154,19 @@ export const fetchAllProductsIntheCompany = () => async (dispatch) => {
     });
   }
 };
+
+export const addProductsToSave =
+  (action) => (dispatch) => {
+    dispatch({
+      type: UNSAVED_CHANGES,
+      transfer_change: action,
+    });
+  };
+
+  export const productsToSell = (item) => (dispatch) => {
+    console.log(item);
+    dispatch({
+      type: ADD_PRODUCTS_TOSELL,
+      products_tosell: item,
+    });
+  };

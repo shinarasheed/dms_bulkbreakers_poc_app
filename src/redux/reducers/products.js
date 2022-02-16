@@ -11,6 +11,8 @@ import {
   GET_ALL_COMPANY_PRODUCTS_REQUEST,
   GET_ALL_COMPANY_PRODUCTS_SUCCESS,
   GET_ALL_COMPANY_PRODUCTS_FAIL,
+  UNSAVED_CHANGES,
+  ADD_PRODUCTS_TOSELL,
 } from "../constants/products";
 
 const initialState = {
@@ -18,6 +20,7 @@ const initialState = {
   productsToOder: [],
   allProducts: [],
   allCompanyProducts: [],
+  products_tosell: [],
   loading: false,
 };
 
@@ -127,6 +130,10 @@ export const productReducer = (state = initialState, action) => {
           (item) => item.id !== payload
         ),
       };
+
+    case ADD_PRODUCTS_TOSELL: {
+      return { ...state, products_tosell: action.products_tosell };
+    }
 
     default:
       return state;
