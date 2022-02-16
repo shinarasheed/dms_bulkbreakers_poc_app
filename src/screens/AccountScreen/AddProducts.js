@@ -125,7 +125,7 @@ const AddProductsScreen = () => {
           onChangeText={(textValue) => setSearchTerm(textValue)}
         />
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {filteredProducts?.map((thisProduct, index) => {
           const { id, brand, imageUrl, price, sku } = thisProduct;
           const indexx = findIndex(products_tosell, {
