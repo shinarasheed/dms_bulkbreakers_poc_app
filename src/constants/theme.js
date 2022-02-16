@@ -40,6 +40,7 @@ export const COLORS = {
   transparent: "transparent",
   darkgray: "#898C95",
   mainBrown: "#45130F",
+  Grey84: "#2D2F39",
 };
 
 export const SIZES = {
