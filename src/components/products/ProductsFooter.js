@@ -61,6 +61,25 @@ const ProductsFooter = ({ distributor }) => {
     orderItems,
   };
 
+  const payload2 = {
+    buyerCompanyId: customer?.SF_Code,
+    sellerCompanyId: distributor?.SF_Code,
+    routeName: "shopNow",
+    referenceId: "shopNow",
+    emptiesReturned: 0,
+    costOfEmptiesReturned: 0,
+    datePlaced: new Date(new Date().getTime()),
+    shipToCode: customer?.SF_Code,
+    billToCode: customer?.SF_Code,
+    buyerDetails: {
+      buyerName: customer?.CUST_Name,
+      buyerPhoneNumber: customer?.phoneNumber,
+      buyerAddress: customer?.address,
+    },
+
+    orderItems,
+  };
+
   const totalAmount = products?.reduce(
     (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
     0
@@ -155,6 +174,7 @@ const ProductsFooter = ({ distributor }) => {
         orderPlaced={orderPlaced}
         loading={loading}
         payload={payload}
+        payload2={payload2}
         productsToOder={productsToOder}
         distributor={distributor}
       />

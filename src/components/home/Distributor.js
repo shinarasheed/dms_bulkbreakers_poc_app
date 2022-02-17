@@ -34,7 +34,10 @@ export const Distributor = ({ distributor }) => {
       if (customer?.CUST_Type.toLowerCase() === "poc") {
         const {
           data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${customer?.id}`, config);
+        } = await axios.get(
+          `${INVENTORY_BASE_URL}/bb/${distributor?.id}`,
+          config
+        );
 
         let availableProducts = data;
         // setLoading(false);

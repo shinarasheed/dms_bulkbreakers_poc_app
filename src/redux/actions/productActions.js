@@ -197,9 +197,10 @@ export const addProductsToSave = (action) => (dispatch) => {
 };
 
 export const productToSell = (item) => (dispatch) => {
+  console.log(item);
   dispatch({
     type: ADD_PRODUCT_TOSELL,
-    product_tosell: item,
+    payload: item,
   });
 };
 

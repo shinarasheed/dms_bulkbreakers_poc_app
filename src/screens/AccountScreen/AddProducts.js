@@ -41,6 +41,8 @@ const AddProductsScreen = () => {
   const products_tosell = useSelector((state) => state.product.products_tosell);
   const array = cloneDeep(products_tosell);
 
+  console.log(products_tosell);
+
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
   }, []);
@@ -51,6 +53,7 @@ const AddProductsScreen = () => {
   const { myInventory } = customerState;
 
   const [priceSet, setPriceSet] = useState(false);
+  const [thePrice, setThePrice] = useState(null);
 
   const { allCompanyProducts, loading } = productsState;
 
@@ -132,10 +135,13 @@ const AddProductsScreen = () => {
             productId: id,
           });
 
-          const theIndexx = findIndex(result, {
-            id: id,
-          });
-          // console.log(theIndexx);
+          // console.log(indexx);
+
+          // const secondindexx = findIndex(result, {
+          //   id: id,
+          // });
+
+          const secondindexx = result.indexOf(thisProduct);
 
           return (
             <View
@@ -145,7 +151,8 @@ const AddProductsScreen = () => {
                 paddingHorizontal: 20,
                 borderBottomWidth: 1,
                 borderBottomColor: appTheme.COLORS.borderGRey,
-                backgroundColor: theIndexx >= 0 ? "#ECEFF4" : "#FFFFFF",
+                backgroundColor:
+                  secondindexx > -1 || indexx >= 0 ? "#ECEFF4" : "#FFFFFF",
                 alignItems: "center",
                 paddingVertical: 20,
               }}
@@ -210,11 +217,11 @@ const AddProductsScreen = () => {
                           fontFamily: "Gilroy-Medium",
                         }}
                       >
-                        {!priceSet
+                        {!thePrice
                           ? " Price not set"
-                          : "\u20A6" + price + "/" + "case"}
+                          : "\u20A6" + thePrice + "/" + "case"}
                       </Text>
-                      {theIndexx < 0 ? (
+                      {secondindexx < 0 || indexx >= 0 ? (
                         <TouchableOpacity
                           style={{
                             flexDirection: "row",
@@ -272,6 +279,7 @@ const AddProductsScreen = () => {
         visible={visible}
         toggle={toggle}
         product={tempProduct}
+        setThePrice={setThePrice}
       />
     </View>
   );

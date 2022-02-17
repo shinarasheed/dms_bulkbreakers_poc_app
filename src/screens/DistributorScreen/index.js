@@ -32,6 +32,8 @@ const DistributorScreen = () => {
 
   const { distributor } = route.params;
 
+  console.log(distributor);
+
   const productsState = useSelector((state) => state.product);
 
   const { products, loading } = productsState;

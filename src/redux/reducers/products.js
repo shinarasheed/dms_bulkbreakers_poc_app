@@ -138,7 +138,7 @@ export const productReducer = (state = initialState, action) => {
     case ADD_PRODUCT_TOSELL: {
       return {
         ...state,
-        products_tosell: [...state?.products_tosell, action.product_tosell],
+        products_tosell: [...state?.products_tosell, action.payload],
       };
     }
     case DELETE_PRODUCT_TO_SELL:

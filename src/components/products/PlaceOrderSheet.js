@@ -25,6 +25,7 @@ const BottomFilter = ({
   visible,
   toggle,
   payload,
+  payload2,
   productsToOder,
   distributor,
 }) => {
@@ -129,9 +130,11 @@ const BottomFilter = ({
               }}
             >
               <TouchableOpacity
-                onPress={() => {
-                  dispatch(placeOrder({ ...payload, deliveryType }));
-                }}
+                onPress={() =>
+                  customer?.CUST_Type.toLowerCase() === "poc"
+                    ? dispatch(placeOrder({ ...payload2, deliveryType }))
+                    : dispatch(placeOrder({ ...payload, deliveryType }))
+                }
                 style={{
                   backgroundColor: appTheme.COLORS.mainRed,
                   justifyContent: "center",
