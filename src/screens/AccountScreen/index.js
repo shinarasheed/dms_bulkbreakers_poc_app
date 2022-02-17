@@ -34,7 +34,7 @@ const AccountScreen = () => {
     >
       <View>
         {/* products */}
-        {customer?.CUST_Type === "BulkBreaker" && (
+        {customer?.CUST_Type.toLowerCase() === "bulkbreaker" && (
           <AccountSection
             title="Products"
             description="Manage the products you sell"

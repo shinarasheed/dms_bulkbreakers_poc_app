@@ -24,7 +24,6 @@ import BulkProductCard from "../../components/products/BulkProductCard";
 import {
   deleteProductToSell,
   fetchAllProductsIntheCompany,
-  productsToSell,
 } from "../../redux/actions/productActions";
 import { LottieLoader } from "../../components/Loaders/LottieLoader";
 import AddProductBottomSheet from "../../components/account/AddProductBottomSheet";
@@ -47,30 +46,31 @@ const AddProductsScreen = () => {
   }, []);
 
   const productsState = useSelector((state) => state.product);
+  const customerState = useSelector((state) => state.customer);
+
+  const { myInventory } = customerState;
 
   const [priceSet, setPriceSet] = useState(false);
 
   const { allCompanyProducts, loading } = productsState;
 
-  // const [productsToSell, setProductsToSell] = useState([]);
+  let result = allCompanyProducts?.filter((o1) =>
+    myInventory.some((o2) => parseInt(o1.productId) === parseInt(o2.productId))
+  );
 
   const filteredProducts = allCompanyProducts?.filter((product) =>
     product?.brand.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
-  useEffect(() => {
-    dispatch(fetchAllProductsIntheCompany());
-  }, [navigation]);
-
   function toggle() {
     setVisible((visible) => !visible);
   }
 
-  const deleteItem = (productID) => {
-    dispatch(deleteProductToSell(productID));
-  };
+  // const deleteItem = (productID) => {
+  //   dispatch(deleteProductToSell(productID));
+  // };
 
-  if (loading) return <LottieLoader />;
+  // if (loading) return <LottieLoader />;
 
   return (
     <View
@@ -132,6 +132,11 @@ const AddProductsScreen = () => {
             productId: id,
           });
 
+          const theIndexx = findIndex(result, {
+            id: id,
+          });
+          // console.log(theIndexx);
+
           return (
             <View
               key={index}
@@ -140,7 +145,7 @@ const AddProductsScreen = () => {
                 paddingHorizontal: 20,
                 borderBottomWidth: 1,
                 borderBottomColor: appTheme.COLORS.borderGRey,
-                backgroundColor: indexx >= 0 ? "#ECEFF4" : "#FFFFFF",
+                backgroundColor: theIndexx >= 0 ? "#ECEFF4" : "#FFFFFF",
                 alignItems: "center",
                 paddingVertical: 20,
               }}
@@ -209,7 +214,7 @@ const AddProductsScreen = () => {
                           ? " Price not set"
                           : "\u20A6" + price + "/" + "case"}
                       </Text>
-                      {indexx < 0 ? (
+                      {theIndexx < 0 ? (
                         <TouchableOpacity
                           style={{
                             flexDirection: "row",

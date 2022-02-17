@@ -21,6 +21,7 @@ import { saveProductsToSell } from "../../redux/actions/productActions";
 const ProductsFooter = () => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
+  const [disabled, SetDisabled] = useState(null);
   const [visible2, setVisible2] = useState(false);
   const products_tosell = useSelector((state) => state.product.products_tosell);
   const customerState = useSelector((state) => state.customer);
@@ -35,7 +36,7 @@ const ProductsFooter = () => {
   };
 
   const saveAction = () => {
-    let processedArray = products_tosell.map((item) => ({
+    let processedArray = products_tosell?.map((item) => ({
       productId: item.productId,
       productSku: item.productSku,
       price: parseInt(item.price),
@@ -48,7 +49,6 @@ const ProductsFooter = () => {
     // console.log(toDB);
 
     dispatch(saveProductsToSell(toDB));
-    // toggle2();
   };
 
   return (
@@ -105,6 +105,7 @@ const ProductsFooter = () => {
 
       <TouchableOpacity
         style={{
+          opacity: disabled ? 0.3 : 1,
           backgroundColor: appTheme.COLORS.mainRed,
           width: "100%",
           height: 50,
@@ -114,7 +115,11 @@ const ProductsFooter = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onPress={() => saveAction()}
+        disabled={products_tosell?.length === 0 ? true : false}
+        onPress={() => {
+          saveAction();
+          toggle2();
+        }}
       >
         <Text
           style={{

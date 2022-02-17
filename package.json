@@ -43,6 +43,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-btr": "^2.1.2",
+    "react-native-countdown-component": "^2.7.1",
     "react-native-daterange-picker": "^1.5.1",
     "react-native-dotenv": "^3.3.1",
     "react-native-elements": "^3.4.2",

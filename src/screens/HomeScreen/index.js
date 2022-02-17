@@ -18,6 +18,7 @@ import {
   getDistributors,
   getMyInventory,
 } from "../../redux/actions/customerActions";
+import { fetchAllProductsIntheCompany } from "../../redux/actions/productActions";
 import { Header } from "../../components/home/Header";
 import { icons } from "../../constants";
 
@@ -45,6 +46,10 @@ const HomeScreen = () => {
 
   useEffect(() => {
     dispatch(getDistributors());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchAllProductsIntheCompany());
   }, []);
 
   return (

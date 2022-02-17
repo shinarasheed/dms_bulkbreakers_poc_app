@@ -16,7 +16,8 @@ import ReOrder from "../../../components/orders/ReOrder";
 import { formatPrice } from "../../../utils/formatPrice";
 import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActions";
 import { ORDER_BASE_URL } from "../../../confg";
-import CountDownTimer from "../../../components/orders/CountDownTimer";
+// import CountDownTimer from "../../../components/orders/CountDownTimer";
+import { OrderCountDownTimer } from "../../../components/orders/OrderCountDownTimer";
 
 const PlacedOrderDetails = () => {
   const route = useRoute();
@@ -52,37 +53,34 @@ const PlacedOrderDetails = () => {
   useEffect(() => {
     let componentMounted = true;
 
-    const action = setInterval(() => {
-      const getSingleOrder = async (orderId) => {
-        try {
-          // setLoadingSingleOrder(true);
-          const config = {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          };
+    const getSingleOrder = async (orderId) => {
+      try {
+        // setLoadingSingleOrder(true);
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
 
-          const {
-            data: { order },
-          } = await axios.get(
-            `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`,
-            config
-          );
+        const {
+          data: { order },
+        } = await axios.get(
+          `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`,
+          config
+        );
 
-          // setLoadingSingleOrder(false);
+        // setLoadingSingleOrder(false);
 
-          if (componentMounted) {
-            setSingleOrder(order);
-          }
-        } catch (error) {
-          console.log(error);
+        if (componentMounted) {
+          setSingleOrder(order);
         }
-      };
-      getSingleOrder(orderId);
-      console.log("checking for status...");
-    }, 1000);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getSingleOrder(orderId);
+
     return () => {
-      clearInterval(action);
       componentMounted = false;
     };
   }, []);
@@ -102,7 +100,6 @@ const PlacedOrderDetails = () => {
     );
   };
 
-  const hoursMinSecs = { hours: 1, minutes: 20, seconds: 40 };
   return (
     <View
       style={{
@@ -114,10 +111,12 @@ const PlacedOrderDetails = () => {
         <View
           style={{
             paddingHorizontal: 10,
-            paddingTop: 40,
+            paddingTop: 20,
           }}
         >
-          {/* <CountDownTimer hoursMinSecs={hoursMinSecs} /> */}
+          <OrderCountDownTimer
+            placed={singleOrder[0]?.orderStatus[0]?.datePlaced}
+          />
         </View>
         <View
           style={{

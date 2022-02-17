@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, View, TouchableOpacity, FlatList, Image, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  Pressable,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native-virtualized-view";
 
@@ -10,18 +17,19 @@ import { formatPrice } from "../../utils/formatPrice";
 
 import ProductCard2 from "../products/ProductCard2";
 import { icons } from "../../constants";
-import { cloneDeep, findIndex, pullAt } from "lodash"
-import { deleteProductToSell, productsToSell } from "../../redux/actions/productActions";
+import { cloneDeep, findIndex, pullAt } from "lodash";
+import {
+  deleteProductToSell,
+  productsToSell,
+} from "../../redux/actions/productActions";
 
 const ProductsSummarySheet = ({ visible, toggle }) => {
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch();
   const products_tosell = useSelector((state) => state.product.products_tosell);
   const array = cloneDeep(products_tosell);
 
   const deleteItem = (productID) => {
     dispatch(deleteProductToSell(productID));
-    
-
   };
 
   //   const totalAmount = products_tosell?.reduce(

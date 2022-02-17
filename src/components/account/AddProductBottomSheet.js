@@ -28,7 +28,6 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
   const [productsToSellArray, setProductsToSellArray] = useState([]);
   const products_tosell = useSelector((state) => state.product.products_tosell);
 
-
   const save = (productID, productSku, productPrice, imageUrl) => {
     // const index = findIndex(productsToSellArray, { productId: productID });
     const item = {
@@ -39,7 +38,6 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
     };
 
     dispatch(productToSell(item));
-
   };
 
   function between(x, min, max) {

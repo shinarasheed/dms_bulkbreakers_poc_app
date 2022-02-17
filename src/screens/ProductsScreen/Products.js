@@ -7,7 +7,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import ProductsTab from "../../components/account/ProductsTab";
@@ -15,6 +15,7 @@ import { Header } from "../../components/account/Header";
 
 import appTheme from "../../constants/theme";
 import Products from "../../components/account/Products";
+import { getMyInventory } from "../../redux/actions/customerActions";
 
 export default function Index() {
   const [index, setIndex] = useState(0);
@@ -35,6 +36,12 @@ export default function Index() {
   const inStockInventory = myInventory.filter((item) => item.instock === true);
   const outOfStcokInventory = myInventory.filter(
     (item) => item.instock === false
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getMyInventory());
+    }, [navigation])
   );
 
   // i should not have need for this

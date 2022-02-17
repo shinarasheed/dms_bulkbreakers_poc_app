@@ -125,7 +125,7 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
   }
 };
 
-export const getDistributors = (navigation) => async (dispatch, getState) => {
+export const getDistributors = () => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
   try {
@@ -178,8 +178,6 @@ export const getDistributors = (navigation) => async (dispatch, getState) => {
         token,
       },
     });
-
-    // navigation.navigate(Routes.HOME_SCREEN);
   } catch (error) {
     console.log(error);
     dispatch({

@@ -138,19 +138,20 @@ export const productReducer = (state = initialState, action) => {
     case ADD_PRODUCT_TOSELL: {
       return {
         ...state,
-        products_tosell: [...state.products_tosell, action.product_tosell],
+        products_tosell: [...state?.products_tosell, action.product_tosell],
       };
     }
     case DELETE_PRODUCT_TO_SELL:
       return {
         ...state,
-        products_tosell: state.products_tosell.filter(
+        products_tosell: state?.products_tosell.filter(
           (item) => item.productId !== payload
         ),
       };
 
     case SAVE_PRODUCTS_REQUEST:
       return {
+        ...state,
         loading: true,
       };
 
@@ -165,7 +166,7 @@ export const productReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: action.payload,
       };
 
     default:

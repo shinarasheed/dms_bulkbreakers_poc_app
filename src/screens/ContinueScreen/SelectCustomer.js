@@ -31,16 +31,6 @@ const SelectCustomer = () => {
 
   const { isLoading, customer } = customerState;
 
-  // const getSavedCustomer = async () => {
-  //   let theCustomer = await AsyncStorage.getItem("customer");
-  //   theCustomer = JSON.parse(theCustomer);
-  //   setSavedCustomer(theCustomer);
-  // };
-
-  // useEffect(() => {
-  //   getSavedCustomer();
-  // }, []);
-
   const handleGetDistributors = async () => {
     try {
       dispatch(getDistributors(navigation));
@@ -133,7 +123,7 @@ const SelectCustomer = () => {
           </TouchableOpacity>
         )}
 
-        {customer?.CUST_Type === "BulkBreaker" ? (
+        {customer?.CUST_Type.toLowerCase() === "bulkbreaker" ? (
           <View
             style={{
               paddingHorizontal: 30,

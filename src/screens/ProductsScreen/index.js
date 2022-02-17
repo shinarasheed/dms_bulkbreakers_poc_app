@@ -7,7 +7,7 @@ import Products from "../ProductsScreen/Products";
 const ProductsScreen = () => {
   const customerState = useSelector((state) => state.customer);
 
-  const { customer, myInventory } = customerState;
+  const { myInventory } = customerState;
 
   return <>{myInventory.length === 0 ? <NoInventory /> : <Products />}</>;
 };

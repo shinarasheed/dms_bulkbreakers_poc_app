@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { getDistributors } from "../../redux/actions/customerActions";
+import { Routes } from "../../navigation/Routes";
 
 const SelectBottomSheet = ({ visible, toggle }) => {
   const filters = [
@@ -48,9 +49,11 @@ const SelectBottomSheet = ({ visible, toggle }) => {
     await AsyncStorage.setItem("customer", JSON.stringify(theCustomer));
     try {
       if (action === "buy") {
-        dispatch(getDistributors(navigation));
+        dispatch(getDistributors(navigation, "HomeScreen"));
+      } else if (action === "setupstore") {
+        dispatch(getDistributors(navigation, "AddProductsScreen"));
       } else {
-        return;
+        dispatch(getDistributors(navigation, "HomeScreen"));
       }
     } catch (error) {
       console.log(error);
