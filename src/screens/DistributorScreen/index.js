@@ -78,7 +78,10 @@ const DistributorScreen = () => {
             fontFamily: "Gilroy-Bold",
           }}
         >
-          Buy From {distributor?.company_name}
+          Buy From{" "}
+          {distributor?.company_name
+            ? distributor?.company_name
+            : distributor?.CUST_Name}
         </Text>
       </View>
       <View style={styles.searchInputContainer}>

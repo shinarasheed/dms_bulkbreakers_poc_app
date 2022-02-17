@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 import { TouchableOpacity, Image, Text, View } from "react-native";
 import axios from "axios";
 
@@ -11,6 +12,9 @@ import { truncateString } from "../../utils/truncateString";
 
 export const TopDistributor = ({ distributor }) => {
   const navigation = useNavigation();
+
+  const customerState = useSelector((state) => state.customer);
+  const { customer } = customerState;
 
   return (
     <TouchableOpacity
@@ -26,6 +30,7 @@ export const TopDistributor = ({ distributor }) => {
           paddingHorizontal: 20,
           marginRight: 10,
           alignItems: "center",
+          width: 150,
         }}
       >
         <Image
@@ -56,7 +61,9 @@ export const TopDistributor = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {truncateString(distributor?.company_name, 14)}
+          {customer?.CUST_Type.toLowerCase() === "bulkbreaker"
+            ? truncateString(distributor?.company_name, 10)
+            : truncateString(distributor?.CUST_Name, 10)}
         </Text>
 
         {distributor?.stars ? (

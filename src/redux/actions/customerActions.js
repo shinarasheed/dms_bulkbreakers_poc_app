@@ -18,6 +18,9 @@ import {
   GET_CUSTOMER_INVENTORY_FAIL,
   UPDATE_PRODUCT_STATUS,
   DELETE_INVENTORY_PRODUCT,
+  GET_BULKBREAKERS_SUCCESS,
+  GET_BULKBREAKERS_REQUEST,
+  GET_BULKBREAKERS_FAIL,
 } from "../constants/customerConstants";
 import { CUSTOMER_BASE_URL, INVENTORY_BASE_URL } from "../../confg";
 import { Routes } from "../../navigation/Routes";
@@ -111,8 +114,6 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
         token,
       },
     });
-
-    console.log(distributor);
   } catch (error) {
     console.log(error);
     dispatch({
@@ -128,6 +129,8 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
 export const getDistributors = () => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
+  const { CUST_Type } = customer;
+
   try {
     dispatch({
       type: GET_DISTRIBUTORS_REQUEST,
@@ -139,49 +142,129 @@ export const getDistributors = () => async (dispatch, getState) => {
       },
     };
 
-    const {
-      data: { result },
-    } = await axios.get(
-      `http://102.133.143.139/company/companies/Nigeria
-    `,
-      config
-    );
-
-    let distributors = result;
-
-    distributors = distributors.map((distributor) => ({
-      ...distributor,
-      byFar: parseInt(
-        getDistanceApart(
-          { lat: customer?.latitude, lon: customer?.longitude },
-          { lat: distributor?.lat, lon: distributor?.long }
-        )
-      ),
-    }));
-
-    distributors = distributors
-      .filter((distributor) => distributor.byFar <= 475)
-      .sort(
-        (distributorA, distributorB) => distributorA.byFar - distributorB.byFar
+    if (CUST_Type.toLowerCase() === "bulkbreaker") {
+      const {
+        data: { result },
+      } = await axios.get(
+        `http://102.133.143.139/company/companies/Nigeria
+      `,
+        config
       );
 
-    const codes = distributors.map((distributor) => distributor.DIST_Code);
+      let distributors = result;
 
-    // dispatch(getAllProducts(codes));
+      distributors = distributors.map((distributor) => ({
+        ...distributor,
+        byFar: parseInt(
+          getDistanceApart(
+            { lat: customer?.latitude, lon: customer?.longitude },
+            { lat: distributor?.lat, lon: distributor?.long }
+          )
+        ),
+      }));
 
-    const token = await AsyncStorage.getItem("token");
+      distributors = distributors
+        .filter((distributor) => distributor.byFar <= 5)
+        .sort(
+          (distributorA, distributorB) =>
+            distributorA.byFar - distributorB.byFar
+        );
 
-    dispatch({
-      type: GET_DISTRIBUTORS_SUCCESS,
-      payload: {
-        distributors,
-        token,
-      },
-    });
+      const codes = distributors.map((distributor) => distributor.DIST_Code);
+
+      // dispatch(getAllProducts(codes));
+
+      const token = await AsyncStorage.getItem("token");
+
+      dispatch({
+        type: GET_DISTRIBUTORS_SUCCESS,
+        payload: {
+          distributors,
+          token,
+        },
+      });
+    } else {
+      const {
+        data: { result },
+      } = await axios.get(
+        `https://dmsdev20.azure-api.net/customer/customer/getcustomerbytype/Nigeria/Bulkbreaker`,
+        config
+      );
+
+      let distributors = result;
+
+      distributors = distributors.map((distributor) => ({
+        ...distributor,
+        byFar: parseInt(
+          getDistanceApart(
+            { lat: customer?.latitude, lon: customer?.longitude },
+            { lat: distributor?.latitude, lon: distributor?.longitude }
+          )
+        ),
+      }));
+
+      distributors = distributors
+        .filter((distributor) => distributor.byFar <= 5)
+        .sort(
+          (distributorA, distributorB) =>
+            distributorA.byFar - distributorB.byFar
+        );
+
+      // const codes = distributors.map((distributor) => distributor.DIST_Code);
+
+      // dispatch(getAllProducts(codes));
+
+      const token = await AsyncStorage.getItem("token");
+
+      dispatch({
+        type: GET_DISTRIBUTORS_SUCCESS,
+        payload: {
+          distributors,
+          token,
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     dispatch({
       type: GET_DISTRIBUTORS_FAIL,
+      payload:
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.msg,
+    });
+  }
+};
+
+export const getBulkbreakers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_BULKBREAKERS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { result },
+    } = await axios.get(
+      `https://dmsdev20.azure-api.net/customer/customer/getcustomerbytype/Nigeria/Bulkbreaker`,
+      config
+    );
+
+    const token = await AsyncStorage.getItem("token");
+
+    dispatch({
+      type: GET_BULKBREAKERS_SUCCESS,
+      payload: result,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: GET_BULKBREAKERS_FAIL,
       payload:
         error.response && error.response.data.msg
           ? error.response.data.msg
@@ -280,7 +363,9 @@ export const updateProductStatus =
 
       dispatch({
         type: UPDATE_PRODUCT_STATUS,
+        payload: productId,
       });
+      dispatch(getMyInventory());
     } catch (error) {
       console.log(error);
     }

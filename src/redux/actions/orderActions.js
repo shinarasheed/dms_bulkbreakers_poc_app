@@ -70,15 +70,13 @@ export const getMyOrders = (salesForceCode) => async (dispatch) => {
       config
     );
 
-    // const result = order.sort(
-    //   (orderA, orderB) =>
-    //     moment(orderA.orderStatus[0].datePlaced).format("MMM Do, YYYY") -
-    //     moment(orderB.orderStatus[0].datePlaced).format("MMM Do, YYYY")
-    // );
+    let result = order.sort(
+      (orderA, orderB) => orderB.orderId - orderA.orderId
+    );
 
     dispatch({
       type: GET_MYORDERS_SUCCESS,
-      payload: order,
+      payload: result,
     });
   } catch (error) {
     console.log(error);

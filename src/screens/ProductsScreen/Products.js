@@ -33,8 +33,8 @@ export default function Index() {
   // const [inStockInventory, setInStockInventory] = useState([]);
   // const [outOfStcokInventory, setOutOfStockInventory] = useState([]);
 
-  const inStockInventory = myInventory.filter((item) => item.instock === true);
-  const outOfStcokInventory = myInventory.filter(
+  const inStockInventory = myInventory?.filter((item) => item.instock === true);
+  const outOfStcokInventory = myInventory?.filter(
     (item) => item.instock === false
   );
 

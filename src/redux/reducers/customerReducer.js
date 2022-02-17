@@ -16,6 +16,7 @@ import {
   GET_CUSTOMER_INVENTORY_SUCCESS,
   GET_CUSTOMER_INVENTORY_FAIL,
   DELETE_INVENTORY_PRODUCT,
+  UPDATE_PRODUCT_STATUS,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -32,6 +33,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  const { payload } = action;
   switch (action.type) {
     case GET_CUSTOMER_REQUEST:
       return {
@@ -77,6 +79,14 @@ export default (state = initialState, action) => {
           (item) => item.productId !== payload
         ),
       };
+
+    case UPDATE_PRODUCT_STATUS:
+      const product = state.myInventory.find(
+        (item) => item?.product?.productId === payload
+      );
+
+      product.instock = !product.instock;
+      return { ...state };
 
     case GET_DISTRIBUTOR_REQUEST:
       return {

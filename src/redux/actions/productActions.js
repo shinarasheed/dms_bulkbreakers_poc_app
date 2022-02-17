@@ -21,7 +21,9 @@ import {
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 
-export const getProducts = (DistributorCode) => async (dispatch) => {
+export const getProducts = (DistributorCode) => async (dispatch, getState) => {
+  const { customer } = getState().customer;
+
   try {
     dispatch({
       type: GET_PRODUCTS_REQUEST,
@@ -33,34 +35,62 @@ export const getProducts = (DistributorCode) => async (dispatch) => {
       },
     };
 
-    const {
-      data: { data },
-    } = await axios.get(
-      `${INVENTORY_BASE_URL}/inventory/${DistributorCode}`,
-      config
-    );
+    if (customer?.CUST_Type.toLowerCase() === "poc") {
+      const {
+        data: { data },
+      } = await axios.get(`http://20.87.34.168/api/v1/bb/1`, config);
 
-    let availableProducts = data.filter((product) => product.quantity > 0);
+      let availableProducts = data;
 
-    availableProducts = availableProducts?.map((item) => ({
-      companyCode: item.companyCode,
-      date: item.date,
-      id: item.id,
-      brand: item.product.brand,
-      country: item.product.country,
-      imageUrl: item.product.imageUrl,
-      price: item.product.price,
-      productId: item.product.productId,
-      productType: item.product.productType,
-      sku: item.product.sku,
-      quantity: item.quantity,
-      buyingQuantity: 0,
-    }));
+      availableProducts = availableProducts?.map((item) => ({
+        companyCode: item.companyCode,
+        date: item.date,
+        id: item.id,
+        brand: item.product.brand,
+        country: item.product.country,
+        imageUrl: item.product.imageUrl,
+        price: item.product.price,
+        productId: item.product.productId,
+        productType: item.product.productType,
+        sku: item.product.sku,
+        quantity: item.quantity,
+        buyingQuantity: 0,
+      }));
 
-    dispatch({
-      type: GET_PRODUCTS_SUCCESS,
-      payload: availableProducts,
-    });
+      dispatch({
+        type: GET_PRODUCTS_SUCCESS,
+        payload: availableProducts,
+      });
+    } else {
+      const {
+        data: { data },
+      } = await axios.get(
+        `${INVENTORY_BASE_URL}/inventory/${DistributorCode}`,
+        config
+      );
+
+      let availableProducts = data.filter((product) => product.quantity > 0);
+
+      availableProducts = availableProducts?.map((item) => ({
+        companyCode: item.companyCode,
+        date: item.date,
+        id: item.id,
+        brand: item.product.brand,
+        country: item.product.country,
+        imageUrl: item.product.imageUrl,
+        price: item.product.price,
+        productId: item.product.productId,
+        productType: item.product.productType,
+        sku: item.product.sku,
+        quantity: item.quantity,
+        buyingQuantity: 0,
+      }));
+
+      dispatch({
+        type: GET_PRODUCTS_SUCCESS,
+        payload: availableProducts,
+      });
+    }
   } catch (error) {
     dispatch({
       type: GET_PRODUCTS_FAIL,
@@ -159,58 +189,54 @@ export const fetchAllProductsIntheCompany = () => async (dispatch) => {
   }
 };
 
-export const addProductsToSave =
-  (action) => (dispatch) => {
+export const addProductsToSave = (action) => (dispatch) => {
+  dispatch({
+    type: UNSAVED_CHANGES,
+    transfer_change: action,
+  });
+};
+
+export const productToSell = (item) => (dispatch) => {
+  dispatch({
+    type: ADD_PRODUCT_TOSELL,
+    product_tosell: item,
+  });
+};
+
+export const deleteProductToSell = (productId) => (dispatch) => {
+  dispatch({
+    type: DELETE_PRODUCT_TO_SELL,
+    payload: productId,
+  });
+};
+
+export const saveProductsToSell = (payload) => async (dispatch) => {
+  try {
     dispatch({
-      type: UNSAVED_CHANGES,
-      transfer_change: action,
+      type: SAVE_PRODUCTS_REQUEST,
     });
-  };
 
-  export const productToSell = (item) => (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { data },
+    } = await axios.post(`${INVENTORY_BASE_URL}/bb/add`, payload, config);
+
     dispatch({
-      type: ADD_PRODUCT_TOSELL,
-      product_tosell: item,
+      type: SAVE_PRODUCTS_SUCCESS,
+      payload: data,
     });
-  };
-
-  export const deleteProductToSell = (productId) => (dispatch) => {
+  } catch (error) {
     dispatch({
-      type: DELETE_PRODUCT_TO_SELL,
-      payload: productId,
+      type: SAVE_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     });
-  };
-
-  export const saveProductsToSell = (payload) => async (dispatch) => {
-    try {
-      dispatch({
-        type: SAVE_PRODUCTS_REQUEST,
-      });
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const {
-        data: { data },
-      } = await axios.post(`${INVENTORY_BASE_URL}/bb/add`, payload, config);
-
-      dispatch({
-        type: SAVE_PRODUCTS_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: SAVE_PRODUCTS_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
-  
-
-  
+  }
+};

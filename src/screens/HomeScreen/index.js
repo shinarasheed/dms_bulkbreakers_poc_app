@@ -15,6 +15,7 @@ import { Distributor } from "../../components/home/Distributor";
 import BottomFilter from "../../components/home/BottomFilter";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  getBulkbreakers,
   getDistributors,
   getMyInventory,
 } from "../../redux/actions/customerActions";
@@ -34,7 +35,7 @@ const HomeScreen = () => {
   const { error, isLoading, distributors, myInventory, customer } =
     customerState;
 
-  const topDistributors = distributors?.slice(0, 3);
+  const topDistributors = distributors?.slice(0, 5);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -50,6 +51,10 @@ const HomeScreen = () => {
 
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getBulkbreakers());
   }, []);
 
   return (
@@ -83,46 +88,47 @@ const HomeScreen = () => {
           </Text>
         </Pressable>
 
-        {myInventory?.length === 0 && (
-          <TouchableOpacity
-            style={{
-              backgroundColor: appTheme.COLORS.countDownYellow,
-              borderRadius: 10,
-              paddingVertical: 10,
-              paddingHorizontal: 10,
-              flexDirection: "row",
-              marginHorizontal: 10,
-              marginVertical: 20,
-              borderColor: appTheme.COLORS.mainYellow,
-              borderWidth: 1,
-            }}
-          >
-            <Image source={icons.InfoIcon} />
-
-            <View
+        {customer?.CUST_Type.toLowerCase() === "bulkbreaker" &&
+          myInventory?.length === 0 && (
+            <TouchableOpacity
               style={{
-                marginLeft: 10,
+                backgroundColor: appTheme.COLORS.countDownYellow,
+                borderRadius: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                flexDirection: "row",
+                marginHorizontal: 10,
+                marginVertical: 20,
+                borderColor: appTheme.COLORS.mainYellow,
+                borderWidth: 1,
               }}
             >
-              <Text
+              <Image source={icons.InfoIcon} />
+
+              <View
                 style={{
-                  fontSize: 15,
-                  fontFamily: "Gilroy-Light",
+                  marginLeft: 10,
                 }}
               >
-                You have not added products to your store
-              </Text>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily: "Gilroy-Light",
-                }}
-              >
-                Tap here to add products
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontFamily: "Gilroy-Light",
+                  }}
+                >
+                  You have not added products to your store
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontFamily: "Gilroy-Light",
+                  }}
+                >
+                  Tap here to add products
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
 
         {distributors?.length > 0 ? (
           <View

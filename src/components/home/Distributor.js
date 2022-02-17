@@ -9,10 +9,14 @@ import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { INVENTORY_BASE_URL } from "../../confg";
+import { truncateString } from "../../utils/truncateString";
 
-export const Distributor = ({ distributor, customer }) => {
+export const Distributor = ({ distributor }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const customerState = useSelector((state) => state.customer);
+  const { customer } = customerState;
 
   const navigation = useNavigation();
 
@@ -27,14 +31,26 @@ export const Distributor = ({ distributor, customer }) => {
 
       // setLoading(true);
 
-      const {
-        data: { data },
-      } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
+      if (customer?.CUST_Type.toLowerCase() === "poc") {
+        const {
+          data: { data },
+        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${customer?.id}`, config);
 
-      let availableProducts = data?.filter((product) => product.quantity > 0);
-      // setLoading(false);
-      if (componentMounted) {
-        setProducts(availableProducts);
+        let availableProducts = data;
+        // setLoading(false);
+        if (componentMounted) {
+          setProducts(availableProducts);
+        }
+      } else {
+        const {
+          data: { data },
+        } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
+
+        let availableProducts = data?.filter((product) => product.quantity > 0);
+        // setLoading(false);
+        if (componentMounted) {
+          setProducts(availableProducts);
+        }
       }
     };
 
@@ -66,6 +82,10 @@ export const Distributor = ({ distributor, customer }) => {
           }}
         >
           {distributor?.company_name}
+
+          {customer?.CUST_Type.toLowerCase() === "bulkbreaker"
+            ? truncateString(distributor?.company_name, 1)
+            : truncateString(distributor?.CUST_Name, 15)}
         </Text>
 
         <View
