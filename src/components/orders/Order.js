@@ -116,7 +116,9 @@ export const Order = ({ item }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            {theDistributor?.company_name}
+            {theDistributor?.company_name
+              ? theDistributor?.company_name
+              : item?.buyerDetails[0]?.buyerName}
           </Text>
 
           <View

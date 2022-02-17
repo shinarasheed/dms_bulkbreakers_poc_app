@@ -9,6 +9,9 @@ import {
   GET_SINGLE_ORDER_SUCCESS,
   GET_SINGLE_ORDER_FAIL,
   TOGGLE_ORDER_PLACED,
+  GET_RECEIVED_ORDERS_REQUEST,
+  GET_RECEIVED_ORDERS_SUCCESS,
+  GET_RECEIVED_ORDERS_FAIL,
 } from "../constants/orderConstants";
 
 export const placeOrderReducer = (state = {}, action) => {
@@ -87,6 +90,36 @@ export const singleOrdersReducer = (state = {}, action) => {
       };
 
     case GET_SINGLE_ORDER_FAIL:
+      return {
+        loading: false,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const recievedOrdersReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case GET_RECEIVED_ORDERS_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case GET_RECEIVED_ORDERS_SUCCESS:
+      return {
+        loading: false,
+        receivedOrders: payload,
+        openOrders: action.payload.filter(
+          (order) => order.orderStatus[0].status !== "Delivered"
+        ),
+        deliveredOrders: action.payload.filter(
+          (order) => order.orderStatus[0].status === "Delivered"
+        ),
+      };
+
+    case GET_RECEIVED_ORDERS_FAIL:
       return {
         loading: false,
       };

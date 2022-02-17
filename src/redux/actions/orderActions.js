@@ -12,6 +12,9 @@ import {
   TOGGLE_ORDER_PLACED,
   UPDATE_ORDER_STATUS_SUCCESS,
   UPDATE_ORDER_STATUS_FAIL,
+  GET_RECEIVED_ORDERS_REQUEST,
+  GET_RECEIVED_ORDERS_SUCCESS,
+  GET_RECEIVED_ORDERS_FAIL,
 } from "../constants/orderConstants";
 import { ORDER_BASE_URL } from "../../confg";
 import moment from "moment";
@@ -70,6 +73,8 @@ export const getMyOrders = (salesForceCode) => async (dispatch) => {
       config
     );
 
+    console.log(order);
+
     let result = order.sort(
       (orderA, orderB) => orderB.orderId - orderA.orderId
     );
@@ -82,6 +87,45 @@ export const getMyOrders = (salesForceCode) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: GET_MYORDERS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getRecievedOrders = (salesForceCode) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_RECEIVED_ORDERS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { order },
+    } = await axios.get(
+      `${ORDER_BASE_URL}/GetOrder/GetOrderBySellerCompanyId/${salesForceCode}`,
+      config
+    );
+
+    let result = order.sort(
+      (orderA, orderB) => orderB.orderId - orderA.orderId
+    );
+
+    dispatch({
+      type: GET_RECEIVED_ORDERS_SUCCESS,
+      payload: result,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: GET_RECEIVED_ORDERS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

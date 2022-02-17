@@ -12,6 +12,7 @@ import {
   listMyOrdersReducer,
   placeOrderReducer,
   singleOrdersReducer,
+  recievedOrdersReducer,
 } from "./reducers/orderReducer";
 
 const persistConfig = {
@@ -27,6 +28,7 @@ const reducer = combineReducers({
   createOrder: placeOrderReducer,
   myOrders: listMyOrdersReducer,
   singleOrder: singleOrdersReducer,
+  recievedOrders: recievedOrdersReducer,
 });
 
 const initialState = {};

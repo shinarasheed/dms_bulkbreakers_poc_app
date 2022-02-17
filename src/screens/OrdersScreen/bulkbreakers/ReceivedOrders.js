@@ -19,7 +19,7 @@ import appTheme from "../../../constants/theme";
 import { icons } from "../../../constants";
 
 import { orders } from "../../../data";
-import { getMyOrders } from "../../../redux/actions/orderActions";
+import { getRecievedOrders } from "../../../redux/actions/orderActions";
 // import { fetchAllProductsIntheCompany } from "../../redux/actions/products";
 
 export default function RecievedOrders() {
@@ -34,9 +34,18 @@ export default function RecievedOrders() {
 
   const { customer } = customerState;
 
-  const myOrdersState = useSelector((state) => state.myOrders);
+  // const myOrdersState = useSelector((state) => state.myOrders);
 
-  const { openOrders, deliveredOrders, myorders, loading } = myOrdersState;
+  // const { openOrders, deliveredOrders, myorders, loading } = myOrdersState;
+
+  const receivedOrdersState = useSelector((state) => state.recievedOrders);
+
+  const {
+    receivedOrders,
+    loading,
+    receivedopenOrders,
+    receiveddeliveredOrders,
+  } = receivedOrdersState;
 
   // const filteredOpenOrders = openOrders?.filter((item) =>
   //   item.orderId.includes(searchTerm)
@@ -44,28 +53,28 @@ export default function RecievedOrders() {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getMyOrders(customer?.SF_Code));
+      dispatch(getRecievedOrders(customer?.SF_Code));
     }, [navigation])
   );
 
-  const [theOpenOrders, setTheOpenOrders] = useState([]);
-  const [theClosedOrders, setTheClosedOrders] = useState([]);
+  // const [theOpenOrders, setTheOpenOrders] = useState([]);
+  // const [theClosedOrders, setTheClosedOrders] = useState([]);
 
-  useEffect(() => {
-    setTheOpenOrders(openOrders);
-    setTheClosedOrders(deliveredOrders);
-  }, [myorders, navigation]);
+  // useEffect(() => {
+  //   setTheOpenOrders(receivedopenOrders);
+  //   setTheClosedOrders(receiveddeliveredOrders);
+  // }, [receivedOrders, navigation]);
 
   const ShowOrders = (index) => {
     switch (index) {
       case 0:
-        return <OpenOrders myorders={theOpenOrders} />;
+        return <OpenOrders myorders={receivedOrders} />;
 
       case 1:
-        return <ClosedOrders myorders={theClosedOrders} />;
+        return <ClosedOrders myorders={receivedOrders} />;
 
       default:
-        return <OpenOrders myorders={theOpenOrders} />;
+        return <OpenOrders myorders={receivedOrders} />;
     }
   };
 
