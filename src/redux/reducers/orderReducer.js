@@ -111,10 +111,10 @@ export const recievedOrdersReducer = (state = {}, action) => {
       return {
         loading: false,
         receivedOrders: payload,
-        openOrders: action.payload.filter(
+       receivedopenOrders: action.payload.filter(
           (order) => order.orderStatus[0].status !== "Delivered"
         ),
-        deliveredOrders: action.payload.filter(
+        receiveddeliveredOrders: action.payload.filter(
           (order) => order.orderStatus[0].status === "Delivered"
         ),
       };

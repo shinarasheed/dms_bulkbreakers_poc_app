@@ -71,18 +71,18 @@ const ProductsSummarySheet = ({ visible, toggle }) => {
               >
                 {productSku}
               </Text>
-              <Text
-                style={{
-                  fontSize: 15,
-                  textTransform: "capitalize",
-                  marginBottom: 5,
-                  color: appTheme.COLORS.black,
-                  fontFamily: "Gilroy-Medium",
-                }}
-              >
-                {price}
-              </Text>
             </View>
+            <Text
+              style={{
+                fontSize: 14,
+                textTransform: "capitalize",
+                marginBottom: 5,
+                color: "#74767E",
+                fontFamily: "Gilroy-Medium",
+              }}
+            >
+              ₦{formatPrice(price)}/case
+            </Text>
           </View>
           <TouchableOpacity onPress={() => deleteItem(productId)}>
             <Image source={icons.deleteIcon} />

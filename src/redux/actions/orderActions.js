@@ -72,9 +72,6 @@ export const getMyOrders = (salesForceCode) => async (dispatch) => {
       `${ORDER_BASE_URL}/GetOrder/GetOrderByBuyerCompanyId/${salesForceCode}`,
       config
     );
-
-    console.log(order);
-
     let result = order.sort(
       (orderA, orderB) => orderB.orderId - orderA.orderId
     );

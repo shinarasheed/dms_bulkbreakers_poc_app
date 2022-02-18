@@ -65,7 +65,7 @@ const Location = () => {
           placeholder="Enter your address here"
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(data, details);
+            // console.log(data, details);
           }}
           query={{
             key: "AIzaSyB8dE8co9lVO0eoQxdQCcxuEq04B03nH6c",

@@ -7,6 +7,7 @@ import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { INVENTORY_BASE_URL } from "../../confg";
+import { distributors } from "../../data";
 
 export const Distributor = ({ distributor }) => {
   const navigation = useNavigation();
@@ -25,19 +26,13 @@ export const Distributor = ({ distributor }) => {
 
         const {
           data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
-
-        let availableProducts = await data.filter(
-          (product) => product.quantity > 0
+        } = await axios.get(
+          `${INVENTORY_BASE_URL}/bb/${distributor?.id}`,
+          config
         );
 
-        availableProducts = availableProducts?.map((item) => ({
-          ...item,
-          buyingQuantity: 0,
-        }));
-
         if (componentMounted) {
-          setProducts(availableProducts);
+          setProducts(data);
         }
       } catch (error) {
         console.log(error);
@@ -71,7 +66,7 @@ export const Distributor = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {distributor?.company_name}
+          {distributor?.CUST_Name}
         </Text>
         <Text
           style={{

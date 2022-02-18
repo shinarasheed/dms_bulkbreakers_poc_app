@@ -159,6 +159,8 @@ export const productReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        products_tosell: [],
+
         // products: action.payload,
       };
 

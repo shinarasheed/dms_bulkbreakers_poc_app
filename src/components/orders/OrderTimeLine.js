@@ -13,7 +13,7 @@ import moment from "moment";
 const OrderTimeLine = ({
   item,
   singleOrder,
-  theDistributor,
+  // theDistributor,
   productsToOder,
 }) => {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ const OrderTimeLine = ({
     ) {
       navigation.navigate(Routes.RATING_SCREEN, {
         productsToOder,
-        theDistributor,
+        // theDistributor,
         item,
       });
     }

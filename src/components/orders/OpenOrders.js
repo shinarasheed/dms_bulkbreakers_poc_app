@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 
-import { Order } from "./Order";
+import { Order } from "./pocs/Order";
 
 const OpenOrders = ({ myorders }) => {
   return (

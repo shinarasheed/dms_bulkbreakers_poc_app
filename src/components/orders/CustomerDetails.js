@@ -19,7 +19,7 @@ import { Routes } from "../../navigation/Routes";
 import { getDistanceApart } from "../../utils/calCulateDistance";
 import { INVENTORY_BASE_URL } from "../../confg";
 
-const OrderFooter = ({ distributor }) => {
+const OrderFooter = ({ distributor, item }) => {
   const navigation = useNavigation();
 
   const [loadingInventory, setLoadingInventory] = useState(false);
@@ -81,7 +81,7 @@ const OrderFooter = ({ distributor }) => {
             fontSize: 18,
           }}
         >
-          Mckhor Industrail Ventures
+          {item?.buyerDetails[0].buyerName}
         </Text>
       </View>
 
@@ -123,11 +123,11 @@ const OrderFooter = ({ distributor }) => {
                 color: appTheme.COLORS.mainTextGray,
               }}
             >
-              46, Fatai Aremo Lane, Off Mr Biggs, Ikeja
+              {item?.buyerDetails[0].buyerAddress}
             </Text>
           </View>
 
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -143,9 +143,9 @@ const OrderFooter = ({ distributor }) => {
             >
               Along, Lagos
             </Text>
-          </View>
+          </View> */}
 
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               marginTop: 10,
@@ -174,7 +174,7 @@ const OrderFooter = ({ distributor }) => {
                 lagos
               </Text>
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
 
@@ -186,7 +186,9 @@ const OrderFooter = ({ distributor }) => {
         }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`tel:+234${distributor.Owner_Phone}}`)}
+          onPress={() =>
+            Linking.openURL(`tel:+234${item.buyerDetails[0]?.phoneNumber}}`)
+          }
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -216,7 +218,7 @@ const OrderFooter = ({ distributor }) => {
         <TouchableOpacity
           onPress={() => {
             Linking.openURL(
-              `http://api.whatsapp.com/send?phone=234${distributor.Owner_Phone}`
+              `http://api.whatsapp.com/send?phone=234${item.buyerDetails[0]?.phoneNumber}`
             );
           }}
           style={{
@@ -233,14 +235,14 @@ const OrderFooter = ({ distributor }) => {
             elevation: 10,
           }}
         >
-          <Image source={icons.wattsappIcon} />
+          <Image source={icons.WhatsAppIcon} />
           <Text
             style={{
               marginLeft: 8,
               fontFamily: "Gilroy-Light",
             }}
           >
-            WattsApp
+            WhatsApp
           </Text>
         </TouchableOpacity>
       </View>

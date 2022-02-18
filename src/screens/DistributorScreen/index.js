@@ -32,7 +32,6 @@ const DistributorScreen = () => {
 
   const { distributor } = route.params;
 
-  console.log(distributor);
 
   const productsState = useSelector((state) => state.product);
 
@@ -128,7 +127,7 @@ const DistributorScreen = () => {
               color: appTheme.COLORS.mainRed,
             }}
           >
-            This Distributor does not not have any products to sell{" "}
+            This Seller does not not have any products to sell{" "}
           </Text>
         </View>
       )}

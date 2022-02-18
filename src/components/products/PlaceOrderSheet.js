@@ -67,66 +67,69 @@ const BottomFilter = ({
       >
         {!orderPlaced ? (
           <>
-            <View
-              style={{
-                paddingHorizontal: 20,
-                paddingVertical: 20,
-              }}
-            >
+            {customer?.CUST_Type.toLowerCase() === "bulkbreaker" && (
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  paddingHorizontal: 20,
+                  paddingVertical: 20,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 17,
-                    fontFamily: "Gilroy-Medium",
-                    marginBottom: 15,
-                  }}
-                >
-                  How will you like to recieve your order?
-                </Text>
-                <Pressable onPress={() => toggle()}>
-                  <Image source={icons.cancelIcon} />
-                </Pressable>
-              </View>
-
-              {filters.map((filter, index) => (
                 <View
-                  key={index}
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
-                    marginBottom: 10,
+                    justifyContent: "space-between",
                   }}
                 >
-                  <RadioButton
-                    value={filter.value}
-                    color={appTheme.COLORS.mainRed}
-                    status={checked === filter.key ? "checked" : "unchecked"}
-                    onPress={() => {
-                      setDeliveryType(filter.key);
-                      setChecked(filter.key);
-                    }}
-                  />
-
                   <Text
                     style={{
-                      fontFamily: "Gilroy-Light",
-                      fontSize: 18,
+                      fontSize: 17,
+                      fontFamily: "Gilroy-Medium",
+                      marginBottom: 15,
                     }}
                   >
-                    {filter.value}
+                    How will you like to recieve your order?
                   </Text>
+                  <Pressable onPress={() => toggle()}>
+                    <Image source={icons.cancelIcon} />
+                  </Pressable>
                 </View>
-              ))}
-            </View>
+
+                {filters.map((filter, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <RadioButton
+                      value={filter.value}
+                      color={appTheme.COLORS.mainRed}
+                      status={checked === filter.key ? "checked" : "unchecked"}
+                      onPress={() => {
+                        setDeliveryType(filter.key);
+                        setChecked(filter.key);
+                      }}
+                    />
+
+                    <Text
+                      style={{
+                        fontFamily: "Gilroy-Light",
+                        fontSize: 18,
+                      }}
+                    >
+                      {filter.value}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
 
             <View
               style={{
                 paddingHorizontal: 30,
+                paddingTop: 20,
               }}
             >
               <TouchableOpacity

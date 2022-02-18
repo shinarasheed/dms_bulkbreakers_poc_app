@@ -19,10 +19,10 @@ import { productToSell } from "../../redux/actions/productActions";
 
 import ProductCard2 from "../products/ProductCard2";
 
-const AddProductBottomSheet = ({ visible, toggle, product, setThePrice }) => {
+const AddProductBottomSheet = ({ visible, toggle, product }) => {
   const [isVisible, SetIsVisible] = useState(visible);
   const dispatch = useDispatch();
-  const [price, SetPrice] = useState(0);
+  const [price, setPrice] = useState(0);
   const [error, SetError] = useState(null);
   const [disabled, SetDisabled] = useState(null);
   const [productsToSellArray, setProductsToSellArray] = useState([]);
@@ -111,7 +111,7 @@ const AddProductBottomSheet = ({ visible, toggle, product, setThePrice }) => {
           }}
           onChangeText={(textValue) => {
             between(textValue, product.price - 100, product.price + 100);
-            setThePrice(textValue);
+            setPrice(textValue);
           }}
           keyboardType="numeric"
         />

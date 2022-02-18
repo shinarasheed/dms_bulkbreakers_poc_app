@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import axios from "axios";
 
-import appTheme from "../../constants/theme";
-import { Routes } from "../../navigation/Routes";
-import { formatPrice } from "../../utils/formatPrice";
-import { COMPANY_BASE_URL } from "../../confg";
+import appTheme from "../../../constants/theme";
+import { Routes } from "../../../navigation/Routes";
+import { formatPrice } from "../../../utils/formatPrice";
+import { COMPANY_BASE_URL } from "../../../confg";
 
 export const Order = ({ item }) => {
-  const [theDistributor, setTheDistributor] = useState(null);
-  const [loadingDistributor, setLoadingDistributor] = useState(false);
   const navigation = useNavigation();
+
+  const customerState = useSelector((state) => state.customer);
+  const { customer, distributors } = customerState;
 
   const totalAmount = item?.orderItems.reduce(
     (accumulator, item) => accumulator + parseInt(item?.price),
@@ -21,37 +23,17 @@ export const Order = ({ item }) => {
 
   const productsToOder = item.orderItems;
 
-  useEffect(() => {
-    let componentMounted = true;
-
-    const getTheDistributor = async () => {
-      // setLoadingDistributor(true);
-      const {
-        data: { result },
-      } = await axios.get(
-        `${COMPANY_BASE_URL}/company/code/${item?.sellerCompanyId}`
-      );
-      // setLoadingDistributor(false);
-
-      if (componentMounted) {
-        setTheDistributor(result);
-      }
-    };
-
-    getTheDistributor();
-
-    return () => {
-      componentMounted = false;
-    };
-  }, []);
+  const theDistributor = distributors.find(
+    (distributor) => distributor?.SF_Code === item?.sellerCompanyId
+  );
 
   return (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
-          theDistributor,
           productsToOder,
           item,
+          theDistributor,
         })
       }
       style={{
@@ -114,9 +96,10 @@ export const Order = ({ item }) => {
               fontSize: 15,
               marginBottom: 5,
               fontFamily: "Gilroy-Medium",
+              color: appTheme.COLORS.black,
             }}
           >
-            {theDistributor?.company_name}
+            {theDistributor?.CUST_Name}
           </Text>
 
           <View

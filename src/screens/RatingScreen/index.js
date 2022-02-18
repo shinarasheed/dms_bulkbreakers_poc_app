@@ -91,7 +91,6 @@ const Ratings = () => {
         config
       );
 
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

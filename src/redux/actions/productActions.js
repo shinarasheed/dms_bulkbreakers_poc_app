@@ -20,6 +20,7 @@ import {
   SAVE_PRODUCTS_FAIL,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
+import { getMyInventory } from "./customerActions";
 
 export const getProducts = (DistributorCode) => async (dispatch, getState) => {
   const { customer } = getState().customer;
@@ -38,7 +39,7 @@ export const getProducts = (DistributorCode) => async (dispatch, getState) => {
     if (customer?.CUST_Type.toLowerCase() === "poc") {
       const {
         data: { data },
-      } = await axios.get(`http://20.87.34.168/api/v1/bb/1`, config);
+      } = await axios.get(`${INVENTORY_BASE_URL}/bb/1`, config);
 
       let availableProducts = data;
 
@@ -231,6 +232,7 @@ export const saveProductsToSell = (payload) => async (dispatch) => {
       type: SAVE_PRODUCTS_SUCCESS,
       payload: data,
     });
+    dispatch(getMyInventory());
   } catch (error) {
     dispatch({
       type: SAVE_PRODUCTS_FAIL,

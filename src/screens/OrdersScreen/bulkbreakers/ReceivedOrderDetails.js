@@ -25,12 +25,19 @@ import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActi
 import { ORDER_BASE_URL } from "../../../confg";
 import CountDownTimer from "../../../components/orders/CountDownTimer";
 import DeliveryMethod from "../../../components/orders/DeliveryMethod";
+import ReceivedOrderFooter from "../../../components/orders/bulkbreakers/ReceivedOrderFooter";
+import MessageModal from "../bulkbreakers/Modal";
 
 const ReceivedOrderDetails = () => {
   const route = useRoute();
+  const [theOrder, setTheOrder] = useState();
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const [singleOrder, setSingleOrder] = useState([]);
   const [loadingSingleOrder, setLoadingSingleOrder] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [showModal, setShowMdal] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const { productsToOder, theDistributor, item } = route.params;
 
@@ -57,15 +64,37 @@ const ReceivedOrderDetails = () => {
     dispatch(fetchAllProductsIntheCompany());
   }, []);
 
-  // useEffect(() => {
-  //   const action = setInterval(() => {
-  //     getSingleOrder(orderId);
-  //     console.log("checking for status...");
-  //   }, 10000);
-  //   return () => {
-  //     clearInterval(action);
-  //   };
-  // }, []);
+  const updateOrderStatus = async (status) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        status,
+      };
+      setLoading(true);
+
+      const {
+        data: { order },
+      } = await axios.patch(
+        `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
+        body,
+        config
+      );
+      setTheOrder(order?.order[0]);
+      setLoading(false);
+      setShowMdal(true);
+      setMessage(status);
+      setTimeout(() => {
+        setShowMdal(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     let componentMounted = true;
@@ -116,7 +145,6 @@ const ReceivedOrderDetails = () => {
     );
   };
 
-  const hoursMinSecs = { hours: 1, minutes: 20, seconds: 40 };
   return (
     <View
       style={{
@@ -230,7 +258,6 @@ const ReceivedOrderDetails = () => {
           style={{
             backgroundColor: appTheme.COLORS.white,
             marginTop: 15,
-            marginBottom: 20,
             elevation: appTheme.STYLES.elevation,
           }}
           data={productsToOder}
@@ -301,7 +328,7 @@ const ReceivedOrderDetails = () => {
         />
 
         {/* customer details */}
-        <CustomerDetails distributor={theDistributor} />
+        <CustomerDetails distributor={theDistributor} item={item} />
 
         {/* delivery method */}
 
@@ -313,6 +340,7 @@ const ReceivedOrderDetails = () => {
           singleOrder={singleOrder}
           theDistributor={theDistributor}
           productsToOder={productsToOder}
+          theOrder={theOrder}
         />
 
         {/* footer */}
@@ -320,6 +348,10 @@ const ReceivedOrderDetails = () => {
         {/* <OrderFooter distributor={theDistributor} /> */}
 
         {/* reject/accept order */}
+
+        {/* <ReceivedOrderFooter orderId={orderId} /> */}
+
+        <MessageModal showModal={showModal} message={message} />
 
         <View
           style={{
@@ -331,6 +363,7 @@ const ReceivedOrderDetails = () => {
           }}
         >
           <TouchableOpacity
+            onPress={() => updateOrderStatus("Rejected")}
             style={{
               justifyContent: "center",
               alignItems: "center",
@@ -354,6 +387,7 @@ const ReceivedOrderDetails = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={() => updateOrderStatus("Accepted")}
             style={{
               backgroundColor: appTheme.COLORS.mainRed,
               justifyContent: "center",

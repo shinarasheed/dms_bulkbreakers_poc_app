@@ -27,8 +27,9 @@ const ReOrder = ({
   productDetails,
   singleOrder,
   getTotalPrice,
-  distributor,
+  // distributor,
   reorder,
+  item
 }) => {
   const navigation = useNavigation();
   return (
@@ -138,7 +139,7 @@ const ReOrder = ({
           >
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate(Routes.DISTRIBUTOR_SCREEN, { distributor })
+                navigation.navigate(Routes.DISTRIBUTOR_SCREEN, { item })
               }
               style={{
                 justifyContent: "center",
@@ -154,7 +155,7 @@ const ReOrder = ({
                   marginBottom: 100,
                 }}
               >
-                Visit {distributor?.company_name}
+                Visit {item?.buyerDetails[0]?.buyerName}
               </Text>
             </TouchableOpacity>
 

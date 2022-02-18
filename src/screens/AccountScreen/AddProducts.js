@@ -28,6 +28,7 @@ import {
 import { LottieLoader } from "../../components/Loaders/LottieLoader";
 import AddProductBottomSheet from "../../components/account/AddProductBottomSheet";
 import { findIndex, cloneDeep, pullAt } from "lodash";
+import { formatPrice } from "../../utils/formatPrice";
 
 const AddProductsScreen = () => {
   const [visible, setVisible] = useState(false);
@@ -41,7 +42,7 @@ const AddProductsScreen = () => {
   const products_tosell = useSelector((state) => state.product.products_tosell);
   const array = cloneDeep(products_tosell);
 
-  console.log(products_tosell);
+  console.log(tempProduct, "---tempProduct---");
 
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
@@ -69,9 +70,9 @@ const AddProductsScreen = () => {
     setVisible((visible) => !visible);
   }
 
-  // const deleteItem = (productID) => {
-  //   dispatch(deleteProductToSell(productID));
-  // };
+  const deleteItem = (productID) => {
+    dispatch(deleteProductToSell(productID));
+  };
 
   // if (loading) return <LottieLoader />;
 
@@ -134,14 +135,22 @@ const AddProductsScreen = () => {
           const indexx = findIndex(products_tosell, {
             productId: id,
           });
-
-          // console.log(indexx);
+          // console.log(products_tosell[indexx]?.price, "===========");
+          const productIsInInventory = findIndex(myInventory, {
+            productId: id,
+          });
+          const thisPrice =
+            productIsInInventory >= 0
+              ? myInventory[productIsInInventory].price
+              : indexx >= 0
+              ? products_tosell[indexx].price
+              : null;
 
           // const secondindexx = findIndex(result, {
           //   id: id,
           // });
 
-          const secondindexx = result.indexOf(thisProduct);
+          // const secondindexx = result.indexOf(thisProduct);
 
           return (
             <View
@@ -152,7 +161,9 @@ const AddProductsScreen = () => {
                 borderBottomWidth: 1,
                 borderBottomColor: appTheme.COLORS.borderGRey,
                 backgroundColor:
-                  secondindexx > -1 || indexx >= 0 ? "#ECEFF4" : "#FFFFFF",
+                  indexx >= 0 || productIsInInventory >= 0
+                    ? "#ECEFF4"
+                    : "#FFFFFF",
                 alignItems: "center",
                 paddingVertical: 20,
               }}
@@ -217,11 +228,11 @@ const AddProductsScreen = () => {
                           fontFamily: "Gilroy-Medium",
                         }}
                       >
-                        {!thePrice
+                        {!thisPrice
                           ? " Price not set"
-                          : "\u20A6" + thePrice + "/" + "case"}
+                          : "\u20A6" + formatPrice(thisPrice) + "/" + "case"}
                       </Text>
-                      {secondindexx < 0 || indexx >= 0 ? (
+                      {indexx < 0 && productIsInInventory < 0 ? (
                         <TouchableOpacity
                           style={{
                             flexDirection: "row",
@@ -261,10 +272,12 @@ const AddProductsScreen = () => {
                             ADD
                           </Text>
                         </TouchableOpacity>
-                      ) : (
+                      ) : productIsInInventory < 0 ? (
                         <TouchableOpacity onPress={() => deleteItem(id)}>
                           <Image source={icons.deleteIcon} />
                         </TouchableOpacity>
+                      ) : (
+                        <View></View>
                       )}
                     </View>
                   </View>

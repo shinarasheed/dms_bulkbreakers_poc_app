@@ -78,19 +78,19 @@ const OrderDetails = () => {
     }
   };
 
-  useEffect(() => {
-    const action = setInterval(() => {
-      getSingleOrder(orderId);
-      console.log("checking for status...");
-    }, 1000);
-    return () => {
-      clearInterval(action);
-    };
-  }, []);
-
   // useEffect(() => {
-  //   getSingleOrder(orderId);
+  //   const action = setInterval(() => {
+  //     getSingleOrder(orderId);
+  //     console.log("checking for status...");
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(action);
+  //   };
   // }, []);
+
+  useEffect(() => {
+    getSingleOrder(orderId);
+  }, []);
 
   const productDetails = (productId) => {
     const x = allCompanyProducts?.filter(
@@ -290,7 +290,7 @@ const OrderDetails = () => {
                 </Text>
               </View>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => toggle()}
                 style={{
                   backgroundColor: appTheme.COLORS.Grey2,
@@ -311,7 +311,7 @@ const OrderDetails = () => {
                 >
                   Reorder
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
         />
@@ -326,7 +326,7 @@ const OrderDetails = () => {
 
         {/* footer */}
 
-        <OrderFooter distributor={theDistributor} />
+        <OrderFooter item={item} />
 
         {/* Remodal sheet */}
 

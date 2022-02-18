@@ -10,7 +10,7 @@ import appTheme from "../../../constants/theme";
 import { Header } from "../../../components/orders/Header";
 import Product from "../../../components/orders/Product";
 import OrderTimeLine from "../../../components/orders/OrderTimeLine";
-import OrderFooter from "../../../components/orders/OrderFooter";
+import PlacedOrderFooter from "../../../components/orders/bulkbreakers/PlacedOrderFooter";
 import DeliveryMethodPlaced from "../../../components/orders/DeliveyMethodPlaced";
 import ReOrder from "../../../components/orders/ReOrder";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -49,38 +49,40 @@ const PlacedOrderDetails = () => {
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
   }, []);
-
   useEffect(() => {
     let componentMounted = true;
 
-    const getSingleOrder = async (orderId) => {
-      try {
-        // setLoadingSingleOrder(true);
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+    const action = setInterval(() => {
+      const getSingleOrder = async (orderId) => {
+        try {
+          // setLoadingSingleOrder(true);
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
 
-        const {
-          data: { order },
-        } = await axios.get(
-          `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`,
-          config
-        );
+          const {
+            data: { order },
+          } = await axios.get(
+            `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`,
+            config
+          );
 
-        // setLoadingSingleOrder(false);
+          // setLoadingSingleOrder(false);
 
-        if (componentMounted) {
-          setSingleOrder(order);
+          if (componentMounted) {
+            setSingleOrder(order);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSingleOrder(orderId);
-
+      };
+      getSingleOrder(orderId);
+      console.log("checking for status...");
+    }, 1000);
     return () => {
+      clearInterval(action);
       componentMounted = false;
     };
   }, []);
@@ -301,7 +303,7 @@ const PlacedOrderDetails = () => {
 
         {/* footer */}
 
-        <OrderFooter distributor={theDistributor} />
+        <PlacedOrderFooter distributor={theDistributor} />
 
         {/* Remodal sheet */}
 

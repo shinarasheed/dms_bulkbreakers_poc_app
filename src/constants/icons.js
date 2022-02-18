@@ -7,7 +7,7 @@ const locationIcon = require("../../assets/icons/Location.png");
 const productIcon = require("../../assets/icons/product.png");
 const backIcon = require("../../assets/icons/BackButton.png");
 const statusIcon = require("../../assets/icons/status.png");
-const wattsappIcon = require("../../assets/icons/watsapp.png");
+const WhatsAppIcon = require("../../assets/icons/watsapp.png");
 const productIcon2 = require("../../assets/icons/product2.png");
 const phoneIcon = require("../../assets/icons/phone.png");
 const cartIcon = require("../../assets/icons/cart.png");
@@ -50,7 +50,7 @@ export default {
   productIcon,
   backIcon,
   statusIcon,
-  wattsappIcon,
+  WhatsAppIcon,
   productIcon2,
   phoneIcon,
   cartIcon,

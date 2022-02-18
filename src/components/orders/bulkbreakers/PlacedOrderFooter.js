@@ -12,14 +12,14 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import { icons } from "../../constants";
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { Routes } from "../../navigation/Routes";
-import { getDistanceApart } from "../../utils/calCulateDistance";
-import { INVENTORY_BASE_URL } from "../../confg";
+import { icons } from "../../../constants";
+import appTheme from "../../../constants/theme";
+import { formatPrice } from "../../../utils/formatPrice";
+import { Routes } from "../../../navigation/Routes";
+import { getDistanceApart } from "../../../utils/calCulateDistance";
+import { INVENTORY_BASE_URL } from "../../../confg";
 
-const OrderFooter = ({ item }) => {
+const OrderFooter = ({ distributor }) => {
   const navigation = useNavigation();
 
   const [loadingInventory, setLoadingInventory] = useState(false);
@@ -27,32 +27,32 @@ const OrderFooter = ({ item }) => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customer, distributors } = customerState;
-
-  const distributor = distributors.find(
-    (distributor) => distributor?.SF_Code === item?.sellerCompanyId
-  );
+  const { customer } = customerState;
 
   useEffect(() => {
-    let componentMounted = true;
-
     const fetchInventory = async () => {
+      let componentMounted = true;
+
       try {
         setLoadingInventory(true);
         const {
           data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${distributor?.id}`);
+        } = await axios.get(
+          `${INVENTORY_BASE_URL}/inventory/${distributor?.DIST_Code}`
+        );
+
+        let availableProducts = data.filter((product) => product.quantity > 0);
 
         if (componentMounted) {
-          setInventory(data);
+          setInventory(availableProducts);
           setLoadingInventory(false);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchInventory();
 
+    fetchInventory();
     return () => {
       componentMounted = false;
     };
@@ -85,10 +85,10 @@ const OrderFooter = ({ item }) => {
             color: appTheme.COLORS.black,
             fontFamily: "Gilroy-Medium",
             marginBottom: 10,
-            fontSize: 20,
+            fontSize: 15,
           }}
         >
-          {distributor?.CUST_Name}
+          {distributor?.company_name}
         </Text>
 
         <View
@@ -126,7 +126,7 @@ const OrderFooter = ({ item }) => {
           marginTop: 10,
         }}
       >
-        {/* <View
+        <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -151,12 +151,13 @@ const OrderFooter = ({ item }) => {
           >
             ({distributor?.raters})
           </Text>
-        </View> */}
+        </View>
 
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
+            marginLeft: 15,
           }}
         >
           <Image source={icons.locationIcon} />
@@ -172,7 +173,7 @@ const OrderFooter = ({ item }) => {
                 lat: customer?.latitude,
                 lon: customer?.longitude,
               },
-              { lat: distributor?.latitude, lon: distributor?.longitude }
+              { lat: distributor?.lat, lon: distributor?.long }
             )}
             km
           </Text>
@@ -206,7 +207,7 @@ const OrderFooter = ({ item }) => {
         }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`tel:+234${distributor?.phoneNumber}`)}
+          onPress={() => Linking.openURL(`tel:+234${distributor.Owner_Phone}}`)}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -232,7 +233,7 @@ const OrderFooter = ({ item }) => {
         <TouchableOpacity
           onPress={() => {
             Linking.openURL(
-              `http://api.whatsapp.com/send?phone=234${distributor?.phoneNumber}`
+              `http://api.whatsapp.com/send?phone=234${distributor.Owner_Phone}`
             );
           }}
           style={{
