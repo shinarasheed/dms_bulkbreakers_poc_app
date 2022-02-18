@@ -127,9 +127,9 @@ export const Order = ({ item }) => {
                 item.orderStatus[0].status === "Placed"
                   ? appTheme.COLORS.borderGRey1
                   : item.orderStatus[0].status === "Assigned"
-                  ? appTheme.COLORS.mainYellow
-                  : item.orderStatus[0].status === "Accepted"
                   ? appTheme.COLORS.mainBlue
+                  : item.orderStatus[0].status === "Accepted"
+                  ? appTheme.COLORS.mainYellow
                   : appTheme.COLORS.mainGreen,
             }}
           >
@@ -148,9 +148,9 @@ export const Order = ({ item }) => {
               }}
             >
               {item.orderStatus[0].status === "Assigned"
-                ? "Confirmed"
-                : item.orderStatus[0].status === "Accepted"
                 ? "Dispatched"
+                : item.orderStatus[0].status === "Accepted"
+                ? "Confirmed"
                 : item.orderStatus[0].status === "Completed"
                 ? "Delivered"
                 : item.orderStatus[0].status}

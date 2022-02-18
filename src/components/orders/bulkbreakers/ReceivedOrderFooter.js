@@ -3,37 +3,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 import appTheme from "../../../constants/theme";
-import { ORDER_BASE_URL } from "../../../confg";
 
-const ReceivedOrderFooter = ({ orderId }) => {
-  const [theOrder, setTheOrder] = useState();
-  const [loading, setLoading] = useState(false);
-
-  const updateOrderStatus = async (status) => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const body = {
-        status,
-      };
-      setLoading(true);
-
-      await axios.patch(
-        `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
-        body,
-        config
-      );
-      setTheOrder(order?.order[0]);
-      setLoading(false);
-      // dispatch(fetchOrder());
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
   return (
     <View
       style={{
@@ -44,52 +15,145 @@ const ReceivedOrderFooter = ({ orderId }) => {
         marginTop: 20,
       }}
     >
-      <TouchableOpacity
-        onPress={() => updateOrderStatus("Rejected")}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          height: 50,
-          borderRadius: 4,
-          flex: 1,
-          marginRight: 20,
-          borderWidth: 1,
-          borderColor: appTheme.COLORS.borderGRey1,
-        }}
-      >
-        <Text
-          style={{
-            color: appTheme.COLORS.black,
-            fontFamily: "Gilroy-Medium",
-            fontSize: 17,
-          }}
-        >
-          Reject Order
-        </Text>
-      </TouchableOpacity>
+      {singleOrder?.status === "Placed" && (
+        <>
+          <TouchableOpacity
+            onPress={() => updateOrderStatus("Rejected")}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+              borderRadius: 4,
+              flex: 1,
+              marginRight: 20,
+              borderWidth: 1,
+              borderColor: appTheme.COLORS.borderGRey1,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.black,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 17,
+              }}
+            >
+              Reject Order
+            </Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => updateOrderStatus("Accepted")}
-        style={{
-          backgroundColor: appTheme.COLORS.mainRed,
-          justifyContent: "center",
-          alignItems: "center",
-          height: 50,
-          borderRadius: 4,
-          flex: 1,
-          elevation: 5,
-        }}
-      >
-        <Text
-          style={{
-            color: appTheme.COLORS.white,
-            fontFamily: "Gilroy-Medium",
-            fontSize: 17,
-          }}
-        >
-          Accept Order
-        </Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => updateOrderStatus("Accepted")}
+            style={{
+              backgroundColor: appTheme.COLORS.mainRed,
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+              borderRadius: 4,
+              flex: 1,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.white,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 17,
+              }}
+            >
+              Accept Order
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* confirm */}
+
+      {singleOrder?.status === "Accepted" && (
+        <>
+          <TouchableOpacity
+            onPress={() => updateOrderStatus("Assigned")}
+            style={{
+              backgroundColor: appTheme.COLORS.mainRed,
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+              borderRadius: 4,
+              flex: 1,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.white,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 17,
+              }}
+            >
+              Mark as Dispatched
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* assigned */}
+
+      {singleOrder?.status === "Assigned" && (
+        <>
+          <TouchableOpacity
+            onPress={() => updateOrderStatus("Delivered")}
+            style={{
+              backgroundColor: appTheme.COLORS.mainRed,
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+              borderRadius: 4,
+              flex: 1,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.white,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 17,
+              }}
+            >
+              Mark as Delivered
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {/* delivered */}
+
+      {singleOrder?.status === "Delivered" && (
+        <>
+          <TouchableOpacity
+            onPress={() => updateOrderStatus("Completed")}
+            style={{
+              backgroundColor: appTheme.COLORS.mainRed,
+              justifyContent: "center",
+              alignItems: "center",
+              height: 50,
+              borderRadius: 4,
+              flex: 1,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.white,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 17,
+              }}
+            >
+              Mark as Completed
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+
+      {singleOrder?.status === "Completed" && <></>}
     </View>
   );
 };

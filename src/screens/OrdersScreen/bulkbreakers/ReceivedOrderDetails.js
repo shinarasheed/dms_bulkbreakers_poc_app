@@ -27,13 +27,13 @@ import CountDownTimer from "../../../components/orders/CountDownTimer";
 import DeliveryMethod from "../../../components/orders/DeliveryMethod";
 import ReceivedOrderFooter from "../../../components/orders/bulkbreakers/ReceivedOrderFooter";
 import MessageModal from "../bulkbreakers/Modal";
+import { updateProductStatus } from "../../../redux/actions/customerActions";
 
 const ReceivedOrderDetails = () => {
   const route = useRoute();
   const [theOrder, setTheOrder] = useState();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const [singleOrder, setSingleOrder] = useState([]);
   const [loadingSingleOrder, setLoadingSingleOrder] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showModal, setShowMdal] = useState(false);
@@ -42,6 +42,8 @@ const ReceivedOrderDetails = () => {
   const { productsToOder, theDistributor, item } = route.params;
 
   const { orderId } = item;
+
+  const [singleOrder, setSingleOrder] = useState(item);
 
   const totalAmount = productsToOder?.reduce(
     (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
@@ -84,7 +86,8 @@ const ReceivedOrderDetails = () => {
         body,
         config
       );
-      setTheOrder(order?.order[0]);
+      // setTheOrder(order?.order[0]);
+      setSingleOrder(order[0]);
       setLoading(false);
       setShowMdal(true);
       setMessage(status);
@@ -95,40 +98,6 @@ const ReceivedOrderDetails = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    let componentMounted = true;
-    const getSingleOrder = async (orderId) => {
-      try {
-        // setLoadingSingleOrder(true);
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-
-        const {
-          data: { order },
-        } = await axios.get(
-          `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`,
-          config
-        );
-
-        // setLoadingSingleOrder(false);
-
-        if (componentMounted) {
-          setSingleOrder(order);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSingleOrder(orderId);
-
-    return () => {
-      componentMounted = false;
-    };
-  }, []);
 
   const productDetails = (productId) => {
     const x = allCompanyProducts?.filter(
@@ -200,58 +169,48 @@ const ReceivedOrderDetails = () => {
             </Text>
           </View>
 
-          {!singleOrder[0]?.orderStatus[0] ? (
-            <ActivityIndicator
-              color={
-                Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
-              }
-              animating={true}
-              size="small"
-            />
-          ) : (
-            <View
-              style={{
-                borderRadius: 20,
-                width: 90,
-                height: 25,
+          <View
+            style={{
+              borderRadius: 20,
+              width: 90,
+              height: 25,
 
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor:
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor:
+                singleOrder[0]?.orderStatus[0].status === "Placed"
+                  ? appTheme.COLORS.borderGRey1
+                  : singleOrder[0]?.orderStatus[0].status === "Assigned"
+                  ? appTheme.COLORS.mainYellow
+                  : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                  ? appTheme.COLORS.mainBlue
+                  : appTheme.COLORS.mainGreen,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                fontSize: 13,
+                color:
                   singleOrder[0]?.orderStatus[0].status === "Placed"
-                    ? appTheme.COLORS.borderGRey1
-                    : singleOrder[0]?.orderStatus[0].status === "Assigned"
-                    ? appTheme.COLORS.mainYellow
+                    ? appTheme.COLORS.black
                     : singleOrder[0]?.orderStatus[0].status === "Accepted"
-                    ? appTheme.COLORS.mainBlue
-                    : appTheme.COLORS.mainGreen,
+                    ? appTheme.COLORS.white
+                    : singleOrder[0]?.orderStatus[0].status === "Completed"
+                    ? appTheme.COLORS.white
+                    : appTheme.COLORS.white,
               }}
             >
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  fontSize: 13,
-                  color:
-                    singleOrder[0]?.orderStatus[0].status === "Placed"
-                      ? appTheme.COLORS.black
-                      : singleOrder[0]?.orderStatus[0].status === "Accepted"
-                      ? appTheme.COLORS.white
-                      : singleOrder[0]?.orderStatus[0].status === "Completed"
-                      ? appTheme.COLORS.white
-                      : appTheme.COLORS.white,
-                }}
-              >
-                {singleOrder[0]?.orderStatus[0].status === "Assigned"
-                  ? "Confirmed"
-                  : singleOrder[0]?.orderStatus[0].status === "Accepted"
-                  ? "Dispatched"
-                  : singleOrder[0]?.orderStatus[0].status === "Completed"
-                  ? "Delivered"
-                  : singleOrder[0]?.orderStatus[0].status}
-              </Text>
-            </View>
-          )}
+              {singleOrder[0]?.orderStatus[0].status === "Assigned"
+                ? "Confirmed"
+                : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                ? "Dispatched"
+                : singleOrder[0]?.orderStatus[0].status === "Completed"
+                ? "Delivered"
+                : singleOrder[0]?.orderStatus[0].status}
+            </Text>
+          </View>
         </View>
 
         <FlatList
@@ -353,62 +312,10 @@ const ReceivedOrderDetails = () => {
 
         <MessageModal showModal={showModal} message={message} />
 
-        <View
-          style={{
-            backgroundColor: appTheme.COLORS.white,
-            paddingVertical: 20,
-            flexDirection: "row",
-            paddingHorizontal: 20,
-            marginTop: 20,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => updateOrderStatus("Rejected")}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              height: 50,
-              borderRadius: 4,
-              flex: 1,
-              marginRight: 20,
-              borderWidth: 1,
-              borderColor: appTheme.COLORS.borderGRey1,
-            }}
-          >
-            <Text
-              style={{
-                color: appTheme.COLORS.black,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Reject Order
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => updateOrderStatus("Accepted")}
-            style={{
-              backgroundColor: appTheme.COLORS.mainRed,
-              justifyContent: "center",
-              alignItems: "center",
-              height: 50,
-              borderRadius: 4,
-              flex: 1,
-              elevation: 5,
-            }}
-          >
-            <Text
-              style={{
-                color: appTheme.COLORS.white,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Accept Order
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <ReceivedOrderFooter
+          updateOrderStatus={updateOrderStatus}
+          singleOrder={singleOrder}
+        />
       </ScrollView>
     </View>
   );

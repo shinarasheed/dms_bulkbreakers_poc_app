@@ -62,7 +62,7 @@ const OrderTimeLine = ({
     currentStepLabelColor: "#fe7013",
   };
 
-  if (!singleOrder[0]?.orderStatus[0])
+  if (singleOrder[0]?.orderStatus[0] === null)
     return (
       <View
         style={{
@@ -128,8 +128,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.datePlaced !== null &&
-            moment(singleOrder[0]?.orderStatus[0]?.datePlaced).format(
+          {singleOrder?.orderStatus[0]?.datePlaced !== null &&
+            moment(singleOrder?.orderStatus[0]?.datePlaced).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -139,8 +139,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.timePlaced
-            ? `at ${singleOrder[0]?.orderStatus[0]?.timePlaced}`
+          {singleOrder?.orderStatus[0]?.timePlaced
+            ? `at ${singleOrder?.orderStatus[0]?.timePlaced}`
             : null}
         </Text>
       </TouchableOpacity>
@@ -151,7 +151,7 @@ const OrderTimeLine = ({
         }}
       >
         {singleOrder !== null &&
-        singleOrder[0]?.orderStatus[0].dateAssigned !== null ? (
+        singleOrder?.orderStatus[0].dateAccepted !== null ? (
           <Image
             style={{
               width: 20,
@@ -187,8 +187,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.dateAssigned !== null &&
-            moment(singleOrder[0]?.orderStatus[0]?.dateAssigned).format(
+          {singleOrder?.orderStatus[0]?.dateAccepted !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateAccepted).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -198,11 +198,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.timeAssigned !== null &&
-            `at ${singleOrder[0]?.orderStatus[0]?.timeAssigned.replace(
-              " ",
-              ""
-            )}`}
+          {singleOrder?.orderStatus[0]?.timeAccepted !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeAccepted.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
 
@@ -213,7 +210,7 @@ const OrderTimeLine = ({
         }}
       >
         {singleOrder !== null &&
-        singleOrder[0]?.orderStatus[0].dateAccepted !== null ? (
+        singleOrder?.orderStatus[0].dateAssigned !== null ? (
           <Image
             style={{
               width: 20,
@@ -249,8 +246,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.dateAccepted !== null &&
-            moment(singleOrder[0]?.orderStatus[0]?.dateAccepted).format(
+          {singleOrder?.orderStatus[0]?.dateAssigned !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateAssigned).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -260,29 +257,26 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.timeAccepted !== null &&
-            `at ${singleOrder[0]?.orderStatus[0]?.timeAccepted.replace(
-              " ",
-              ""
-            )}`}
+          {singleOrder?.orderStatus[0]?.timeAssigned !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeAssigned.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(Routes.RATING_SCREEN, {
-            productsToOder,
-            theDistributor,
-            item,
-          })
-        }
+        // onPress={() =>
+        //   navigation.navigate(Routes.RATING_SCREEN, {
+        //     productsToOder,
+        //     theDistributor,
+        //     item,
+        //   })
+        // }
         style={{
           flexDirection: "row",
           marginBottom: 20,
         }}
       >
         {singleOrder !== null &&
-        singleOrder[0]?.orderStatus[0].dateCompleted !== null ? (
+        singleOrder?.orderStatus[0].dateDelivered !== null ? (
           <Image
             style={{
               width: 20,
@@ -318,8 +312,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.dateCompleted !== null &&
-            moment(singleOrder[0]?.orderStatus[0]?.dateCompleted).format(
+          {singleOrder?.orderStatus[0]?.dateDelivered !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateDelivered).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -329,11 +323,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.timeCompleted !== null &&
-            `at ${singleOrder[0]?.orderStatus[0]?.timeCompleted.replace(
-              " ",
-              ""
-            )}`}
+          {singleOrder?.orderStatus[0]?.timeDelivered !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeDelivered.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
 
@@ -344,7 +335,7 @@ const OrderTimeLine = ({
         }}
       >
         {singleOrder !== null &&
-        singleOrder[0]?.orderStatus[0].dateDelivered !== null ? (
+        singleOrder?.orderStatus[0].dateCompleted !== null ? (
           <Image
             style={{
               width: 20,
@@ -380,8 +371,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.dateDelivered !== null &&
-            moment(singleOrder[0]?.orderStatus[0]?.dateDelivered).format(
+          {singleOrder?.orderStatus[0]?.dateCompleted !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateCompleted).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -391,11 +382,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder[0]?.orderStatus[0]?.timeDelivered !== null &&
-            `at ${singleOrder[0]?.orderStatus[0]?.timeDelivered.replace(
-              " ",
-              ""
-            )}`}
+          {singleOrder?.orderStatus[0]?.timeCompleted !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeCompleted.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
 

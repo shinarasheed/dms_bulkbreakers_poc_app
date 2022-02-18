@@ -15,6 +15,9 @@ import {
   GET_RECEIVED_ORDERS_REQUEST,
   GET_RECEIVED_ORDERS_SUCCESS,
   GET_RECEIVED_ORDERS_FAIL,
+  FETCH_SINGLE_ORDER_REQUEST,
+  FETCH_SINGLE_ORDER_SUCCESS,
+  FETCH_SINGLE_ORDER_FAIL,
 } from "../constants/orderConstants";
 import { ORDER_BASE_URL } from "../../confg";
 import moment from "moment";
@@ -201,6 +204,31 @@ export const updateOrderStatus = (status, orderId) => async (dispatch) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    });
+  }
+};
+
+export const fetchSingleOrder = (orderId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: FETCH_SINGLE_ORDER_REQUEST,
+    });
+
+    const {
+      data: { order },
+    } = await axios.get(
+      `${ORDER_BASE_URL}/GetOrder/GetOrderByOrderId/${orderId}`
+    );
+
+    dispatch({
+      type: FETCH_SINGLE_ORDER_SUCCESS,
+      payload: order[0],
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: FETCH_SINGLE_ORDER_FAIL,
+      payload: "There was an error",
     });
   }
 };
