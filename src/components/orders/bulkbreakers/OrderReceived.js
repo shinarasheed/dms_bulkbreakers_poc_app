@@ -21,23 +21,30 @@ export const Order = ({ item }) => {
 
   const productsToOder = item.orderItems;
 
-  const getTheDistributor = async () => {
-    try {
-      setLoadingDistributor(true);
-      const {
-        data: { result },
-      } = await axios.get(
-        `${COMPANY_BASE_URL}/company/code/${item?.sellerCompanyId}`
-      );
-      setTheDistributor(result);
-      setLoadingDistributor(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    let componentMounted = true;
+
+    const getTheDistributor = async () => {
+      try {
+        setLoadingDistributor(true);
+        const {
+          data: { result },
+        } = await axios.get(
+          `${COMPANY_BASE_URL}/company/syspro/${item?.sellerCompanyId}`
+        );
+        if (componentMounted) {
+          setTheDistributor(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getTheDistributor();
+
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   return (
@@ -130,6 +137,8 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainBlue
                   : item.orderStatus[0].status === "Accepted"
                   ? appTheme.COLORS.mainYellow
+                  : item.orderStatus[0].status === "Rejected"
+                  ? appTheme.COLORS.mainRed
                   : appTheme.COLORS.mainGreen,
             }}
           >
@@ -151,6 +160,8 @@ export const Order = ({ item }) => {
                 ? "Dispatched"
                 : item.orderStatus[0].status === "Accepted"
                 ? "Confirmed"
+                : item.orderStatus[0].status === "Delivered"
+                ? "Completed"
                 : item.orderStatus[0].status === "Completed"
                 ? "Delivered"
                 : item.orderStatus[0].status}

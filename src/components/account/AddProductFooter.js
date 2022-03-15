@@ -23,7 +23,10 @@ const ProductsFooter = () => {
   const [visible, setVisible] = useState(false);
   const [disabled, SetDisabled] = useState(null);
   const [visible2, setVisible2] = useState(false);
-  const products_tosell = useSelector((state) => state.product.products_tosell);
+  const productsState = useSelector((state) => state.product);
+
+  const { products_tosell, saveLoading } = productsState;
+
   const customerState = useSelector((state) => state.customer);
   const { customer } = customerState;
 
@@ -77,7 +80,7 @@ const ProductsFooter = () => {
                 alignSelf: "center",
               }}
             >
-              {products_tosell?.length ? products_tosell.length : 0}
+              {products_tosell?.length ? products_tosell?.length : 0}
             </Text>
           </View>
           <Image

@@ -20,9 +20,9 @@ import {
   FETCH_SINGLE_ORDER_FAIL,
 } from "../constants/orderConstants";
 import { ORDER_BASE_URL } from "../../confg";
-import moment from "moment";
 
 export const placeOrder = (payload) => async (dispatch) => {
+  // console.log(payload);
   try {
     dispatch({
       type: PLACE_ORDER_REQUEST,

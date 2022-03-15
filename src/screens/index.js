@@ -26,6 +26,12 @@ import AddProductsScreen from "./AccountScreen/AddProducts";
 import NoInventory from "./AccountScreen/NoInventory";
 import ProductsScreen from "./ProductsScreen";
 import Products from "./ProductsScreen/Products";
+import BulkbreakerScreen from "./BulkBreakerScreen";
+import BulkBreakersScreen from "./BulkBreakersScreen";
+import TermsOfUse from "./AccountScreen/TermsOfUse";
+import PrivacyPolicy from "./AccountScreen/PrivacyPolicy";
+import ReturnPolicy from "./AccountScreen/ReturnPolicy";
+import RatingsBulkbreaker from "./RatingsBulkbreaker";
 
 export {
   LocationScreen,
@@ -55,4 +61,10 @@ export {
   NoInventory,
   ProductsScreen,
   Products,
+  BulkbreakerScreen,
+  BulkBreakersScreen,
+  TermsOfUse,
+  PrivacyPolicy,
+  ReturnPolicy,
+  RatingsBulkbreaker,
 };

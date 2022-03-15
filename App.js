@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { PersistGate } from "redux-persist/integration/react";
+import { NativeBaseProvider } from "native-base";
 
 import { restoreToken } from "./src/redux/actions/customerActions";
 import { store, persistor } from "./src/redux/store";
@@ -52,11 +53,11 @@ const AppWrapper = () => {
       <SafeAreaProvider>
         <StatusBar style="light" backgroundColor={appTheme.COLORS.mainRed} />
         <NavigationContainer theme={theme}>
-          <Provider store={store}>
+          <NativeBaseProvider>
             <PersistGate loading={null} persistor={persistor}>
               {!token ? <AuthStackNavigation /> : <RootStackNavigation />}
             </PersistGate>
-          </Provider>
+          </NativeBaseProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </>

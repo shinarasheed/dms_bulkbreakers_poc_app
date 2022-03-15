@@ -44,7 +44,7 @@ const ProductsFooter = ({ distributor }) => {
 
   const payload = {
     buyerCompanyId: customer?.SF_Code,
-    sellerCompanyId: distributor?.DIST_Code,
+    sellerCompanyId: distributor?.SYS_Code,
     routeName: "shopNow",
     referenceId: "shopNow",
     emptiesReturned: 0,
@@ -63,7 +63,7 @@ const ProductsFooter = ({ distributor }) => {
 
   const payload2 = {
     buyerCompanyId: customer?.SF_Code,
-    sellerCompanyId: distributor?.SF_Code,
+    sellerCompanyId: distributor?.SYS_Code,
     routeName: "shopNow",
     referenceId: "shopNow",
     emptiesReturned: 0,
@@ -78,6 +78,16 @@ const ProductsFooter = ({ distributor }) => {
     },
 
     orderItems,
+  };
+
+  const inventoryItems = productsToOder?.map((prod) => ({
+    productId: parseInt(prod.id),
+    quantity: parseInt(prod.quantity),
+  }));
+
+  const inventoryPayload = {
+    sellerCompanyId: distributor?.DIST_Code,
+    orderItems: inventoryItems,
   };
 
   const totalAmount = products?.reduce(
@@ -175,6 +185,7 @@ const ProductsFooter = ({ distributor }) => {
         loading={loading}
         payload={payload}
         payload2={payload2}
+        inventoryPayload={inventoryPayload}
         productsToOder={productsToOder}
         distributor={distributor}
       />

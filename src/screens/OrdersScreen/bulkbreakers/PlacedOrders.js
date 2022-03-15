@@ -36,7 +36,7 @@ export default function PlacedOrders() {
 
   const myOrdersState = useSelector((state) => state.myOrders);
 
-  const { openOrders, deliveredOrders, myorders, loading } = myOrdersState;
+  const { openOrders, completedOrders, myorders, loading } = myOrdersState;
 
   // const filteredOpenOrders = openOrders?.filter((item) =>
   //   item.orderId.includes(searchTerm)
@@ -53,7 +53,7 @@ export default function PlacedOrders() {
 
   useEffect(() => {
     setTheOpenOrders(openOrders);
-    setTheClosedOrders(deliveredOrders);
+    setTheClosedOrders(completedOrders);
   }, [myorders, navigation]);
 
   const ShowOrders = (index) => {

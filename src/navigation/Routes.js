@@ -24,4 +24,10 @@ export const Routes = {
   NOINVENTORY_SCREEN: "NoInventory",
   PRODUCTS_SCREEN: "ProductsScreen",
   PRODUCTS: "Products",
+  BULKBREAKER_SCREEN: "BulkbreakerScreen",
+  BULKBREAKERS_SCREEN: "BulkBreakersScreen",
+  TERMSOF_USER: "TermsOfUse",
+  PRIVACY_POLICY: "PrivacyPolicy",
+  RETURN_POLICY: "ReturnPolicy",
+  RATING_SCREEN_BULKBREAKER: "RatingsBulkbreaker",
 };

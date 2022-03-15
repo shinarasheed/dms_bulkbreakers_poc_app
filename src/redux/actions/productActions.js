@@ -18,11 +18,15 @@ import {
   SAVE_PRODUCTS_REQUEST,
   SAVE_PRODUCTS_SUCCESS,
   SAVE_PRODUCTS_FAIL,
+  UPDATE_INVENTORY_REQUEST,
+  UPDATE_INVENTORY_SUCCESS,
+  UPDATE_INVENTORY_FAIL,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 import { getMyInventory } from "./customerActions";
 
-export const getProducts = (DistributorCode) => async (dispatch, getState) => {
+//this gets the inventory of the distributor/ bulkbreaker. should be renamed
+export const getProducts = (code) => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
   try {
@@ -39,7 +43,7 @@ export const getProducts = (DistributorCode) => async (dispatch, getState) => {
     if (customer?.CUST_Type.toLowerCase() === "poc") {
       const {
         data: { data },
-      } = await axios.get(`${INVENTORY_BASE_URL}/bb/1`, config);
+      } = await axios.get(`${INVENTORY_BASE_URL}/bb/${code}`, config);
 
       let availableProducts = data;
 
@@ -65,10 +69,7 @@ export const getProducts = (DistributorCode) => async (dispatch, getState) => {
     } else {
       const {
         data: { data },
-      } = await axios.get(
-        `${INVENTORY_BASE_URL}/inventory/${DistributorCode}`,
-        config
-      );
+      } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
 
       let availableProducts = data.filter((product) => product.quantity > 0);
 
@@ -198,7 +199,6 @@ export const addProductsToSave = (action) => (dispatch) => {
 };
 
 export const productToSell = (item) => (dispatch) => {
-  console.log(item);
   dispatch({
     type: ADD_PRODUCT_TOSELL,
     payload: item,
@@ -240,6 +240,38 @@ export const saveProductsToSell = (payload) => async (dispatch) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    });
+  }
+};
+
+//i do not need this
+export const updateInventory = (payload) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_INVENTORY_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      `${INVENTORY_BASE_URL}/inventory/update-quantity`,
+      payload,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_INVENTORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: UPDATE_INVENTORY_FAIL,
+      payload: "There was an error",
     });
   }
 };

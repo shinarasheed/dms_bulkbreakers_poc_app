@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StatusBar,
   Text,
@@ -10,14 +10,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { getDistributors } from "../../redux/actions/customerActions";
+import { getBulkbreakers } from "../../redux/actions/customerActions";
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import SelectBottomSheet from "./BottomSheet";
 
 const SelectCustomer = () => {
-  // const [savedCustomer, setSavedCustomer] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -33,7 +32,7 @@ const SelectCustomer = () => {
 
   const handleGetDistributors = async () => {
     try {
-      dispatch(getDistributors(navigation));
+      dispatch(getBulkbreakers());
     } catch (error) {
       console.log(error);
     }

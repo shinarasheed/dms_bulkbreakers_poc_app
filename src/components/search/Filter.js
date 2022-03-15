@@ -58,7 +58,6 @@ export const Filter = ({ filterVisible, toggleFilter }) => {
             }}
           >
             <CheckBox
-              onPressIn={() => console.log("hey")}
               center
               checkedIcon={
                 <Icon

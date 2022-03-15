@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 
-import { Order } from "./pocs/Order";
+import { Order } from "./Order";
 
-const OpenOrders = ({ myorders }) => {
+const CompletedOrders = ({ myorders }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {myorders?.map((item, index) => (
@@ -14,4 +14,4 @@ const OpenOrders = ({ myorders }) => {
   );
 };
 
-export default OpenOrders;
+export default CompletedOrders;

@@ -58,10 +58,14 @@ export const listMyOrdersReducer = (state = {}, action) => {
         myorders: action.payload,
         orderPlaced: true,
         openOrders: action.payload.filter(
-          (order) => order.orderStatus[0].status !== "Delivered"
+          (order) =>
+            order.orderStatus[0].status !== "Delivered" &&
+            order.orderStatus[0].status !== "Rejected"
         ),
-        deliveredOrders: action.payload.filter(
-          (order) => order.orderStatus[0].status === "Delivered"
+        completedOrders: action.payload.filter(
+          (order) =>
+            order.orderStatus[0].status === "Delivered" ||
+            order.orderStatus[0].status === "Rejected"
         ),
       };
 
@@ -111,11 +115,15 @@ export const recievedOrdersReducer = (state = {}, action) => {
       return {
         loading: false,
         receivedOrders: payload,
-       receivedopenOrders: action.payload.filter(
-          (order) => order.orderStatus[0].status !== "Delivered"
+        receivedopenOrders: action.payload.filter(
+          (order) =>
+            order.orderStatus[0].status !== "Delivered" &&
+            order.orderStatus[0].status !== "Rejected"
         ),
-        receiveddeliveredOrders: action.payload.filter(
-          (order) => order.orderStatus[0].status === "Delivered"
+        receivedcompletedOrders: action.payload.filter(
+          (order) =>
+            order.orderStatus[0].status === "Delivered" ||
+            order.orderStatus[0].status === "Rejected"
         ),
       };
 

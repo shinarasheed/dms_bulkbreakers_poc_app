@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { TouchableOpacity, Image, Text, View } from "react-native";
-import axios from "axios";
 
-import { INVENTORY_BASE_URL } from "../../confg";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { truncateString } from "../../utils/truncateString";
+import { StarRating } from "../starRating";
 
 export const TopDistributor = ({ distributor }) => {
   const navigation = useNavigation();
@@ -61,60 +60,30 @@ export const TopDistributor = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {customer?.CUST_Type.toLowerCase() === "bulkbreaker"
-            ? truncateString(distributor?.company_name, 10)
-            : truncateString(distributor?.CUST_Name, 10)}
+          {truncateString(distributor?.company_name, 10)}
         </Text>
 
-        {distributor?.stars ? (
+        {distributor?.ratings && (
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              alignSelf: "center",
-              marginBottom: 5,
+              marginRight: 15,
             }}
           >
+            <StarRating number={distributor?.stars?.toFixed(1)} />
             <Text
               style={{
-                marginRight: 5,
-                fontFamily: "Gilroy-Medium",
+                marginLeft: 3,
+                color: appTheme.COLORS.mainTextGray,
+                fontFamily: "Gilroy-Light",
               }}
             >
-              {distributor?.stars.toFixed(1)}
+              ({distributor?.rating})
             </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              {new Array(2).fill(0).map((_, i) => (
-                <Image key={i} source={icons.starIcon} />
-              ))}
-            </View>
-            <Text
-              style={{
-                fontFamily: "Gilroy-Medium",
-                fontSize: 14,
-              }}
-            >
-              ({distributor?.raters})
-            </Text>
-          </View>
-        ) : (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 5,
-            }}
-          >
-            {new Array(2).fill(0).map((_, i) => (
-              <Image key={i} source={icons.starIcon} />
-            ))}
           </View>
         )}
+
         <View
           style={{
             flexDirection: "row",

@@ -30,7 +30,7 @@ const Distributors = () => {
         style={{
           paddingHorizontal: 20,
           paddingBottom: 30,
-          marginTop: 20,
+          marginTop: 40,
         }}
       >
         <Pressable
@@ -65,5 +65,3 @@ const Distributors = () => {
 };
 
 export default Distributors;
-
-const styles = StyleSheet.create({});

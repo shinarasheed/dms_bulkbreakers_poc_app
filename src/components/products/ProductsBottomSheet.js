@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View, TouchableOpacity, FlatList } from "react-native";
 import { useSelector } from "react-redux";
-import { ScrollView } from "react-native-virtualized-view";
 
 import { BottomSheet } from "react-native-btr";
 

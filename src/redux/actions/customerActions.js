@@ -6,11 +6,10 @@ import {
   GET_DISTRIBUTOR_REQUEST,
   GET_DISTRIBUTOR_SUCCESS,
   GET_DISTRIBUTOR_FAIL,
-  GET_DISTRIBUTORS_REQUEST,
-  GET_DISTRIBUTORS_SUCCESS,
-  GET_DISTRIBUTORS_FAIL,
+  GET_SELLERS_REQUEST,
+  GET_SELLERS_SUCCESS,
+  GET_SELLERS_FAIL,
   RETRIVE_CUSTOMER,
-  SORT_DISTRIBUTORS,
   RESTORE_TOKEN,
   LOGOUT,
   GET_CUSTOMER_INVENTORY_REQUEST,
@@ -18,15 +17,20 @@ import {
   GET_CUSTOMER_INVENTORY_FAIL,
   UPDATE_PRODUCT_STATUS,
   DELETE_INVENTORY_PRODUCT,
-  GET_BULKBREAKERS_SUCCESS,
+  SORT_SELLERS,
   GET_BULKBREAKERS_REQUEST,
+  GET_BULKBREAKERS_SUCCESS,
   GET_BULKBREAKERS_FAIL,
+  SELLERS_NOT_NEAR,
 } from "../constants/customerConstants";
-import { CUSTOMER_BASE_URL, INVENTORY_BASE_URL } from "../../confg";
+import {
+  COMPANY_BASE_URL,
+  CUSTOMER_BASE_URL,
+  INVENTORY_BASE_URL,
+} from "../../confg";
 import { Routes } from "../../navigation/Routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistanceApart } from "../../utils/calCulateDistance";
-import { getAllProducts } from "./productActions";
 
 export const getCustomerDetails = (code, navigation) => async (dispatch) => {
   try {
@@ -44,31 +48,18 @@ export const getCustomerDetails = (code, navigation) => async (dispatch) => {
       sfDigit: code,
     };
 
-    // const {
-    //   data: { results },
-    // } = await axios.post(
-    //   `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
-    //   body,
-    //   config
-    // );
-
     const {
-      data: { result },
-    } = await axios.get(
-      `${CUSTOMER_BASE_URL}/customer/${code}`,
+      data: { results },
+    } = await axios.post(
+      `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
 
       body,
       config
     );
 
-    // dispatch({
-    //   type: GET_CUSTOMER_SUCCESS,
-    //   payload: results[0],
-    // });
-
     dispatch({
       type: GET_CUSTOMER_SUCCESS,
-      payload: result,
+      payload: results[0],
     });
 
     navigation.navigate(Routes.SELECT_CUSTOMER_SCREEN);
@@ -83,7 +74,7 @@ export const getCustomerDetails = (code, navigation) => async (dispatch) => {
     });
   }
 };
-export const getDistributor = (code, navigation) => async (dispatch) => {
+export const getDistributor = (code) => async (dispatch) => {
   try {
     dispatch({
       type: GET_DISTRIBUTOR_REQUEST,
@@ -98,7 +89,7 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
     const {
       data: { result },
     } = await axios.get(
-      `http://102.133.143.139/company/code/${code}`,
+      `${COMPANY_BASE_URL}/company/code/${code}`,
 
       config
     );
@@ -129,11 +120,9 @@ export const getDistributor = (code, navigation) => async (dispatch) => {
 export const getDistributors = () => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
-  const { CUST_Type } = customer;
-
   try {
     dispatch({
-      type: GET_DISTRIBUTORS_REQUEST,
+      type: GET_SELLERS_REQUEST,
     });
 
     const config = {
@@ -142,92 +131,55 @@ export const getDistributors = () => async (dispatch, getState) => {
       },
     };
 
-    if (CUST_Type.toLowerCase() === "bulkbreaker") {
-      const {
-        data: { result },
-      } = await axios.get(
-        `http://102.133.143.139/company/companies/Nigeria
+    const {
+      data: { result },
+    } = await axios.get(
+      `${COMPANY_BASE_URL}/company/companies/Nigeria
       `,
-        config
+      config
+    );
+
+    let distributors = result;
+
+    const mapdistributorsToShow = distributors.map((distributor) => ({
+      ...distributor,
+      byFar: parseInt(
+        getDistanceApart(
+          { lat: customer?.latitude, lon: customer?.longitude },
+          { lat: distributor?.lat, lon: distributor?.long }
+        )
+      ),
+    }));
+
+    const nearDistributors = mapdistributorsToShow
+      .filter((distributor) => distributor.byFar <= 5)
+      .sort(
+        (distributorA, distributorB) => distributorA.byFar - distributorB.byFar
       );
 
-      let distributors = result;
+    const token = await AsyncStorage.getItem("token");
+    let distributorsToShow;
 
-      distributors = distributors.map((distributor) => ({
-        ...distributor,
-        byFar: parseInt(
-          getDistanceApart(
-            { lat: customer?.latitude, lon: customer?.longitude },
-            { lat: distributor?.lat, lon: distributor?.long }
-          )
-        ),
-      }));
-
-      distributors = distributors
-        .filter((distributor) => distributor.byFar <= 5)
-        .sort(
-          (distributorA, distributorB) =>
-            distributorA.byFar - distributorB.byFar
-        );
-
-      const codes = distributors.map((distributor) => distributor.DIST_Code);
-
-      // dispatch(getAllProducts(codes));
-
-      const token = await AsyncStorage.getItem("token");
-
-      dispatch({
-        type: GET_DISTRIBUTORS_SUCCESS,
-        payload: {
-          distributors,
-          token,
-        },
-      });
+    if (nearDistributors.length > 0) {
+      distributorsToShow = nearDistributors;
     } else {
-      const {
-        data: { result },
-      } = await axios.get(
-        `https://dmsdev20.azure-api.net/customer/customer/getcustomerbytype/Nigeria/Bulkbreaker`,
-        config
-      );
-
-      let distributors = result;
-
-      distributors = distributors.map((distributor) => ({
-        ...distributor,
-        byFar: parseInt(
-          getDistanceApart(
-            { lat: customer?.latitude, lon: customer?.longitude },
-            { lat: distributor?.latitude, lon: distributor?.longitude }
-          )
-        ),
-      }));
-
-      distributors = distributors
-        .filter((distributor) => distributor.byFar <= 5)
-        .sort(
-          (distributorA, distributorB) =>
-            distributorA.byFar - distributorB.byFar
-        );
-
-      // const codes = distributors.map((distributor) => distributor.DIST_Code);
-
-      // dispatch(getAllProducts(codes));
-
-      const token = await AsyncStorage.getItem("token");
-
+      distributorsToShow = mapdistributorsToShow;
       dispatch({
-        type: GET_DISTRIBUTORS_SUCCESS,
-        payload: {
-          distributors,
-          token,
-        },
+        type: SELLERS_NOT_NEAR,
       });
     }
+
+    dispatch({
+      type: GET_SELLERS_SUCCESS,
+      payload: {
+        distributorsToShow,
+        token,
+      },
+    });
   } catch (error) {
     console.log(error);
     dispatch({
-      type: GET_DISTRIBUTORS_FAIL,
+      type: GET_SELLERS_FAIL,
       payload:
         error.response && error.response.data.msg
           ? error.response.data.msg
@@ -237,6 +189,7 @@ export const getDistributors = () => async (dispatch, getState) => {
 };
 
 export const getBulkbreakers = () => async (dispatch, getState) => {
+  const { customer } = getState().customer;
   try {
     dispatch({
       type: GET_BULKBREAKERS_REQUEST,
@@ -251,15 +204,44 @@ export const getBulkbreakers = () => async (dispatch, getState) => {
     const {
       data: { result },
     } = await axios.get(
-      `https://dmsdev20.azure-api.net/customer/customer/getcustomerbytype/Nigeria/Bulkbreaker`,
+      `${CUSTOMER_BASE_URL}/customer/getcustomerbytype/Nigeria/Bulkbreaker`,
       config
     );
+
+    let distributors = result;
+
+    const mapdistributorsToShow = distributors.map((distributor) => ({
+      ...distributor,
+      byFar: parseInt(
+        getDistanceApart(
+          { lat: customer?.latitude, lon: customer?.longitude },
+          { lat: distributor?.latitude, lon: distributor?.longitude }
+        )
+      ),
+    }));
+
+    const nearDistributors = mapdistributorsToShow
+      .filter((distributor) => distributor.byFar <= 5)
+      .sort(
+        (distributorA, distributorB) => distributorA.byFar - distributorB.byFar
+      );
+
+    let distributorsToShow;
+
+    if (nearDistributors.length === 0) {
+      distributorsToShow = mapdistributorsToShow;
+    } else {
+      distributorsToShow = nearDistributors;
+    }
 
     const token = await AsyncStorage.getItem("token");
 
     dispatch({
       type: GET_BULKBREAKERS_SUCCESS,
-      payload: result,
+      payload: {
+        distributorsToShow,
+        token,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -283,9 +265,7 @@ export const restoreToken = () => async (dispatch) => {
   const token = await AsyncStorage.getItem("token");
   dispatch({
     type: RESTORE_TOKEN,
-    payload: {
-      token,
-    },
+    payload: token,
   });
 };
 
@@ -300,20 +280,21 @@ export const retrieveCustomer = () => async (dispatch) => {
 
 export const sortDistributors = (sortBy) => async (dispatch) => {
   dispatch({
-    type: SORT_DISTRIBUTORS,
+    type: SORT_SELLERS,
     payload: sortBy,
   });
 };
 
 export const getMyInventory = () => async (dispatch, getState) => {
+  const {
+    customer: { id },
+  } = getState().customer;
+
   try {
     dispatch({
       type: GET_CUSTOMER_INVENTORY_REQUEST,
     });
 
-    const {
-      customer: { id },
-    } = getState().customer;
     const config = {
       headers: {
         "Content-Type": "application/json",

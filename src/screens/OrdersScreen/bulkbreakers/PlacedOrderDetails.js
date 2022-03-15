@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import { Text, View, FlatList, ActivityIndicator } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+  Pressable,
+  Image,
+} from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import axios from "axios";
 import moment from "moment";
+import { Slide, Box } from "native-base";
+import { icons } from "../../../constants";
 
 import appTheme from "../../../constants/theme";
-import { Header } from "../../../components/orders/Header";
+import { Header } from "../../../components/orders/bulkbreakers/HeaderPlacedOrder";
 import Product from "../../../components/orders/Product";
-import OrderTimeLine from "../../../components/orders/OrderTimeLine";
+import OrderTimeLinePlaced from "../../../components/orders/bulkbreakers/OrderTimeLinePlaced";
+import OrderTimeLinePickup from "../../../components/orders/bulkbreakers/OrderTimeLinePickup";
 import PlacedOrderFooter from "../../../components/orders/bulkbreakers/PlacedOrderFooter";
-import DeliveryMethodPlaced from "../../../components/orders/DeliveyMethodPlaced";
-import ReOrder from "../../../components/orders/ReOrder";
+import DeliveryMethodPlaced from "../../../components/orders/bulkbreakers/DeliveyMethodPlaced";
+import ReOrder from "../../../components/orders/pocs/ReOrder";
 import { formatPrice } from "../../../utils/formatPrice";
 import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActions";
 import { ORDER_BASE_URL } from "../../../confg";
-// import CountDownTimer from "../../../components/orders/CountDownTimer";
-import { OrderCountDownTimer } from "../../../components/orders/OrderCountDownTimer";
+import { Routes } from "../../../navigation/Routes";
 
 const PlacedOrderDetails = () => {
   const route = useRoute();
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const navigation = useNavigation();
   const [singleOrder, setSingleOrder] = useState([]);
   const [loadingSingleOrder, setLoadingSingleOrder] = useState(false);
@@ -55,7 +66,6 @@ const PlacedOrderDetails = () => {
     const action = setInterval(() => {
       const getSingleOrder = async (orderId) => {
         try {
-          // setLoadingSingleOrder(true);
           const config = {
             headers: {
               "Content-Type": "application/json",
@@ -69,8 +79,6 @@ const PlacedOrderDetails = () => {
             config
           );
 
-          // setLoadingSingleOrder(false);
-
           if (componentMounted) {
             setSingleOrder(order);
           }
@@ -80,12 +88,36 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 1000);
+    }, 10000);
     return () => {
       clearInterval(action);
       componentMounted = false;
     };
-  }, []);
+  }, [singleOrder]);
+
+  const updateOrderStatus = async (status) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        status,
+      };
+
+      const { data } = await axios.patch(
+        `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
+        body,
+        config
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const productDetails = (productId) => {
     const x = allCompanyProducts?.filter(
@@ -108,7 +140,13 @@ const PlacedOrderDetails = () => {
         flex: 1,
       }}
     >
-      <Header single orderId={orderId} />
+      <Header
+        single
+        orderId={orderId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        singleOrder
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -116,9 +154,9 @@ const PlacedOrderDetails = () => {
             paddingTop: 20,
           }}
         >
-          <OrderCountDownTimer
+          {/* <OrderCountDownTimer
             placed={singleOrder[0]?.orderStatus[0]?.datePlaced}
-          />
+          /> */}
         </View>
         <View
           style={{
@@ -184,6 +222,10 @@ const PlacedOrderDetails = () => {
                     ? appTheme.COLORS.mainYellow
                     : singleOrder[0]?.orderStatus[0].status === "Accepted"
                     ? appTheme.COLORS.mainBlue
+                    : singleOrder[0].orderStatus[0].status === "Completed"
+                    ? appTheme.COLORS.lightBlue
+                    : singleOrder[0].orderStatus[0].status === "Rejected"
+                    ? appTheme.COLORS.mainRed
                     : appTheme.COLORS.mainGreen,
               }}
             >
@@ -209,6 +251,8 @@ const PlacedOrderDetails = () => {
                   ? "Delivered"
                   : singleOrder[0]?.orderStatus[0].status === "Delivered"
                   ? "Completed"
+                  : singleOrder[0]?.orderStatus[0].status === "Rejected"
+                  ? "Cancelled"
                   : singleOrder[0]?.orderStatus[0].status}
               </Text>
             </View>
@@ -219,7 +263,6 @@ const PlacedOrderDetails = () => {
           style={{
             backgroundColor: appTheme.COLORS.white,
             marginTop: 15,
-            marginBottom: 20,
             elevation: appTheme.STYLES.elevation,
           }}
           data={productsToOder}
@@ -290,12 +333,22 @@ const PlacedOrderDetails = () => {
         />
 
         {/* order TimeLine */}
-        <OrderTimeLine
-          item={item}
-          singleOrder={singleOrder}
-          theDistributor={theDistributor}
-          productsToOder={productsToOder}
-        />
+
+        {singleOrder[0]?.deliveryType === "Pick-Up" ? (
+          <OrderTimeLinePickup
+            item={item}
+            singleOrder={singleOrder}
+            theDistributor={theDistributor}
+            productsToOder={productsToOder}
+          />
+        ) : (
+          <OrderTimeLinePlaced
+            item={item}
+            singleOrder={singleOrder}
+            theDistributor={theDistributor}
+            productsToOder={productsToOder}
+          />
+        )}
 
         {/* delivery method */}
 
@@ -318,6 +371,106 @@ const PlacedOrderDetails = () => {
           reorder
         />
         {/* Reorder sheet */}
+
+        <Slide
+          in={isOpen}
+          placement="right"
+          style={{
+            marginTop: 25,
+          }}
+        >
+          <Box
+            _text={{
+              color: "white",
+            }}
+            style={{
+              backgroundColor: "#eee",
+              width: 200,
+              marginTop: 50,
+              paddingVertical: 15,
+              paddingLeft: 20,
+              elevation: 50,
+            }}
+          >
+            <View>
+              <Pressable
+                onPress={() => navigation.navigate(Routes.HOME_SCREEN)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 18,
+                }}
+              >
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                  source={icons.home}
+                />
+
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  Go Home
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate(Routes.PRODUCTS_SCREEN);
+                  setIsOpen(!isOpen);
+                }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 18,
+                }}
+              >
+                <Image source={icons.productIcon2} />
+
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  View my Products
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() => {
+                  updateOrderStatus("Rejected");
+                  setIsOpen(!isOpen);
+                }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                  source={icons.rejectedIcon}
+                />
+
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  Cancell order
+                </Text>
+              </Pressable>
+            </View>
+          </Box>
+        </Slide>
       </ScrollView>
     </View>
   );

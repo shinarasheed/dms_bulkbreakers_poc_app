@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { RadioButton } from "react-native-paper";
 
-import appTheme from "../../constants/theme";
+import appTheme from "../../../constants/theme";
 
 const DeliveryMethod = ({ deliveryType }) => {
   const [checked, setChecked] = React.useState(false);
@@ -23,7 +23,6 @@ const DeliveryMethod = ({ deliveryType }) => {
         backgroundColor: appTheme.COLORS.white,
         paddingVertical: 20,
         elevation: appTheme.STYLES.elevation,
-        marginTop: 20,
       }}
     >
       <Text

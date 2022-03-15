@@ -20,12 +20,14 @@ import {
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
+import { updateInventory } from "../../redux/actions/productActions";
 
 const BottomFilter = ({
   visible,
   toggle,
   payload,
   payload2,
+  inventoryPayload,
   productsToOder,
   distributor,
 }) => {

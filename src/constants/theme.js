@@ -41,6 +41,8 @@ export const COLORS = {
   darkgray: "#898C95",
   mainBrown: "#45130F",
   Grey84: "#2D2F39",
+  switchGreen: "#90EE90",
+  lightBlue: "#00B3F4",
 };
 
 export const SIZES = {

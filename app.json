@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "dmsmarketplace",
-    "slug": "dmsmarketplace",
-    "version": "1.0.0",
+    "name": "shopdc",
+    "slug": "shopdc",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splashscreen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#45130F"
+      "backgroundColor": "#FFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,8 +20,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#45130F"
-      }
+        "backgroundColor": "#FFF"
+      },
+      "package": "app.shopdc",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/icon.png"

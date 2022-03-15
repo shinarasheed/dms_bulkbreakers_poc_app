@@ -12,12 +12,12 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import { icons } from "../../constants";
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { Routes } from "../../navigation/Routes";
-import { getDistanceApart } from "../../utils/calCulateDistance";
-import { INVENTORY_BASE_URL } from "../../confg";
+import { icons } from "../../../constants";
+import appTheme from "../../../constants/theme";
+import { formatPrice } from "../../../utils/formatPrice";
+import { Routes } from "../../../navigation/Routes";
+import { getDistanceApart } from "../../../utils/calCulateDistance";
+import { INVENTORY_BASE_URL } from "../../../confg";
 
 const OrderFooter = ({ item }) => {
   const navigation = useNavigation();
@@ -29,8 +29,8 @@ const OrderFooter = ({ item }) => {
 
   const { customer, distributors } = customerState;
 
-  const distributor = distributors.find(
-    (distributor) => distributor?.SF_Code === item?.sellerCompanyId
+  const bulkbreaker = distributors.find(
+    (bulkbreaker) => bulkbreaker?.SF_Code === item?.sellerCompanyId
   );
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const OrderFooter = ({ item }) => {
         setLoadingInventory(true);
         const {
           data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${distributor?.id}`);
+        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${bulkbreaker?.id}`);
 
         if (componentMounted) {
           setInventory(data);
@@ -61,11 +61,9 @@ const OrderFooter = ({ item }) => {
     <View
       style={{
         backgroundColor: appTheme.COLORS.white,
-        marginTop: 20,
         paddingVertical: 20,
         paddingHorizontal: 20,
         elevation: appTheme.STYLES.elevation,
-        marginBottom: 20,
       }}
     >
       <Text
@@ -88,7 +86,7 @@ const OrderFooter = ({ item }) => {
             fontSize: 20,
           }}
         >
-          {distributor?.CUST_Name}
+          {bulkbreaker?.CUST_Name}
         </Text>
 
         <View
@@ -139,7 +137,7 @@ const OrderFooter = ({ item }) => {
               fontFamily: "Gilroy-Light",
             }}
           >
-            {distributor?.stars}
+            {bulkbreaker?.stars}
           </Text>
           <Image source={icons.starsIcon} />
           <Text
@@ -149,7 +147,7 @@ const OrderFooter = ({ item }) => {
               fontFamily: "Gilroy-Light",
             }}
           >
-            ({distributor?.raters})
+            ({bulkbreaker?.raters})
           </Text>
         </View> */}
 
@@ -172,7 +170,7 @@ const OrderFooter = ({ item }) => {
                 lat: customer?.latitude,
                 lon: customer?.longitude,
               },
-              { lat: distributor?.latitude, lon: distributor?.longitude }
+              { lat: bulkbreaker?.latitude, lon: bulkbreaker?.longitude }
             )}
             km
           </Text>
@@ -206,7 +204,7 @@ const OrderFooter = ({ item }) => {
         }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`tel:+234${distributor?.phoneNumber}`)}
+          onPress={() => Linking.openURL(`tel:+234${bulkbreaker?.phoneNumber}`)}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -232,7 +230,7 @@ const OrderFooter = ({ item }) => {
         <TouchableOpacity
           onPress={() => {
             Linking.openURL(
-              `http://api.whatsapp.com/send?phone=234${distributor?.phoneNumber}`
+              `http://api.whatsapp.com/send?phone=234${bulkbreaker?.phoneNumber}`
             );
           }}
           style={{
@@ -258,9 +256,11 @@ const OrderFooter = ({ item }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(Routes.DISTRIBUTOR_SCREEN, { distributor })
-          }
+          // onPress={() =>
+          //   navigation.navigate(Routes.BULKBREAKER_SCREEN, {
+          //     bulkbreaker,
+          //   })
+          // }
           style={{
             flexDirection: "row",
             alignItems: "center",

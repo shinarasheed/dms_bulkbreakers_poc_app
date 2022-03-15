@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView } from "react-native-virtualized-view";
+import { useForm, Controller } from "react-hook-form";
 
 import { BottomSheet } from "react-native-btr";
 import { icons } from "../../constants";
@@ -21,13 +21,23 @@ import RatingProduct from "../../components/orders/RatingProduct";
 import OrderCompleteSheet from "../../components/orders/OrderCompleteSheet";
 import { Routes } from "../../navigation/Routes";
 
-import { Rating, AirbnbRating } from "react-native-ratings";
+// import { Rating, AirbnbRating } from "react-native-ratings";
+import { AirbnbRating } from "react-native-elements";
 import { updateOrderStatus } from "../../redux/actions/orderActions";
-import { ORDER_BASE_URL } from "../../confg";
+import { COMPANY_BASE_URL } from "../../confg";
 
 const Ratings = () => {
   const navigation = useNavigation();
-  const [comment, setComment] = useState(null);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      comment: "",
+    },
+  });
+
   const [ratingValue, setRatingValue] = useState(null);
 
   const dispatch = useDispatch();
@@ -68,10 +78,10 @@ const Ratings = () => {
 
   const ratingCompleted = (rating) => {
     setRatingValue(rating);
-    console.log(ratingValue);
   };
 
-  const rateDistributor = async () => {
+  const rateDistributor = async (data) => {
+    const { comment } = data;
     try {
       const config = {
         headers: {
@@ -80,17 +90,19 @@ const Ratings = () => {
       };
 
       const body = {
-        // stars: ratingValue,
+        stars: ratingValue,
         comment,
         companyId: theDistributor?.DIST_Code,
         reviewerId: customerDetails?.SF_Code,
       };
+
       const { data } = await axios.patch(
-        `https://dmsapim.azure-api.net/company/company/rate-distributor/${theDistributor?.id}`,
+        `${COMPANY_BASE_URL}/company/rate-distributor/${theDistributor?.id}`,
         body,
         config
       );
-
+      dispatch(updateOrderStatus("Delivered", orderId));
+      toggle();
     } catch (error) {
       console.log(error);
     }
@@ -128,7 +140,7 @@ const Ratings = () => {
                 fontSize: 17,
               }}
             >
-              With {theDistributor?.company_name}
+              With {theDistributor?.CUST_Name}
             </Text>
           </View>
 
@@ -142,7 +154,7 @@ const Ratings = () => {
               onFinishRating={ratingCompleted}
               count={5}
               reviews={["Very Poor", "Poor", "Good", "Very Good", "Excellent"]}
-              defaultRating={0}
+              defaultRating={1}
               size={30}
             />
           </View>
@@ -153,18 +165,38 @@ const Ratings = () => {
               paddingHorizontal: 20,
             }}
           >
-            <TextInput
-              placeholder="Write about your experience"
-              onChangeText={(textValue) => setComment(textValue)}
-              style={{
-                borderWidth: 0,
-                borderBottomWidth: 1,
-                borderBottomColor: appTheme.COLORS.borderGRey1,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 15,
-                paddingBottom: 5,
+            <Controller
+              control={control}
+              rules={{
+                required: true,
               }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="Write about your experience"
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  style={{
+                    borderWidth: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: appTheme.COLORS.borderGRey1,
+                    fontFamily: "Gilroy-Medium",
+                    fontSize: 15,
+                    paddingBottom: 5,
+                  }}
+                />
+              )}
+              name="comment"
             />
+            {errors.comment && (
+              <Text
+                style={{
+                  color: appTheme.COLORS.mainRed,
+                }}
+              >
+                comment is required.
+              </Text>
+            )}
           </View>
 
           <View
@@ -176,11 +208,7 @@ const Ratings = () => {
             }}
           >
             <TouchableOpacity
-              onPress={() => {
-                rateDistributor();
-                dispatch(updateOrderStatus("Delivered", orderId));
-                toggle();
-              }}
+              onPress={handleSubmit(rateDistributor)}
               style={{
                 backgroundColor: appTheme.COLORS.mainRed,
                 height: 40,

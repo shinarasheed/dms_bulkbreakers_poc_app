@@ -10,8 +10,8 @@ import {
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import OpenOrders from "../../../components/orders/OpenOrders";
-import ClosedOrders from "../../../components/orders/ClosedOrders";
+import OpenOrders from "../../../components/orders/pocs/OpenOrders";
+import CompletedOrders from "../../../components/orders/pocs/CompletedOrders";
 import OrdersTab from "../../../components/orders/OrdersTab";
 import { Header } from "../../../components/orders/Header";
 
@@ -35,7 +35,7 @@ export default function Index() {
 
   const myOrdersState = useSelector((state) => state.myOrders);
 
-  const { openOrders, deliveredOrders, myorders, loading } = myOrdersState;
+  const { openOrders, completedOrders, myorders, loading } = myOrdersState;
 
   // const filteredOpenOrders = openOrders?.filter((item) =>
   //   item.orderId.includes(searchTerm)
@@ -48,11 +48,11 @@ export default function Index() {
   );
 
   const [theOpenOrders, setTheOpenOrders] = useState([]);
-  const [theClosedOrders, setTheClosedOrders] = useState([]);
+  const [theCompletedOrders, setTheCompletedOrders] = useState([]);
 
   useEffect(() => {
     setTheOpenOrders(openOrders);
-    setTheClosedOrders(deliveredOrders);
+    setTheCompletedOrders(completedOrders);
   }, [myorders, navigation]);
 
   const ShowOrders = (index) => {
@@ -61,7 +61,7 @@ export default function Index() {
         return <OpenOrders myorders={theOpenOrders} />;
 
       case 1:
-        return <ClosedOrders myorders={theClosedOrders} />;
+        return <CompletedOrders myorders={theCompletedOrders} />;
 
       default:
         return <OpenOrders myorders={theOpenOrders} />;
@@ -69,7 +69,7 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         backgroundColor: appTheme.COLORS.mainBackground,
         flex: 1,
@@ -120,7 +120,7 @@ export default function Index() {
       ) : (
         ShowOrders(index)
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 

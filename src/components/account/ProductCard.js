@@ -144,7 +144,7 @@ const ProductCard = ({ theProduct }) => {
             </View>
 
             <Switch
-              color={appTheme.COLORS.mainGreen}
+              color={appTheme.COLORS.switchGreen}
               value={instock ? checked : !checked}
               onValueChange={(value) => {
                 setChecked(value);

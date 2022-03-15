@@ -3,6 +3,7 @@ import {
   REGISTER_REQUEST,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
+  CLEAR_ERRORS,
 } from "../constants/authConstants";
 
 const initialState = {
@@ -29,6 +30,12 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
       };
 
     default:

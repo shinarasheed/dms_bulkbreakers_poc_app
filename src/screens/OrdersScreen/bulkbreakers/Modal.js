@@ -18,8 +18,17 @@ const MessageModal = ({ showModal, message }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            your order has been {message}
+            You have{" "}
+            {message === "Accepted"
+              ? "Confirm"
+              : message === "Assigned"
+              ? "Dispatched"
+              : message === "Completed"
+              ? "Delivered"
+              : message}
           </Text>
+
+          <Text>this order</Text>
         </View>
       </Modal>
     </View>
@@ -34,7 +43,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 250,
     borderRadius: 6,
-    padding: 35,
+    padding: 40,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

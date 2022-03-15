@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, ActivityIndicator, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Timeline from "react-native-timeline-flatlist";
-import StepIndicator from "react-native-step-indicator";
+import { Placeholder, PlaceholderMedia, Fade } from "rn-placeholder";
 
 import { icons } from "../../../constants";
 import appTheme from "../../../constants/theme";
@@ -32,51 +31,21 @@ const OrderTimeLine = ({
     }
   }, []);
 
-  const currentPosition = 0;
-
-  const labels = [
-    "Cart",
-    "Delivery Address",
-    "Order Summary",
-    "Payment Method",
-    "Track",
-  ];
-  const stepIndicatorStyles = {
-    stepIndicatorSize: 30,
-    currentStepIndicatorSize: 40,
-    separatorStrokeWidth: 3,
-    currentStepStrokeWidth: 5,
-    stepStrokeCurrentColor: "#fe7013",
-    separatorFinishedColor: "#fe7013",
-    separatorUnFinishedColor: "#aaaaaa",
-    stepIndicatorFinishedColor: "#fe7013",
-    stepIndicatorUnFinishedColor: "#aaaaaa",
-    stepIndicatorCurrentColor: "#ffffff",
-    stepIndicatorLabelFontSize: 15,
-    currentStepIndicatorLabelFontSize: 15,
-    stepIndicatorLabelCurrentColor: "#000000",
-    stepIndicatorLabelFinishedColor: "#ffffff",
-    stepIndicatorLabelUnFinishedColor: "rgba(255,255,255,0.5)",
-    labelColor: "#666666",
-    labelSize: 15,
-    currentStepLabelColor: "#fe7013",
-  };
-
   if (singleOrder[0]?.orderStatus[0] === null)
     return (
-      <View
+      <Placeholder
+        Animation={Fade}
         style={{
-          flex: 1,
+          marginVertical: 2,
         }}
       >
-        <ActivityIndicator
-          color={
-            Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
-          }
-          animating={true}
-          size="small"
+        <PlaceholderMedia
+          style={{
+            width: "100%",
+            height: 80,
+          }}
         />
-      </View>
+      </Placeholder>
     );
   return (
     <View
@@ -276,7 +245,7 @@ const OrderTimeLine = ({
         }}
       >
         {singleOrder !== null &&
-        singleOrder?.orderStatus[0].dateDelivered !== null ? (
+        singleOrder?.orderStatus[0].dateCompleted !== null ? (
           <Image
             style={{
               width: 20,
@@ -312,8 +281,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder?.orderStatus[0]?.dateDelivered !== null &&
-            moment(singleOrder?.orderStatus[0]?.dateDelivered).format(
+          {singleOrder?.orderStatus[0]?.dateCompleted !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateCompleted).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -323,8 +292,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder?.orderStatus[0]?.timeDelivered !== null &&
-            `at ${singleOrder?.orderStatus[0]?.timeDelivered.replace(" ", "")}`}
+          {singleOrder?.orderStatus[0]?.timeCompleted !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeCompleted.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
 
@@ -335,7 +304,7 @@ const OrderTimeLine = ({
         }}
       >
         {singleOrder !== null &&
-        singleOrder?.orderStatus[0].dateCompleted !== null ? (
+        singleOrder?.orderStatus[0].dateDelivered !== null ? (
           <Image
             style={{
               width: 20,
@@ -371,8 +340,8 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder?.orderStatus[0]?.dateCompleted !== null &&
-            moment(singleOrder?.orderStatus[0]?.dateCompleted).format(
+          {singleOrder?.orderStatus[0]?.dateDelivered !== null &&
+            moment(singleOrder?.orderStatus[0]?.dateDelivered).format(
               "MMM Do, YYYY"
             )}
         </Text>
@@ -382,17 +351,10 @@ const OrderTimeLine = ({
             color: appTheme.COLORS.MainGray,
           }}
         >
-          {singleOrder?.orderStatus[0]?.timeCompleted !== null &&
-            `at ${singleOrder?.orderStatus[0]?.timeCompleted.replace(" ", "")}`}
+          {singleOrder?.orderStatus[0]?.timeDelivered !== null &&
+            `at ${singleOrder?.orderStatus[0]?.timeDelivered.replace(" ", "")}`}
         </Text>
       </TouchableOpacity>
-
-      {/* <StepIndicator
-      customStyles={stepIndicatorStyles}
-      currentPosition={currentPosition}
-      labels={labels}
-      direction="vertical"
-    /> */}
     </View>
   );
 };

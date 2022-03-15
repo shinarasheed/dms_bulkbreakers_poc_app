@@ -12,13 +12,13 @@ import { ScrollView } from "react-native-virtualized-view";
 
 import { useNavigation } from "@react-navigation/native";
 import { BottomSheet } from "react-native-btr";
-import { icons } from "../../constants";
+import { icons } from "../../../constants";
 
-import appTheme from "../../constants/theme";
-import { reordes } from "../../data";
-import { formatPrice } from "../../utils/formatPrice";
-import { Routes } from "../../navigation/Routes";
-import Product from "../../components/orders/Product";
+import appTheme from "../../../constants/theme";
+import { reordes } from "../../../data";
+import { formatPrice } from "../../../utils/formatPrice";
+import { Routes } from "../../../navigation/Routes";
+import Product from "../Product";
 
 const ReOrder = ({
   visible,
@@ -29,7 +29,7 @@ const ReOrder = ({
   getTotalPrice,
   // distributor,
   reorder,
-  item
+  item,
 }) => {
   const navigation = useNavigation();
   return (

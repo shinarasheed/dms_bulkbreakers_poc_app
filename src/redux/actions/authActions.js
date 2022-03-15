@@ -9,7 +9,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
+  CLEAR_ERRORS,
 } from "../constants/authConstants";
+import { USER_BASE_URL } from "../../confg";
 
 export const register = (navigation) => async (dispatch) => {
   try {
@@ -38,7 +40,8 @@ export const register = (navigation) => async (dispatch) => {
       };
 
       //continue
-      await axios.post(`http://20.87.33.26/register`, body, config);
+      await axios.post(`${USER_BASE_URL}/register`, body, config);
+      await AsyncStorage.setItem("token", token);
       navigation.navigate(Routes.CONTINUE_SCREEN);
 
       dispatch({
@@ -56,13 +59,16 @@ export const register = (navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.error
-          ? error.response.data.error
-          : error.error,
+      payload: "Signup Error. This account already exist in our system",
     });
 
     await adService.logoutAsync();
     await AsyncStorage.clear();
   }
+};
+
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  });
 };

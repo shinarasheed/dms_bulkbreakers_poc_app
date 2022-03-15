@@ -43,18 +43,11 @@ const SelectBottomSheet = ({ visible, toggle }) => {
   const { isLoading, customer } = customerState;
 
   const handleNextAction = async () => {
-    console.log(action);
     // save customer in asyncstorage
     let theCustomer = { ...customer, isFirstTime: true };
     await AsyncStorage.setItem("customer", JSON.stringify(theCustomer));
     try {
-      if (action === "buy") {
-        dispatch(getDistributors(navigation, "HomeScreen"));
-      } else if (action === "setupstore") {
-        dispatch(getDistributors(navigation, "AddProductsScreen"));
-      } else {
-        dispatch(getDistributors(navigation, "HomeScreen"));
-      }
+      dispatch(getDistributors());
     } catch (error) {
       console.log(error);
     }

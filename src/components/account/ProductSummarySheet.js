@@ -25,7 +25,9 @@ import {
 
 const ProductsSummarySheet = ({ visible, toggle }) => {
   const dispatch = useDispatch();
-  const products_tosell = useSelector((state) => state.product.products_tosell);
+  const products_tosell = useSelector(
+    (state) => state.product?.products_tosell
+  );
   const array = cloneDeep(products_tosell);
 
   const deleteItem = (productID) => {

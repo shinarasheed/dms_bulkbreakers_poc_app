@@ -12,14 +12,14 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import { icons } from "../../constants";
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { Routes } from "../../navigation/Routes";
-import { getDistanceApart } from "../../utils/calCulateDistance";
-import { INVENTORY_BASE_URL } from "../../confg";
+import { icons } from "../../../constants";
+import appTheme from "../../../constants/theme";
+import { formatPrice } from "../../../utils/formatPrice";
+import { Routes } from "../../../navigation/Routes";
+import { getDistanceApart } from "../../../utils/calCulateDistance";
+import { INVENTORY_BASE_URL } from "../../../confg";
 
-const OrderFooter = ({ distributor, item }) => {
+const CustomerDetails = ({ distributor, item }) => {
   const navigation = useNavigation();
 
   const [loadingInventory, setLoadingInventory] = useState(false);
@@ -54,11 +54,11 @@ const OrderFooter = ({ distributor, item }) => {
     <View
       style={{
         backgroundColor: appTheme.COLORS.white,
-        marginTop: 20,
+        marginTop: 15,
         paddingVertical: 20,
         paddingHorizontal: 20,
         elevation: appTheme.STYLES.elevation,
-        marginBottom: 20,
+        marginBottom: 15,
       }}
     >
       <View>
@@ -77,11 +77,21 @@ const OrderFooter = ({ distributor, item }) => {
           style={{
             color: appTheme.COLORS.black,
             fontFamily: "Gilroy-Medium",
-            marginBottom: 10,
+            marginBottom: 5,
             fontSize: 18,
           }}
         >
           {item?.buyerDetails[0].buyerName}
+        </Text>
+
+        <Text
+          style={{
+            color: appTheme.COLORS.black,
+            fontFamily: "Gilroy-Medium",
+            fontSize: 15,
+          }}
+        >
+          {item?.buyerDetails[0].buyerAddress}
         </Text>
       </View>
 
@@ -91,16 +101,16 @@ const OrderFooter = ({ distributor, item }) => {
           alignItems: "flex-start",
         }}
       >
-        <Image
+        {/* <Image
           source={icons.locationIconRed}
           style={{
             marginRight: 10,
             width: 25,
             height: 25,
           }}
-        />
+        /> */}
         <View>
-          <Text
+          {/* <Text
             style={{
               fontSize: 16,
               fontFamily: "Gilroy-Medium",
@@ -125,7 +135,7 @@ const OrderFooter = ({ distributor, item }) => {
             >
               {item?.buyerDetails[0].buyerAddress}
             </Text>
-          </View>
+          </View> */}
 
           {/* <View
             style={{
@@ -250,6 +260,6 @@ const OrderFooter = ({ distributor, item }) => {
   );
 };
 
-export default OrderFooter;
+export default CustomerDetails;
 
 const styles = StyleSheet.create({});

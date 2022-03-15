@@ -5,18 +5,22 @@ import {
   GET_DISTRIBUTOR_REQUEST,
   GET_DISTRIBUTOR_SUCCESS,
   GET_DISTRIBUTOR_FAIL,
-  GET_DISTRIBUTORS_REQUEST,
-  GET_DISTRIBUTORS_SUCCESS,
-  GET_DISTRIBUTORS_FAIL,
+  GET_SELLERS_REQUEST,
+  GET_SELLERS_FAIL,
+  GET_SELLERS_SUCCESS,
   LOGOUT,
   RESTORE_TOKEN,
   RETRIVE_CUSTOMER,
-  SORT_DISTRIBUTORS,
   GET_CUSTOMER_INVENTORY_REQUEST,
   GET_CUSTOMER_INVENTORY_SUCCESS,
   GET_CUSTOMER_INVENTORY_FAIL,
   DELETE_INVENTORY_PRODUCT,
   UPDATE_PRODUCT_STATUS,
+  SORT_SELLERS,
+  GET_BULKBREAKERS_FAIL,
+  GET_BULKBREAKERS_SUCCESS,
+  GET_BULKBREAKERS_REQUEST,
+  SELLERS_NOT_NEAR,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -30,6 +34,7 @@ const initialState = {
   assigned: false,
   customerDetails: null,
   myInventory: [],
+  sellersNotNear: false,
 };
 
 export default (state = initialState, action) => {
@@ -107,29 +112,29 @@ export default (state = initialState, action) => {
         isLoading: false,
       };
 
-    case GET_DISTRIBUTORS_REQUEST:
+    case GET_SELLERS_REQUEST:
       return {
         ...state,
         isLoading: true,
       };
-    case GET_DISTRIBUTORS_SUCCESS:
+    case GET_SELLERS_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        distributors: action.payload.distributors,
+        distributors: action.payload.distributorsToShow,
         token: action.payload.token,
         isAuthenticated: true,
         assigned: false,
       };
 
-    case GET_DISTRIBUTORS_FAIL:
+    case GET_SELLERS_FAIL:
       return {
         ...state,
         error: action.payload,
         isLoading: false,
       };
 
-    case SORT_DISTRIBUTORS:
+    case SORT_SELLERS:
       return {
         ...state,
         distributors:
@@ -149,12 +154,41 @@ export default (state = initialState, action) => {
               ),
       };
 
+    case SELLERS_NOT_NEAR:
+      return {
+        ...state,
+        isLoading: false,
+        sellersNotNear: true,
+      };
+
+    case GET_BULKBREAKERS_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case GET_BULKBREAKERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        distributors: action.payload.distributorsToShow,
+        token: action.payload.token,
+        isAuthenticated: true,
+        assigned: false,
+      };
+
+    case GET_BULKBREAKERS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+
     case RESTORE_TOKEN:
       return {
         ...state,
         isLoading: false,
         isAuthenticated: true,
-        token: action.payload.token,
+        token: action.payload,
       };
 
     case RETRIVE_CUSTOMER:

@@ -110,7 +110,7 @@ const Product2 = ({ theProduct }) => {
                 }}
               >
                 {"\u20A6"}
-                {price}/case
+                {formatPrice(price)}/case
               </Text>
             </View>
           </View>

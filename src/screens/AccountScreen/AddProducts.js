@@ -39,10 +39,9 @@ const AddProductsScreen = () => {
 
   const dispatch = useDispatch();
 
-  const products_tosell = useSelector((state) => state.product.products_tosell);
-  const array = cloneDeep(products_tosell);
-
-  console.log(tempProduct, "---tempProduct---");
+  const products_tosell = useSelector(
+    (state) => state.product?.products_tosell
+  );
 
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
@@ -74,7 +73,7 @@ const AddProductsScreen = () => {
     dispatch(deleteProductToSell(productID));
   };
 
-  // if (loading) return <LottieLoader />;
+  if (loading) return <LottieLoader />;
 
   return (
     <View
@@ -135,7 +134,6 @@ const AddProductsScreen = () => {
           const indexx = findIndex(products_tosell, {
             productId: id,
           });
-          // console.log(products_tosell[indexx]?.price, "===========");
           const productIsInInventory = findIndex(myInventory, {
             productId: id,
           });
@@ -145,12 +143,6 @@ const AddProductsScreen = () => {
               : indexx >= 0
               ? products_tosell[indexx].price
               : null;
-
-          // const secondindexx = findIndex(result, {
-          //   id: id,
-          // });
-
-          // const secondindexx = result.indexOf(thisProduct);
 
           return (
             <View

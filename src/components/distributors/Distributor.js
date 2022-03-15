@@ -7,7 +7,8 @@ import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { INVENTORY_BASE_URL } from "../../confg";
-import { distributors } from "../../data";
+import { formatPrice } from "../../utils/formatPrice";
+import { StarRating } from "../starRating";
 
 export const Distributor = ({ distributor }) => {
   const navigation = useNavigation();
@@ -16,7 +17,7 @@ export const Distributor = ({ distributor }) => {
   useEffect(() => {
     let componentMounted = true;
 
-    const getProducts = async (code) => {
+    const fetchInventory = async () => {
       try {
         const config = {
           headers: {
@@ -27,23 +28,29 @@ export const Distributor = ({ distributor }) => {
         const {
           data: { data },
         } = await axios.get(
-          `${INVENTORY_BASE_URL}/bb/${distributor?.id}`,
+          `${INVENTORY_BASE_URL}/inventory/${distributor?.DIST_Code}`,
           config
         );
 
+        let availableProducts = data?.filter((product) => product.quantity > 0);
         if (componentMounted) {
-          setProducts(data);
+          setProducts(availableProducts);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    getProducts(distributor?.DIST_Code);
+    fetchInventory();
 
     return () => {
       componentMounted = false;
     };
   }, []);
+
+  const pricesArray = products.map((prod) => prod.product.price);
+
+  let minPrice = Math.min(...pricesArray);
+  let maxPrice = Math.max(...pricesArray);
 
   return (
     <TouchableOpacity
@@ -66,7 +73,7 @@ export const Distributor = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {distributor?.CUST_Name}
+          {distributor?.company_name}
         </Text>
         <Text
           style={{
@@ -98,13 +105,17 @@ export const Distributor = ({ distributor }) => {
               >
                 Beers selling from{" "}
               </Text>
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                }}
-              >
-                {"\u20A6"}1300 - {"\u20A6"}2300{" "}
-              </Text>
+
+              {minPrice !== Infinity && maxPrice !== Infinity && (
+                <Text
+                  style={{
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  {`\u20A6${formatPrice(minPrice)}`} -{" "}
+                  {`\u20A6${formatPrice(maxPrice)}`}
+                </Text>
+              )}
             </View>
 
             <View
@@ -113,24 +124,36 @@ export const Distributor = ({ distributor }) => {
                 alignItems: "center",
               }}
             >
-              <Text
-                style={{
-                  marginRight: 5,
-                  fontFamily: "Gilroy-Light",
-                }}
-              >
-                5.0
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                {new Array(4).fill(0).map((_, i) => (
-                  <Image key={i} source={icons.starIcon} />
-                ))}
-              </View>
+              {distributor?.ratings && (
+                <>
+                  <Text
+                    style={{
+                      marginRight: 5,
+                      fontFamily: "Gilroy-Light",
+                    }}
+                  >
+                    5.0
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginRight: 15,
+                    }}
+                  >
+                    <StarRating number={distributor?.stars?.toFixed(1)} />
+                    <Text
+                      style={{
+                        marginLeft: 3,
+                        color: appTheme.COLORS.mainTextGray,
+                        fontFamily: "Gilroy-Light",
+                      }}
+                    >
+                      ({distributor?.rating})
+                    </Text>
+                  </View>
+                </>
+              )}
               <Text
                 style={{
                   fontFamily: "Gilroy-Light",

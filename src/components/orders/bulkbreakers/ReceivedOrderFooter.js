@@ -12,7 +12,7 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
         paddingVertical: 20,
         flexDirection: "row",
         paddingHorizontal: 20,
-        marginTop: 20,
+        marginTop: 15,
       }}
     >
       {singleOrder?.status === "Placed" && (
@@ -100,7 +100,7 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
       {singleOrder?.status === "Assigned" && (
         <>
           <TouchableOpacity
-            onPress={() => updateOrderStatus("Delivered")}
+            onPress={() => updateOrderStatus("Completed")}
             style={{
               backgroundColor: appTheme.COLORS.mainRed,
               justifyContent: "center",
@@ -126,9 +126,9 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
 
       {/* delivered */}
 
-      {singleOrder?.status === "Delivered" && (
-        <>
-          <TouchableOpacity
+      {/* {singleOrder?.status === "Delivered" && ( */}
+      <>
+        {/* <TouchableOpacity
             onPress={() => updateOrderStatus("Completed")}
             style={{
               backgroundColor: appTheme.COLORS.mainRed,
@@ -149,9 +149,9 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
             >
               Mark as Completed
             </Text>
-          </TouchableOpacity>
-        </>
-      )}
+          </TouchableOpacity> */}
+      </>
+      {/* )} */}
 
       {singleOrder?.status === "Completed" && <></>}
     </View>

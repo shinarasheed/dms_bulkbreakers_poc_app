@@ -7,30 +7,36 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
+  Image,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import axios from "axios";
 import moment from "moment";
+import { Slide, Box } from "native-base";
 
 import appTheme from "../../../constants/theme";
 import { icons } from "../../../constants";
-import { Header } from "../../../components/orders/Header";
+import { Header } from "../../../components/orders/bulkbreakers/HeaderReceivedOrders";
 import Product from "../../../components/orders/Product";
 import OrderTimeLineReceived from "../../../components/orders/bulkbreakers/OrderTimeLineReceived";
-import OrderFooter from "../../../components/orders/OrderFooter";
-import CustomerDetails from "../../../components/orders/CustomerDetails";
-import ReOrder from "../../../components/orders/ReOrder";
+import RejectedOrderTimeLine from "../../../components/orders/bulkbreakers/RejectedOrderTimeLine";
+import OrderFooter from "../../../components/orders/pocs/OrderFooter";
+import CustomerDetails from "../../../components/orders/bulkbreakers/CustomerDetails";
+import ReOrder from "../../../components/orders/pocs/ReOrder";
 import { formatPrice } from "../../../utils/formatPrice";
 import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActions";
 import { ORDER_BASE_URL } from "../../../confg";
 import CountDownTimer from "../../../components/orders/CountDownTimer";
-import DeliveryMethod from "../../../components/orders/DeliveryMethod";
+import DeliveryMethod from "../../../components/orders/pocs/DeliveryMethod";
 import ReceivedOrderFooter from "../../../components/orders/bulkbreakers/ReceivedOrderFooter";
 import MessageModal from "../bulkbreakers/Modal";
 import { updateProductStatus } from "../../../redux/actions/customerActions";
+import { Routes } from "../../../navigation/Routes";
 
 const ReceivedOrderDetails = () => {
   const route = useRoute();
+  const [isOpen, setIsOpen] = React.useState(false);
   const [theOrder, setTheOrder] = useState();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -120,7 +126,13 @@ const ReceivedOrderDetails = () => {
         flex: 1,
       }}
     >
-      <Header single orderId={orderId} />
+      <Header
+        single
+        orderId={orderId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        singleOrder
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -137,6 +149,7 @@ const ReceivedOrderDetails = () => {
             alignItems: "center",
             paddingHorizontal: 10,
             paddingTop: 10,
+            marginBottom: 10,
           }}
         >
           <View
@@ -179,12 +192,16 @@ const ReceivedOrderDetails = () => {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor:
-                singleOrder[0]?.orderStatus[0].status === "Placed"
+                singleOrder?.orderStatus[0].status === "Placed"
                   ? appTheme.COLORS.borderGRey1
-                  : singleOrder[0]?.orderStatus[0].status === "Assigned"
-                  ? appTheme.COLORS.mainYellow
-                  : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                  : singleOrder?.orderStatus[0].status === "Assigned"
                   ? appTheme.COLORS.mainBlue
+                  : singleOrder?.orderStatus[0].status === "Accepted"
+                  ? appTheme.COLORS.mainYellow
+                  : singleOrder?.orderStatus[0].status === "Rejected"
+                  ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Completed"
+                  ? appTheme.COLORS.lightBlue
                   : appTheme.COLORS.mainGreen,
             }}
           >
@@ -193,22 +210,24 @@ const ReceivedOrderDetails = () => {
                 fontFamily: "Gilroy-Medium",
                 fontSize: 13,
                 color:
-                  singleOrder[0]?.orderStatus[0].status === "Placed"
+                  singleOrder?.orderStatus[0].status === "Placed"
                     ? appTheme.COLORS.black
-                    : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                    : singleOrder?.orderStatus[0].status === "Accepted"
                     ? appTheme.COLORS.white
-                    : singleOrder[0]?.orderStatus[0].status === "Completed"
+                    : singleOrder?.orderStatus[0].status === "Completed"
                     ? appTheme.COLORS.white
                     : appTheme.COLORS.white,
               }}
             >
-              {singleOrder[0]?.orderStatus[0].status === "Assigned"
-                ? "Confirmed"
-                : singleOrder[0]?.orderStatus[0].status === "Accepted"
+              {singleOrder?.orderStatus[0].status === "Assigned"
                 ? "Dispatched"
-                : singleOrder[0]?.orderStatus[0].status === "Completed"
+                : singleOrder?.orderStatus[0].status === "Accepted"
+                ? "Confirmed"
+                : singleOrder?.orderStatus[0].status === "Completed"
                 ? "Delivered"
-                : singleOrder[0]?.orderStatus[0].status}
+                : singleOrder?.orderStatus[0].status === "Delivered"
+                ? "Completed"
+                : singleOrder?.orderStatus[0].status}
             </Text>
           </View>
         </View>
@@ -216,7 +235,6 @@ const ReceivedOrderDetails = () => {
         <FlatList
           style={{
             backgroundColor: appTheme.COLORS.white,
-            marginTop: 15,
             elevation: appTheme.STYLES.elevation,
           }}
           data={productsToOder}
@@ -291,16 +309,24 @@ const ReceivedOrderDetails = () => {
 
         {/* delivery method */}
 
-        <DeliveryMethod distributor={theDistributor} />
+        {/* <DeliveryMethod
+          distributor={theDistributor}
+          singleOrder={singleOrder}
+        /> */}
+
+        {singleOrder?.orderStatus[0]?.status === "Rejected" ? (
+          <RejectedOrderTimeLine singleOrder={singleOrder} />
+        ) : (
+          <OrderTimeLineReceived
+            item={item}
+            singleOrder={singleOrder}
+            theDistributor={theDistributor}
+            productsToOder={productsToOder}
+            theOrder={theOrder}
+          />
+        )}
 
         {/* order TimeLine */}
-        <OrderTimeLineReceived
-          item={item}
-          singleOrder={singleOrder}
-          theDistributor={theDistributor}
-          productsToOder={productsToOder}
-          theOrder={theOrder}
-        />
 
         {/* footer */}
 
@@ -316,6 +342,77 @@ const ReceivedOrderDetails = () => {
           updateOrderStatus={updateOrderStatus}
           singleOrder={singleOrder}
         />
+
+        <Slide
+          in={isOpen}
+          placement="right"
+          style={{
+            marginTop: 25,
+          }}
+        >
+          <Box
+            _text={{
+              color: "white",
+            }}
+            style={{
+              backgroundColor: "#eee",
+              width: 200,
+              marginTop: 50,
+              paddingVertical: 15,
+              paddingLeft: 20,
+              elevation: 50,
+            }}
+          >
+            <View>
+              <Pressable
+                onPress={() => navigation.navigate(Routes.HOME_SCREEN)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 20,
+                }}
+              >
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                  source={icons.home}
+                />
+
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  Go Home
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate(Routes.PRODUCTS_SCREEN);
+                  setIsOpen(!isOpen);
+                }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Image source={icons.productIcon2} />
+
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                  }}
+                >
+                  View my Products
+                </Text>
+              </Pressable>
+            </View>
+          </Box>
+        </Slide>
       </ScrollView>
     </View>
   );

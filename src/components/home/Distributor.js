@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
@@ -10,6 +10,8 @@ import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { INVENTORY_BASE_URL } from "../../confg";
 import { truncateString } from "../../utils/truncateString";
+import { formatPrice } from "../../utils/formatPrice";
+import { StarRating } from "../starRating";
 
 export const Distributor = ({ distributor }) => {
   const [products, setProducts] = useState([]);
@@ -22,7 +24,7 @@ export const Distributor = ({ distributor }) => {
 
   useEffect(() => {
     let componentMounted = true;
-    const getProducts = async (code) => {
+    const fetchInventory = async (code) => {
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -57,12 +59,17 @@ export const Distributor = ({ distributor }) => {
       }
     };
 
-    getProducts(distributor.DIST_Code);
+    fetchInventory(distributor.DIST_Code);
 
     return () => {
       componentMounted = false;
     };
   }, []);
+
+  const pricesArray = products.map((prod) => prod.product.price);
+
+  let minPrice = Math.min(...pricesArray);
+  let maxPrice = Math.max(...pricesArray);
 
   return (
     <TouchableOpacity
@@ -86,9 +93,7 @@ export const Distributor = ({ distributor }) => {
         >
           {distributor?.company_name}
 
-          {customer?.CUST_Type.toLowerCase() === "bulkbreaker"
-            ? truncateString(distributor?.company_name, 1)
-            : truncateString(distributor?.CUST_Name, 15)}
+          {truncateString(distributor?.company_name, 1)}
         </Text>
 
         <View
@@ -98,60 +103,61 @@ export const Distributor = ({ distributor }) => {
           }}
         >
           <View>
-            {distributor?.stars && (
+            {distributor?.ratings && (
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  alignSelf: "center",
-                  marginBottom: 5,
+                  marginRight: 15,
                 }}
               >
-                <Text
-                  style={{
-                    marginRight: 5,
-                    fontFamily: "Gilroy-Medium",
-                  }}
-                >
-                  {distributor?.stars.toFixed(1)}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  {new Array(5).fill(0).map((_, i) => (
-                    <Image key={i} source={icons.starIcon} />
-                  ))}
-                </View>
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    fontSize: 14,
-                  }}
-                >
-                  ({distributor?.raters})
-                </Text>
+                <StarRating number={distributor?.stars?.toFixed(1)} />
+
+                {distributor?.rating && (
+                  <Text
+                    style={{
+                      marginRight: 3,
+                      marginLeft: 15,
+                      color: appTheme.COLORS.mainTextGray,
+                      fontFamily: "Gilroy-Light",
+                    }}
+                  >
+                    ({distributor?.rating})
+                  </Text>
+                )}
               </View>
             )}
 
             <View style={{ flexDirection: "row", marginBottom: 10 }}>
               <Text
                 style={{
-                  fontFamily: "Gilroy-Light",
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 14,
                 }}
               >
                 Beers selling from{" "}
               </Text>
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  fontSize: 12,
-                }}
-              >
-                {"\u20A6"}1300 - {"\u20A6"}2300{" "}
-              </Text>
+              {products.length > 0 ? (
+                <Text
+                  style={{
+                    fontFamily: "Gilroy-Medium",
+                    fontSize: 13,
+                  }}
+                >
+                  {`\u20A6${formatPrice(minPrice)}`} -{" "}
+                  {`\u20A6${formatPrice(maxPrice)}`}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    fontFamily: "Gilroy-Medium",
+                    fontSize: 13,
+                  }}
+                >
+                  {`\u20A6${formatPrice(1300)}`} -{" "}
+                  {`\u20A6${formatPrice(2500)}`}
+                </Text>
+              )}
             </View>
           </View>
 

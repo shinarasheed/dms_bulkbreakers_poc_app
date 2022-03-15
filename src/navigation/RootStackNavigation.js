@@ -21,6 +21,12 @@ import {
   NoInventory,
   ProductsScreen,
   Products,
+  BulkbreakerScreen,
+  BulkBreakersScreen,
+  TermsOfUse,
+  PrivacyPolicy,
+  ReturnPolicy,
+  RatingsBulkbreaker,
 } from "../screens";
 import { BottomTabs } from "./BottomTabNavigation";
 import appTheme from "../constants/theme";
@@ -72,6 +78,8 @@ export const RootStackNavigation = () => {
       <Stack.Screen name="LegalScreen" component={LegalScreen} />
 
       <Stack.Screen name="DistributorScreen" component={DistributorScreen} />
+      <Stack.Screen name="BulkbreakerScreen" component={BulkbreakerScreen} />
+      <Stack.Screen name="BulkBreakersScreen" component={BulkBreakersScreen} />
       <Stack.Screen name="OrdersBulkbreakers" component={OrdersBulkbreakers} />
       <Stack.Screen name="OrdersPocs" component={OrdersPocs} />
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
@@ -85,6 +93,10 @@ export const RootStackNavigation = () => {
         component={ReceivedOrderDetails}
       />
       <Stack.Screen name="RatingScreen" component={RatingScreen} />
+      <Stack.Screen name="RatingsBulkbreaker" component={RatingsBulkbreaker} />
+      <Stack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="ReturnPolicy" component={ReturnPolicy} />
     </Stack.Navigator>
   );
 };

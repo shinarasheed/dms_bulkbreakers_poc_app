@@ -100,7 +100,7 @@ export default function Index() {
           onChangeText={(textValue) => setSearchTerm(textValue)}
         />
       </View>
-
+      {/* 
       {isLoading ? (
         <View
           style={{
@@ -119,7 +119,9 @@ export default function Index() {
         </View>
       ) : (
         ShowProducts(index)
-      )}
+      )} */}
+
+      {ShowProducts(index)}
     </SafeAreaView>
   );
 }

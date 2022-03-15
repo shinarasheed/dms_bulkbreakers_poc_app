@@ -39,6 +39,7 @@ const ErrorIcon = require("../../assets/icons/error.png");
 const ProductsCart = require("../../assets/icons/ProductsCart.png");
 const ArrowDown = require("../../assets/icons/ArrowDown.png");
 const InfoIcon = require("../../assets/icons/InfoIcon.png");
+const rejectedIcon = require("../../assets/icons/Rejected.png");
 
 export default {
   home,
@@ -82,4 +83,5 @@ export default {
   ProductsCart,
   ArrowDown,
   InfoIcon,
+  rejectedIcon,
 };

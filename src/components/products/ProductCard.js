@@ -24,7 +24,8 @@ const ProductCard = ({ theProduct }) => {
     dispatch(incrementQuantityByTyping(text, id));
   };
 
-  const { id, brand, imageUrl, price, sku, buyingQuantity } = theProduct;
+  const { id, brand, imageUrl, price, sku, buyingQuantity, quantity } =
+    theProduct;
   return (
     <View
       key={id}
@@ -33,7 +34,7 @@ const ProductCard = ({ theProduct }) => {
         paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: appTheme.COLORS.borderGRey,
-        alignItems: "center",
+        alignItems: "flex-start",
         paddingVertical: 10,
       }}
     >
@@ -92,11 +93,24 @@ const ProductCard = ({ theProduct }) => {
                 }}
               >
                 {"\u20A6"}
-                {price}/case
+                {formatPrice(price)}/case
               </Text>
             </View>
           </View>
         </View>
+
+        {/* <View>
+          <Text
+            style={{
+              fontFamily: "Gilroy-Medium",
+              fontSize: 13,
+              color: appTheme.COLORS.mainTextGray,
+            }}
+          >
+            {formatPrice(quantity)}{" "}
+            {quantity > 1 ? `quantities left` : `quantity left`}
+          </Text>
+        </View> */}
 
         <View
           style={{

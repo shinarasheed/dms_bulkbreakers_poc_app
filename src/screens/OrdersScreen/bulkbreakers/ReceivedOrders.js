@@ -36,7 +36,7 @@ export default function RecievedOrders() {
 
   // const myOrdersState = useSelector((state) => state.myOrders);
 
-  // const { openOrders, deliveredOrders, myorders, loading } = myOrdersState;
+  // const { openOrders, completedOrders, myorders, loading } = myOrdersState;
 
   const receivedOrdersState = useSelector((state) => state.recievedOrders);
 
@@ -44,7 +44,7 @@ export default function RecievedOrders() {
     receivedOrders,
     loading,
     receivedopenOrders,
-    receiveddeliveredOrders,
+    receivedcompletedOrders,
   } = receivedOrdersState;
 
   // const filteredOpenOrders = openOrders?.filter((item) =>
@@ -62,19 +62,19 @@ export default function RecievedOrders() {
 
   // useEffect(() => {
   //   setTheOpenOrders(receivedopenOrders);
-  //   setTheClosedOrders(receiveddeliveredOrders);
+  //   setTheClosedOrders(receivedcompletedOrders);
   // }, [receivedOrders, navigation]);
 
   const ShowOrders = (index) => {
     switch (index) {
       case 0:
-        return <OpenOrders myorders={receivedOrders} />;
+        return <OpenOrders myorders={receivedopenOrders} />;
 
       case 1:
-        return <ClosedOrders myorders={receivedOrders} />;
+        return <ClosedOrders myorders={receivedcompletedOrders} />;
 
       default:
-        return <OpenOrders myorders={receivedOrders} />;
+        return <OpenOrders myorders={receivedopenOrders} />;
     }
   };
 

@@ -32,13 +32,13 @@ const DistributorScreen = () => {
 
   const { distributor } = route.params;
 
-
   const productsState = useSelector((state) => state.product);
 
   const { products, loading } = productsState;
 
+  //gets inventory
   useEffect(() => {
-    dispatch(getProducts(distributor.DIST_Code));
+    dispatch(getProducts(distributor?.DIST_Code));
   }, []);
 
   function toggle() {
@@ -122,7 +122,7 @@ const DistributorScreen = () => {
           <Text
             style={{
               fontFamily: "Gilroy-Medium",
-              fontSize: 18,
+              fontSize: 15,
               textAlign: "center",
               color: appTheme.COLORS.mainRed,
             }}

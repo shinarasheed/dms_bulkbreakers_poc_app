@@ -39,8 +39,10 @@
     "lottie-react-native": "4.0.3",
     "luxon": "^2.3.0",
     "moment": "^2.29.1",
+    "native-base": "^3.3.7",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.28.0",
     "react-native": "0.64.3",
     "react-native-btr": "^2.1.2",
     "react-native-countdown-component": "^2.7.1",
@@ -60,6 +62,7 @@
     "react-native-screens": "~3.8.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-step-indicator": "^1.0.3",
+    "react-native-svg": "12.1.1",
     "react-native-timeline-flatlist": "^0.8.0",
     "react-native-virtualized-view": "^0.1.5",
     "react-native-web": "0.17.1",
@@ -68,7 +71,8 @@
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rn-placeholder": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
