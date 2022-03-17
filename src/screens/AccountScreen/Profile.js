@@ -1,9 +1,18 @@
-import { StyleSheet, Text, View, Image, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { Header } from "../../components/orders/Header";
+import { CUSTOMER_BASE_URL } from "../../confg";
 
 const Profile = () => {
   const customerState = useSelector((state) => state.customer);
@@ -19,6 +28,32 @@ const Profile = () => {
     setMyPhoneNumber(customer?.phoneNumber);
     setMyEmail(customer?.myEmail);
   }, []);
+
+  const updatePhoneNumber = async () => {
+    const body = {
+      code: customer?.BB_Code,
+      phoneNumber: myPhoneNumber,
+    };
+
+    console.log(body);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.patch(
+        `${CUSTOMER_BASE_URL}/updatecustomer/update-phone`,
+        body,
+        config
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View
@@ -113,13 +148,15 @@ const Profile = () => {
                 fontWeight: "bold",
                 color: appTheme.COLORS.mainTextGray,
               }}
-              value={myEmail}
+              value={
+                myEmail == null ? "You do not have an email address" : myEmail
+              }
               onChangeText={(value) => setMyEmail(value)}
             />
           </View>
         </View>
 
-        <View style={{}}>
+        <View>
           <View
             style={{
               flexDirection: "row",
@@ -145,6 +182,7 @@ const Profile = () => {
               </Text>
 
               <TextInput
+                keyboardType="numeric"
                 style={{
                   borderWidth: 0,
                   borderBottomWidth: 1,
@@ -243,6 +281,66 @@ const Profile = () => {
             </Text>
           </View>
         </View>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: appTheme.COLORS.white,
+          elevation: 50,
+          flex: 1,
+          paddingHorizontal: 20,
+          justifyContent: "center",
+          marginTop: 70,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => updatePhoneNumber()}
+          style={{
+            backgroundColor: appTheme.COLORS.mainRed,
+            width: "100%",
+            height: 50,
+            justifyContent: "center",
+            borderRadius: 5,
+            marginTop: 10,
+            alignItems: "center",
+            justifyContent: "center",
+            elevation: 50,
+          }}
+        >
+          <Text
+            style={{
+              color: appTheme.COLORS.white,
+              fontSize: 16,
+              fontFamily: "Gilroy-Bold",
+            }}
+          >
+            Save Changes
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: appTheme.COLORS.white,
+            width: "100%",
+            height: 50,
+            justifyContent: "center",
+            borderRadius: 5,
+            marginTop: 10,
+            alignItems: "center",
+            justifyContent: "center",
+            elevation: 50,
+          }}
+        >
+          <Text
+            style={{
+              color: appTheme.COLORS.black,
+              fontSize: 16,
+              fontFamily: "Gilroy-Bold",
+            }}
+          >
+            Discard Changes
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
