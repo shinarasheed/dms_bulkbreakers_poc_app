@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TextInput } from "react-native";
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { Header } from "../../components/orders/Header";
@@ -9,6 +9,17 @@ const Profile = () => {
   const customerState = useSelector((state) => state.customer);
 
   const { customer } = customerState;
+
+  const [myPhoneNumber, setMyPhoneNumber] = useState("");
+  const [myPhoneNumberWhatsApp, setMyPhoneNumberWhatsApp] = useState("123456");
+
+  const [myEmail, setMyEmail] = useState("");
+
+  useEffect(() => {
+    setMyPhoneNumber(customer?.phoneNumber);
+    setMyEmail(customer?.myEmail);
+  }, []);
+
   return (
     <View
       style={{
@@ -21,7 +32,7 @@ const Profile = () => {
       <View
         style={{
           paddingHorizontal: 20,
-          paddingTop: 70,
+          paddingTop: 30,
         }}
       >
         <View
@@ -34,6 +45,10 @@ const Profile = () => {
           <View
             style={{
               marginLeft: 10,
+              width: "100%",
+              borderColor: appTheme.COLORS.borderGRey,
+              paddingTop: 5,
+              // borderBottomWidth: 1,
             }}
           >
             <Text
@@ -48,6 +63,7 @@ const Profile = () => {
                 color: appTheme.COLORS.black,
                 fontSize: 18,
                 fontFamily: "Gilroy-Medium",
+                width: "100%",
               }}
             >
               {customer?.CUST_Name}
@@ -74,6 +90,7 @@ const Profile = () => {
           <View
             style={{
               marginLeft: 10,
+              width: "100%",
             }}
           >
             <Text
@@ -83,24 +100,22 @@ const Profile = () => {
             >
               Email
             </Text>
-            <Text
+
+            <TextInput
               style={{
-                color: appTheme.COLORS.black,
-                fontSize: 18,
-                fontFamily: "Gilroy-Medium",
+                borderWidth: 0,
+                borderBottomWidth: 1,
+                width: "100%",
+                borderColor: appTheme.COLORS.borderGRey,
+                marginRight: 5,
+                borderRadius: 5,
+                textAlign: "left",
+                fontWeight: "bold",
+                color: appTheme.COLORS.mainTextGray,
               }}
-            >
-              {customer?.email}
-            </Text>
-            <Text
-              style={{
-                color: appTheme.COLORS.black,
-                fontSize: 15,
-                fontFamily: "Gilroy-Medium",
-              }}
-            >
-              {customer?.DIST_Code}
-            </Text>
+              value={myEmail}
+              onChangeText={(value) => setMyEmail(value)}
+            />
           </View>
         </View>
 
@@ -110,44 +125,39 @@ const Profile = () => {
               flexDirection: "row",
               marginBottom: 30,
               marginRight: 50,
+              width: "100%",
             }}
           >
             <Image source={icons.phoneIcon2} />
             <View
               style={{
                 marginLeft: 10,
+                width: "100%",
               }}
             >
               <Text
                 style={{
                   color: appTheme.COLORS.MainGray,
+                  marginBottom: 8,
                 }}
               >
                 Phone number
               </Text>
-              <Text
-                style={{
-                  color: appTheme.COLORS.black,
-                  fontSize: 18,
-                  fontFamily: "Gilroy-Medium",
-                  marginTop: 10,
-                }}
-              >
-                {customer?.phoneNumber}
-              </Text>
 
               <TextInput
                 style={{
-                  borderWidth: 1,
-                  width: 70,
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  width: "100%",
                   borderColor: appTheme.COLORS.borderGRey,
                   marginRight: 5,
                   borderRadius: 5,
-                  textAlign: "center",
+                  textAlign: "left",
                   fontWeight: "bold",
                   color: appTheme.COLORS.mainTextGray,
                 }}
-                value={customer?.phoneNumber}
+                value={myPhoneNumber}
+                onChangeText={(value) => setMyPhoneNumber(value)}
               />
             </View>
           </View>
@@ -156,31 +166,40 @@ const Profile = () => {
             style={{
               flexDirection: "row",
               marginBottom: 30,
+              width: "100%",
             }}
           >
             <Image source={icons.WhatsAppIcon} />
             <View
               style={{
                 marginLeft: 10,
+                width: "100%",
               }}
             >
               <Text
                 style={{
                   color: appTheme.COLORS.MainGray,
+                  marginBottom: 8,
                 }}
               >
-                WhatsApp
+                WhatsApp number
               </Text>
-              <Text
+
+              <TextInput
                 style={{
-                  color: appTheme.COLORS.black,
-                  fontSize: 18,
-                  fontFamily: "Gilroy-Medium",
-                  marginTop: 10,
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  width: "100%",
+                  borderColor: appTheme.COLORS.borderGRey,
+                  marginRight: 5,
+                  borderRadius: 5,
+                  textAlign: "left",
+                  fontWeight: "bold",
+                  color: appTheme.COLORS.mainTextGray,
                 }}
-              >
-                {customer?.phoneNumber}
-              </Text>
+                value={myPhoneNumberWhatsApp}
+                onChangeText={(value) => setMyPhoneNumberWhatsApp(value)}
+              />
             </View>
           </View>
         </View>
@@ -199,6 +218,7 @@ const Profile = () => {
             <Text
               style={{
                 color: appTheme.COLORS.MainGray,
+                marginBottom: 8,
               }}
             >
               Address
