@@ -22,7 +22,6 @@ import {
 import { ORDER_BASE_URL } from "../../confg";
 
 export const placeOrder = (payload) => async (dispatch) => {
-  // console.log(payload);
   try {
     dispatch({
       type: PLACE_ORDER_REQUEST,

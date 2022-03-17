@@ -24,7 +24,7 @@ import { Routes } from "../../navigation/Routes";
 // import { Rating, AirbnbRating } from "react-native-ratings";
 import { AirbnbRating } from "react-native-elements";
 import { updateOrderStatus } from "../../redux/actions/orderActions";
-import { COMPANY_BASE_URL } from "../../confg";
+import { COMPANY_BASE_URL, CUSTOMER_BASE_URL } from "../../confg";
 
 const Ratings = () => {
   const navigation = useNavigation();
@@ -51,7 +51,7 @@ const Ratings = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customerDetails } = customerState;
+  const { customer } = customerState;
 
   const { allCompanyProducts } = productsState;
 
@@ -80,6 +80,8 @@ const Ratings = () => {
     setRatingValue(rating);
   };
 
+  console.log(customer);
+
   const rateDistributor = async (data) => {
     const { comment } = data;
     try {
@@ -92,12 +94,14 @@ const Ratings = () => {
       const body = {
         stars: ratingValue,
         comment,
-        companyId: theDistributor?.DIST_Code,
-        reviewerId: customerDetails?.SF_Code,
+        outletCode: theDistributor?.BB_Code,
+        raterCode: customer?.BB_Code,
+        orderId: orderId,
+        country: "Nigeria",
       };
 
-      const { data } = await axios.patch(
-        `${COMPANY_BASE_URL}/company/rate-distributor/${theDistributor?.id}`,
+      await axios.patch(
+        `${CUSTOMER_BASE_URL}/customer/rate-customer`,
         body,
         config
       );

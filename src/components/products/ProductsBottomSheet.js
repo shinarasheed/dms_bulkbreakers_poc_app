@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View, TouchableOpacity, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 
@@ -8,8 +8,23 @@ import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
 
 import ProductCard2 from "./ProductCard2";
+import PlaceOrderSheet from "./PlaceOrderSheet";
 
-const ProductsBottomSheet = ({ confirmVisible, toggleConfirm }) => {
+const ProductsBottomSheet = ({
+  confirmVisible,
+  toggleConfirm,
+  orderPlaced,
+  distributor,
+  loading,
+  inventoryPayload,
+  payload,
+  payload2,
+}) => {
+  const [visible, setVisible] = useState(false);
+
+  console.log(payload);
+  console.log(payload2);
+
   const productsState = useSelector((state) => state.product);
 
   const { productsToOder } = productsState;
@@ -18,6 +33,10 @@ const ProductsBottomSheet = ({ confirmVisible, toggleConfirm }) => {
     (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
     0
   );
+
+  function toggle() {
+    setVisible((visible) => !visible);
+  }
 
   return (
     <BottomSheet
@@ -50,6 +69,7 @@ const ProductsBottomSheet = ({ confirmVisible, toggleConfirm }) => {
         }}
       >
         <TouchableOpacity
+          onPress={() => toggle()}
           style={{
             backgroundColor: appTheme.COLORS.mainRed,
             width: "100%",
@@ -73,6 +93,18 @@ const ProductsBottomSheet = ({ confirmVisible, toggleConfirm }) => {
               `Confirm \u20A6${formatPrice(totalAmount)}`}
           </Text>
         </TouchableOpacity>
+
+        <PlaceOrderSheet
+          toggle={toggle}
+          visible={visible}
+          orderPlaced={orderPlaced}
+          loading={loading}
+          payload={payload}
+          payload2={payload2}
+          inventoryPayload={inventoryPayload}
+          productsToOder={productsToOder}
+          distributor={distributor}
+        />
       </View>
     </BottomSheet>
   );

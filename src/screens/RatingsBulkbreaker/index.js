@@ -48,7 +48,7 @@ const RatingsBulkbreaker = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { customerDetails } = customerState;
+  const { customer } = customerState;
 
   const { allCompanyProducts } = productsState;
 
@@ -90,7 +90,7 @@ const RatingsBulkbreaker = () => {
         stars: ratingValue,
         comment,
         companyId: theDistributor?.DIST_Code,
-        reviewerId: customerDetails?.SF_Code,
+        reviewerId: customer?.SF_Code,
       };
       const { data } = await axios.patch(
         `${COMPANY_BASE_URL}/company/rate-distributor/${theDistributor?.id}`,

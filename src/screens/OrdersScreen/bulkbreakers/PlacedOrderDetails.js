@@ -88,7 +88,7 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 10000);
+    }, 2000);
     return () => {
       clearInterval(action);
       componentMounted = false;
@@ -443,7 +443,7 @@ const PlacedOrderDetails = () => {
 
               <Pressable
                 onPress={() => {
-                  updateOrderStatus("Rejected");
+                  updateOrderStatus("Canceled");
                   setIsOpen(!isOpen);
                 }}
                 style={{

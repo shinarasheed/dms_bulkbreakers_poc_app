@@ -196,7 +196,10 @@ const ProductsFooter = ({ distributor }) => {
         visible={visible}
         orderPlaced={orderPlaced}
         productsToOder={productsToOder}
+        inventoryPayload={inventoryPayload}
         distributor={distributor}
+        payload={payload}
+        payload2={payload2}
         loading={loading}
       />
     </View>

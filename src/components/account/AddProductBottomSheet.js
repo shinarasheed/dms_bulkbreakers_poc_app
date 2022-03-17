@@ -110,7 +110,11 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
             marginBottom: 16,
           }}
           onChangeText={(textValue) => {
-            between(textValue, product.price - 100, product.price + 100);
+            between(
+              textValue,
+              product.price - 0.5 * product.price,
+              product.price + 0.5 * product.price
+            );
             setPrice(textValue);
           }}
           keyboardType="numeric"
@@ -143,8 +147,8 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
         <Text style={{ marginBottom: 8, color: "#2D2F39" }}>
           Suggested price range:{" "}
           <Text style={{ fontWeight: "600" }}>
-            ₦{formatPrice(product.price - 100)} - ₦
-            {formatPrice(product.price + 100)}
+            ₦{formatPrice(product.price - 0.5 * product.price)} - ₦
+            {formatPrice(product.price + 0.5 * product.price)}
           </Text>
         </Text>
       </View>

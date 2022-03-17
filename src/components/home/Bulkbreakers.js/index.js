@@ -45,7 +45,7 @@ const Bulkbreakers = () => {
     >
       <Header customer={customer} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Pressable
+        {/* <Pressable
           // onPress={() => navigation.navigate(Routes.SEARCH_SCREEN)}
           style={styles.searchInputContainer}
         >
@@ -65,7 +65,7 @@ const Bulkbreakers = () => {
           >
             Search for products or sellers
           </Text>
-        </Pressable>
+        </Pressable> */}
 
         {bulkbreakers?.length > 0 ? (
           <View

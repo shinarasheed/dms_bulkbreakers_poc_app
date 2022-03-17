@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Text, View, Image, Pressable } from "react-native";
-import { adService } from "ad-b2c-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { logOut } from "../../redux/actions/customerActions";
@@ -20,9 +19,9 @@ const AccountScreen = () => {
   const { customer } = customerState;
 
   const handleLogout = async () => {
-    await adService.logoutAsync();
-    await AsyncStorage.removeItem("token");
+    await AsyncStorage.clear();
     dispatch(logOut());
+    await AsyncStorage.removeItem("token");
   };
 
   return (

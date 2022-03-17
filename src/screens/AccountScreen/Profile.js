@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TextInput } from "react-native";
 import { useSelector } from "react-redux";
 import React from "react";
 import { icons } from "../../constants";
@@ -104,11 +104,7 @@ const Profile = () => {
           </View>
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
+        <View style={{}}>
           <View
             style={{
               flexDirection: "row",
@@ -127,7 +123,7 @@ const Profile = () => {
                   color: appTheme.COLORS.MainGray,
                 }}
               >
-                Phone
+                Phone number
               </Text>
               <Text
                 style={{
@@ -139,6 +135,20 @@ const Profile = () => {
               >
                 {customer?.phoneNumber}
               </Text>
+
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  width: 70,
+                  borderColor: appTheme.COLORS.borderGRey,
+                  marginRight: 5,
+                  borderRadius: 5,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: appTheme.COLORS.mainTextGray,
+                }}
+                value={customer?.phoneNumber}
+              />
             </View>
           </View>
 
