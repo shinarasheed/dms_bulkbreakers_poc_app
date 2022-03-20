@@ -80,7 +80,7 @@ const Ratings = () => {
     setRatingValue(rating);
   };
 
-  console.log(customer);
+  // console.log(customer);
 
   const rateDistributor = async (data) => {
     const { comment } = data;

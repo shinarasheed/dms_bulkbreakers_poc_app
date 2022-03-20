@@ -44,13 +44,10 @@ const SelectBottomSheet = ({ visible, toggle }) => {
 
   const handleNextAction = async () => {
     // save customer in asyncstorage
-    let theCustomer = { ...customer, isFirstTime: true };
-    await AsyncStorage.setItem("customer", JSON.stringify(theCustomer));
-    try {
-      dispatch(getDistributors());
-    } catch (error) {
-      console.log(error);
-    }
+    let theAction = action;
+    await AsyncStorage.setItem("action", theAction);
+
+    dispatch(getDistributors(navigation));
   };
 
   return (

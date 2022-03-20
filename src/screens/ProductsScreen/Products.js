@@ -29,10 +29,6 @@ export default function Index() {
 
   const { customer, myInventory, isLoading } = customerState;
 
-  const [allInventory, setAllInventory] = useState([]);
-  // const [inStockInventory, setInStockInventory] = useState([]);
-  // const [outOfStcokInventory, setOutOfStockInventory] = useState([]);
-
   const inStockInventory = myInventory?.filter((item) => item.instock === true);
   const outOfStcokInventory = myInventory?.filter(
     (item) => item.instock === false
@@ -43,13 +39,6 @@ export default function Index() {
       dispatch(getMyInventory());
     }, [navigation])
   );
-
-  // i should not have need for this
-  // useEffect(() => {
-  //   setAllInventory(myInventory);
-  //   setInStockInventory(myInventory);
-  //   setOutOfStockInventory(myInventory);
-  // }, [myInventory, navigation]);
 
   const ShowProducts = (index) => {
     switch (index) {

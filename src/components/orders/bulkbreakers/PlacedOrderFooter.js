@@ -58,7 +58,7 @@ const OrderFooter = ({ distributor }) => {
     };
   }, []);
 
-  const pricesArray = inventory.map((prod) => prod.product.price);
+  const pricesArray = inventory?.map((prod) => prod.product.price);
 
   let minPrice = Math.min(...pricesArray);
   let maxPrice = Math.max(...pricesArray);

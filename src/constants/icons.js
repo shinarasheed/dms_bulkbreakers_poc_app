@@ -1,4 +1,4 @@
-const home = require("../../assets/icons/home.png");
+const home = require("../../assets/icons/Home.png");
 const orders = require("../../assets/icons/deliveries.png");
 const account = require("../../assets/icons/Profile.png");
 const chevronIcon = require("../../assets/icons/chevron.png");
@@ -40,6 +40,14 @@ const ProductsCart = require("../../assets/icons/ProductsCart.png");
 const ArrowDown = require("../../assets/icons/ArrowDown.png");
 const InfoIcon = require("../../assets/icons/InfoIcon.png");
 const rejectedIcon = require("../../assets/icons/Rejected.png");
+const excellentRating = require("../../assets/icons/excellentRating.png");
+const goodRating = require("../../assets/icons/goodStar.png");
+const veryPoorRating = require("../../assets/icons/verypoorRating.png");
+const poorRating = require("../../assets/icons/poorRating.png");
+const veryGoodRating = require("../../assets/icons/excellentRating.png");
+const rating = require("../../assets/icons/rating.png");
+const homeColored = require("../../assets/icons/HomeColored.png");
+const RestaurantColored = require("../../assets/icons/RestaurantColored.png");
 
 export default {
   home,
@@ -84,4 +92,12 @@ export default {
   ArrowDown,
   InfoIcon,
   rejectedIcon,
+  excellentRating,
+  veryGoodRating,
+  goodRating,
+  poorRating,
+  veryPoorRating,
+  rating,
+  homeColored,
+  RestaurantColored,
 };

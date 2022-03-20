@@ -146,7 +146,7 @@ const ProductsFooter = ({ distributor }) => {
                 marginLeft: 8,
               }}
             >
-              View order summary
+              {/* View order summary */}
             </Text>
 
             <Image source={icons.chevronIcon} />

@@ -23,7 +23,7 @@ const OrderFooter = ({ item }) => {
   const navigation = useNavigation();
 
   const [loadingInventory, setLoadingInventory] = useState(false);
-  const [inventory, setInventory] = useState(null);
+  const [inventory, setInventory] = useState([]);
 
   const customerState = useSelector((state) => state.customer);
 
@@ -288,5 +288,3 @@ const OrderFooter = ({ item }) => {
 };
 
 export default OrderFooter;
-
-const styles = StyleSheet.create({});

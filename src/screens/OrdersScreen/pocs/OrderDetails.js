@@ -78,7 +78,7 @@ const OrderDetails = () => {
     const action = setInterval(() => {
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 2000);
+    }, 1000);
     return () => {
       clearInterval(action);
     };

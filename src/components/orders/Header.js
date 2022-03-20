@@ -12,6 +12,7 @@ import Icon from "react-native-vector-icons/Entypo";
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
+import { Routes } from "../../navigation/Routes";
 
 export const Header = ({
   single,
@@ -39,7 +40,7 @@ export const Header = ({
           alignItems: "center",
         }}
       >
-        <Pressable onPress={() => navigation.goBack()}>
+        <Pressable onPress={() => navigation.navigate(Routes.HOME_SCREEN)}>
           <Image source={icons.backIcon} style={{ marginRight: 18 }} />
         </Pressable>
 

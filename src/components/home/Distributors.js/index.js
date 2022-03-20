@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,6 +31,7 @@ import { logOut } from "../../../redux/actions/customerActions";
 const Distributors = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const dispatch = useDispatch();
 
@@ -38,6 +40,10 @@ const Distributors = () => {
   const { distributors, myInventory, sellersNotNear, customer } = customerState;
 
   const topDistributors = distributors?.slice(0, 5);
+
+  const filteredDistributors = distributors?.filter((dist) =>
+    dist?.company_name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+  );
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -82,8 +88,27 @@ const Distributors = () => {
       }}
     >
       <Header customer={customer} />
+
+      {/* search bar */}
+      <Pressable style={styles.searchInputContainer}>
+        <Icon
+          name="search"
+          size={18}
+          style={{ color: appTheme.COLORS.mainYellow }}
+        />
+        <TextInput
+          placeholder=" Search for sellers"
+          style={{
+            fontSize: 15,
+            paddingLeft: 5,
+            flex: 1,
+            fontFamily: "Gilroy-Medium",
+          }}
+          onChangeText={(textValue) => setSearchTerm(textValue)}
+        />
+      </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Pressable
+        {/* <Pressable
           // onPress={() => navigation.navigate(Routes.SEARCH_SCREEN)}
           style={styles.searchInputContainer}
         >
@@ -103,7 +128,7 @@ const Distributors = () => {
           >
             Search for products or sellers
           </Text>
-        </Pressable>
+        </Pressable> */}
 
         {myInventory?.length === 0 && (
           <TouchableOpacity
@@ -237,7 +262,7 @@ const Distributors = () => {
                 );
               }}
               showsVerticalScrollIndicator={false}
-              data={distributors}
+              data={filteredDistributors}
               listKey={(item) => item.id.toString()}
               keyExtractor={(item, id) => id.toString()}
               renderItem={({ item }) => (

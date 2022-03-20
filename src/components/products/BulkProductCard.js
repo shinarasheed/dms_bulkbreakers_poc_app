@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Image,
@@ -10,7 +9,6 @@ import {
 } from "react-native";
 
 import appTheme from "../../constants/theme";
-import { ToggleButton } from "react-native-paper";
 
 const ProductCard = ({ theProduct }) => {
   const { id, brand, imageUrl, price, sku } = theProduct;

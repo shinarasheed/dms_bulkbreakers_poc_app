@@ -23,7 +23,7 @@ const CustomerDetails = ({ distributor, item }) => {
   const navigation = useNavigation();
 
   const [loadingInventory, setLoadingInventory] = useState(false);
-  const [inventory, setInventory] = useState(null);
+  const [inventory, setInventory] = useState([]);
 
   const customerState = useSelector((state) => state.customer);
 

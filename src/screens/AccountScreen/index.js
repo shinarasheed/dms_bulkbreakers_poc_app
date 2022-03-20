@@ -38,13 +38,13 @@ const AccountScreen = () => {
             title="Products"
             description="Manage the products you sell"
             destination={PRODUCTS_SCREEN}
-            icon={require("../../../assets/icons/Profile.png")}
+            icon={require("../../../assets/icons/smallprofile.png")}
           />
         )}
 
         {/* Profile */}
         <AccountSection
-          icon={require("../../../assets/icons/Profile.png")}
+          icon={require("../../../assets/icons/smallprofile.png")}
           title="Profile"
           destination={PROFILE_SCREEN}
           description="View your account details"

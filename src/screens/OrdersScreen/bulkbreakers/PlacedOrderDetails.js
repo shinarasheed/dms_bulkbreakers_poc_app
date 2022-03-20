@@ -88,7 +88,7 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 2000);
+    }, 1000);
     return () => {
       clearInterval(action);
       componentMounted = false;
@@ -113,7 +113,7 @@ const PlacedOrderDetails = () => {
         config
       );
 
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -18,6 +18,7 @@ import { productToSell } from "../../redux/actions/productActions";
 // import ProductCard2 from "../products/ProductCard2";
 
 const AddProductBottomSheet = ({ visible, toggle, product }) => {
+  const [thePrice, setThePrice] = useState("");
   const [isVisible, SetIsVisible] = useState(visible);
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
@@ -25,6 +26,10 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
   const [disabled, SetDisabled] = useState(null);
   const [productsToSellArray, setProductsToSellArray] = useState([]);
   const products_tosell = useSelector((state) => state.product.products_tosell);
+
+  useEffect(() => {
+    setThePrice(product?.price);
+  }, []);
 
   const save = (productID, productSku, productPrice, imageUrl) => {
     // const index = findIndex(productsToSellArray, { productId: productID });
@@ -37,6 +42,22 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
 
     dispatch(productToSell(item));
   };
+
+  //   const saveAction = () => {
+  //     let processedArray = products_tosell?.map((item) => ({
+  //       productId: item.productId,
+  //       productSku: item.productSku,
+  //       price: parseInt(item.price),
+  //       instock: true,
+  //     }));
+  //     let toDB = {};
+  //     toDB["bulkBreakerId"] = customer.id.toString();
+  //     toDB["products"] = processedArray;
+
+  //     // console.log(toDB);
+
+  //     dispatch(saveProductsToSell(toDB));
+  //   };
 
   function between(x, min, max) {
     if (x < min && x > 0) {
@@ -103,7 +124,7 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
             paddingVertical: 8,
             borderWidth: 0,
             borderBottomWidth: 1,
-            borderBottomColor: "#F49C00",
+            borderBottomColor: appTheme.COLORS.mainYellow,
             fontFamily: "Gilroy-Medium",
             marginBottom: 16,
           }}
@@ -116,6 +137,7 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
             setPrice(textValue);
           }}
           keyboardType="numeric"
+          value={thePrice}
         />
 
         {error && (

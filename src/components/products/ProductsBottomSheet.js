@@ -22,8 +22,8 @@ const ProductsBottomSheet = ({
 }) => {
   const [visible, setVisible] = useState(false);
 
-  console.log(payload);
-  console.log(payload2);
+  // console.log(payload);
+  // console.log(payload2);
 
   const productsState = useSelector((state) => state.product);
 

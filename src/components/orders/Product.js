@@ -105,7 +105,7 @@ const Product = ({ item, productDetails, reorder, singleOrder }) => {
             {"\u20A6"}
             {productDetails(productId)?.price !== undefined &&
               formatPrice(productDetails(productId)?.price)}{" "}
-            {buyingQuantity ? `x ${buyingQuantity}` : null}
+            {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
           </Text>
 
           <Text

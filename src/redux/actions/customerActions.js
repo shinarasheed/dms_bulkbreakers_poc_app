@@ -52,7 +52,6 @@ export const getCustomerDetails = (code, navigation) => async (dispatch) => {
       data: { results },
     } = await axios.post(
       `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
-
       body,
       config
     );
@@ -117,7 +116,7 @@ export const getDistributor = (code) => async (dispatch) => {
   }
 };
 
-export const getDistributors = () => async (dispatch, getState) => {
+export const getDistributors = (navigation) => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
   try {
@@ -176,6 +175,11 @@ export const getDistributors = () => async (dispatch, getState) => {
         token,
       },
     });
+
+    const theAction = await AsyncStorage.getItem("action");
+    if (theAction === "setupstore") {
+      navigation.navigate(Routes.ADDPRODUCTS_SCREEN);
+    }
   } catch (error) {
     console.log(error);
     dispatch({

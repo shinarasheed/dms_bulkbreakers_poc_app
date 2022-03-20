@@ -88,7 +88,6 @@ const ProductsFooter = ({ bulkbreaker }) => {
                 height: 20,
                 borderRadius: 50,
                 backgroundColor: appTheme.COLORS.mainRed,
-                // justifyContent: "center",
                 alignItems: "center",
               }}
             >
@@ -127,7 +126,9 @@ const ProductsFooter = ({ bulkbreaker }) => {
 
       <TouchableOpacity
         onPress={() => toggle()}
+        disabled={productsToOder?.length > 0 ? false : true}
         style={{
+          // opacity: 0.3,
           backgroundColor: appTheme.COLORS.mainRed,
           width: "100%",
           height: 50,
