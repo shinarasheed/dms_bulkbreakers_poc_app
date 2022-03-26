@@ -28,7 +28,8 @@ const Product2 = ({ theProduct }) => {
     dispatch(incrementQuantityByTyping(text, id));
   };
 
-  const { id, brand, imageUrl, price, sku, buyingQuantity } = theProduct;
+  const { id, brand, imageUrl, price, sellerPrice, sku, buyingQuantity } =
+    theProduct;
   return (
     <View
       key={id}
@@ -110,7 +111,7 @@ const Product2 = ({ theProduct }) => {
                 }}
               >
                 {"\u20A6"}
-                {formatPrice(price)}/case
+                {formatPrice(sellerPrice)}/case
               </Text>
             </View>
           </View>
@@ -172,7 +173,7 @@ const Product2 = ({ theProduct }) => {
             }}
           >
             {"\u20A6"}
-            {formatPrice(price * buyingQuantity)}
+            {formatPrice(sellerPrice * buyingQuantity)}
           </Text>
         </View>
       </View>

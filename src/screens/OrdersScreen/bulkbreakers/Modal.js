@@ -15,11 +15,10 @@ const MessageModal = ({ showModal, message }) => {
     >
       <Modal
         isVisible={showModal}
-        // animationIn="zoomIn"
-        // animationOut="fadeOut"
+        animationIn="fadeIn"
+        animationOut="fadeOut"
         animationInTiming={2000}
         animationOutTiming={100}
-        swipeDirection={["up", "left", "right", "down"]}
       >
         <View style={styles.modalView}>
           <Text
@@ -66,12 +65,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowColor: "#000",
     justifyContent: "center",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     elevation: 5,
     alignSelf: "center",
   },

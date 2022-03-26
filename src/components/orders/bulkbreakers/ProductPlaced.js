@@ -1,9 +1,9 @@
 import React from "react";
 import { Image, TouchableOpacity, Text, View } from "react-native";
 
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { icons } from "../../constants";
+import appTheme from "../../../constants/theme";
+import { formatPrice } from "../../../utils/formatPrice";
+import { icons } from "../../../constants";
 
 const Product = ({ item, productDetails, reorder }) => {
   const { brand, imageUrl, price, productId, sku, quantity, buyingQuantity } =
@@ -91,9 +91,9 @@ const Product = ({ item, productDetails, reorder }) => {
             }}
           >
             {"\u20A6"}
-            {price
+            {buyingQuantity
               ? formatPrice(price)
-              : formatPrice(productDetails(productId)?.price)}{" "}
+              : formatPrice(price / quantity)}{" "}
             {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
           </Text>
 
@@ -114,7 +114,7 @@ const Product = ({ item, productDetails, reorder }) => {
 
             {buyingQuantity
               ? formatPrice(buyingQuantity * price)
-              : formatPrice(quantity * productDetails(productId)?.price)}
+              : formatPrice((quantity * price) / quantity)}
           </Text>
         </View>
       </View>

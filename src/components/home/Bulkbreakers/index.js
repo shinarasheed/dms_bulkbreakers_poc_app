@@ -14,12 +14,12 @@ import { ScrollView } from "react-native-virtualized-view";
 
 import appTheme from "../../../constants/theme";
 import { Routes } from "../../../navigation/Routes";
-import { TopBulkbreaker } from "../../../components/home/Bulkbreakers.js/TopBulkbreaker";
-import { Bulkbreaker } from "../../../components/home/Bulkbreakers.js/Bulkbreaker";
-import BottomFilter from "../../../components/home/BottomFilter";
+import { TopBulkbreaker } from "./TopBulkbreaker";
+import { Bulkbreaker } from "./Bulkbreaker";
+import BottomFilter from "../BottomFilter";
 
 import { getBulkbreakers } from "../../../redux/actions/customerActions";
-import { Header } from "../../../components/home/Header";
+import { Header } from "../Header";
 import { icons } from "../../../constants";
 
 const Bulkbreakers = () => {
@@ -36,8 +36,10 @@ const Bulkbreakers = () => {
   const topBulkbreakers = bulkbreakers?.slice(0, 5);
 
   const filteredBulkbreakers = bulkbreakers?.filter((bb) =>
-    bb?.CUST_Name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    bb?.companyName.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
+
+  // console.log(bulkbreakers);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -75,28 +77,6 @@ const Bulkbreakers = () => {
         />
       </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <Pressable
-          // onPress={() => navigation.navigate(Routes.SEARCH_SCREEN)}
-          style={styles.searchInputContainer}
-        >
-          <Icon
-            name="search"
-            size={20}
-            style={{ color: appTheme.COLORS.mainYellow, marginRight: 5 }}
-          />
-          <Text
-            style={{
-              fontSize: 14,
-              paddingLeft: 5,
-              flex: 1,
-              fontFamily: "Gilroy-Medium",
-              color: appTheme.COLORS.black,
-            }}
-          >
-            Search for products or sellers
-          </Text>
-        </Pressable> */}
-
         {bulkbreakers?.length > 0 ? (
           <View
             style={{
@@ -144,7 +124,7 @@ const Bulkbreakers = () => {
                 horizontal
                 data={topBulkbreakers}
                 listKey={(item) => item.id.toString()}
-                keyExtractor={(distributor) => distributor.id.toString()}
+                keyExtractor={(distributor) => distributor?.id.toString()}
                 renderItem={({ item }) => (
                   <TopBulkbreaker bulkbreaker={item} customer={customer} />
                 )}
@@ -231,3 +211,25 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
 });
+
+// import { StyleSheet, Text, View } from "react-native";
+// import React, { useEffect } from "react";
+// import { useDispatch } from "react-redux";
+// import { getBulkbreakers } from "../../../redux/actions/customerActions";
+
+// const index = () => {
+//   const dispatch = useDispatch();
+
+//   useEffect(() => {
+//     dispatch(getBulkbreakers());
+//   }, []);
+//   return (
+//     <View>
+//       <Text>index</Text>
+//     </View>
+//   );
+// };
+
+// export default index;
+
+// const styles = StyleSheet.create({});

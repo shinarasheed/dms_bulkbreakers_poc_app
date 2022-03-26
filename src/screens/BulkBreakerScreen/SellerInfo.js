@@ -95,7 +95,7 @@ const SellerInfo = ({ bulkbreaker, infoVisible, toggleInfo }) => {
               fontSize: 18,
             }}
           >
-            {bulkbreaker?.CUST_Name}
+            {bulkbreaker?.sellerName}
           </Text>
         </View>
 

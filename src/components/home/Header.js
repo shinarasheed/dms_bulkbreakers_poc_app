@@ -21,12 +21,11 @@ export const Header = ({ customer }) => {
       style={{
         backgroundColor: appTheme.COLORS.mainRed,
         flexDirection: "row",
-        paddingBottom: 15,
         justifyContent: "space-between",
         alignItems: "flex-end",
         paddingHorizontal: 20,
-        // this will affect the other device
-        height: StatusBar.currentHeight * 3.5,
+        paddingBottom: 10,
+        paddingTop: StatusBar.currentHeight,
       }}
     >
       <View>

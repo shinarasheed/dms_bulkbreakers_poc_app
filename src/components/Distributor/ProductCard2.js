@@ -1,39 +1,34 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Image,
   Pressable,
   Text,
   View,
+  TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 import appTheme from "../../constants/theme";
+import { icons } from "../../constants";
+import { formatPrice } from "../../utils/formatPrice";
 import {
   decrementQuantity,
   incrementQuantity,
+  deleteProductOrdering,
+  deleteProduct,
   incrementQuantityByTyping,
-} from "../../redux/actions/productActions";
-import { formatPrice } from "../../utils/formatPrice";
+} from "../../redux/actions/productActions.js";
 
-const ProductCard = ({ theProduct }) => {
+const ProductCard2 = ({ theProduct }) => {
   const dispatch = useDispatch();
 
   const handleTextChange = (text, id) => {
     dispatch(incrementQuantityByTyping(text, id));
   };
 
-  const {
-    id,
-    brand,
-    imageUrl,
-    sellerPrice,
-    price,
-    sku,
-    buyingQuantity,
-    quantity,
-  } = theProduct;
+  const { id, brand, imageUrl, price, sku, buyingQuantity } = theProduct;
   return (
     <View
       key={id}
@@ -42,10 +37,22 @@ const ProductCard = ({ theProduct }) => {
         paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: appTheme.COLORS.borderGRey,
-        alignItems: "flex-start",
+        alignItems: "center",
         paddingVertical: 10,
       }}
     >
+      <TouchableOpacity
+        onPress={() => dispatch(deleteProduct(id))}
+        style={{
+          position: "absolute",
+          right: 20,
+          top: 10,
+          width: 15,
+          height: 15,
+        }}
+      >
+        <Image source={icons.deleteIcon} />
+      </TouchableOpacity>
       <Image style={{ width: 30, height: 60 }} source={{ uri: imageUrl }} />
       <View style={{ marginLeft: 20, flex: 1 }}>
         <View style={{ flexDirection: "row" }}>
@@ -61,11 +68,13 @@ const ProductCard = ({ theProduct }) => {
           >
             {brand}
           </Text>
+
           <Text
             style={{
               fontSize: 15,
               textTransform: "capitalize",
               marginBottom: 5,
+              marginRight: 5,
               color: appTheme.COLORS.black,
               fontFamily: "Gilroy-Medium",
             }}
@@ -95,30 +104,17 @@ const ProductCard = ({ theProduct }) => {
             >
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   color: appTheme.COLORS.black,
                   fontFamily: "Gilroy-Medium",
                 }}
               >
                 {"\u20A6"}
-                {formatPrice(sellerPrice)}/case
+                {formatPrice(price)}/case
               </Text>
             </View>
           </View>
         </View>
-
-        {/* <View>
-          <Text
-            style={{
-              fontFamily: "Gilroy-Medium",
-              fontSize: 13,
-              color: appTheme.COLORS.mainTextGray,
-            }}
-          >
-            {formatPrice(quantity)}{" "}
-            {quantity > 1 ? `quantities left` : `quantity left`}
-          </Text>
-        </View> */}
 
         <View
           style={{
@@ -158,7 +154,7 @@ const ProductCard = ({ theProduct }) => {
                 fontFamily: "Gilroy-Medium",
               }}
               value={buyingQuantity?.toString()}
-              onChangeText={(text) => handleTextChange(text, id)}
+              // onChangeText={(text) => handleTextChange(text, id)}
             />
 
             <View style={styles.productIncreaseDecreaseContainer}>
@@ -176,7 +172,7 @@ const ProductCard = ({ theProduct }) => {
             }}
           >
             {"\u20A6"}
-            {formatPrice(sellerPrice * buyingQuantity)}
+            {formatPrice(price * buyingQuantity)}
           </Text>
         </View>
       </View>
@@ -184,7 +180,7 @@ const ProductCard = ({ theProduct }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCard2;
 
 const styles = StyleSheet.create({
   productIncreaseDecreaseContainer: {

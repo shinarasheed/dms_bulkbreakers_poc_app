@@ -24,16 +24,8 @@ const ProductCard = ({ theProduct }) => {
     dispatch(incrementQuantityByTyping(text, id));
   };
 
-  const {
-    id,
-    brand,
-    imageUrl,
-    sellerPrice,
-    price,
-    sku,
-    buyingQuantity,
-    quantity,
-  } = theProduct;
+  const { id, brand, imageUrl, price, sku, buyingQuantity, quantity } =
+    theProduct;
   return (
     <View
       key={id}
@@ -101,7 +93,7 @@ const ProductCard = ({ theProduct }) => {
                 }}
               >
                 {"\u20A6"}
-                {formatPrice(sellerPrice)}/case
+                {formatPrice(price)}/case
               </Text>
             </View>
           </View>
@@ -176,7 +168,7 @@ const ProductCard = ({ theProduct }) => {
             }}
           >
             {"\u20A6"}
-            {formatPrice(sellerPrice * buyingQuantity)}
+            {formatPrice(price * buyingQuantity)}
           </Text>
         </View>
       </View>

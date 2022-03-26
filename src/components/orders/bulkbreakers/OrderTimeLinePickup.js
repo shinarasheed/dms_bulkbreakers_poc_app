@@ -115,6 +115,113 @@ const OrderTimeLine = ({
         </Text>
       </TouchableOpacity>
 
+      {/* Rejected */}
+      {singleOrder !== null &&
+        singleOrder[0]?.orderStatus[0].dateRejected !== null && (
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              marginBottom: 20,
+            }}
+          >
+            <Image
+              style={{
+                width: 20,
+                height: 20,
+              }}
+              source={icons.rejectedIcon}
+            />
+
+            <Text
+              style={{
+                marginLeft: 10,
+                color: appTheme.COLORS.black,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 15,
+              }}
+            >
+              Rejected
+            </Text>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: appTheme.COLORS.MainGray,
+              }}
+            >
+              {singleOrder[0]?.orderStatus[0]?.dateRejected !== null &&
+                moment(singleOrder[0]?.orderStatus[0]?.dateRejected).format(
+                  "MMM Do, YYYY"
+                )}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: appTheme.COLORS.MainGray,
+              }}
+            >
+              {singleOrder[0]?.orderStatus[0]?.timeRejected !== null &&
+                `at ${singleOrder[0]?.orderStatus[0]?.timeRejected.replace(
+                  " ",
+                  ""
+                )}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+      {/* cancelled */}
+
+      {singleOrder !== null &&
+        singleOrder[0]?.orderStatus[0].dateCanceled !== null && (
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              marginBottom: 20,
+            }}
+          >
+            <Image
+              style={{
+                width: 20,
+                height: 20,
+              }}
+              source={icons.rejectedIcon}
+            />
+
+            <Text
+              style={{
+                marginLeft: 10,
+                color: appTheme.COLORS.black,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 15,
+              }}
+            >
+              Cancelled
+            </Text>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: appTheme.COLORS.MainGray,
+              }}
+            >
+              {singleOrder[0]?.orderStatus[0]?.dateCanceled !== null &&
+                moment(singleOrder[0]?.orderStatus[0]?.dateCanceled).format(
+                  "MMM Do, YYYY"
+                )}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: appTheme.COLORS.MainGray,
+              }}
+            >
+              {singleOrder[0]?.orderStatus[0]?.timeCanceled !== null &&
+                `at ${singleOrder[0]?.orderStatus[0]?.timeCanceled.replace(
+                  " ",
+                  ""
+                )}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+
       <TouchableOpacity
         style={{
           flexDirection: "row",

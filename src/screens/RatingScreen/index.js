@@ -97,7 +97,7 @@ const Ratings = () => {
         outletCode: theDistributor?.BB_Code,
         raterCode: customer?.BB_Code,
         orderId: orderId,
-        country: "Nigeria",
+        country: customer?.country,
       };
 
       await axios.patch(
@@ -144,7 +144,7 @@ const Ratings = () => {
                 fontSize: 17,
               }}
             >
-              With {theDistributor?.CUST_Name}
+              With {theDistributor?.sellerName}
             </Text>
           </View>
 

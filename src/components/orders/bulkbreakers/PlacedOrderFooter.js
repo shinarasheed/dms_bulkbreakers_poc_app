@@ -38,10 +38,11 @@ const OrderFooter = ({ distributor }) => {
         const {
           data: { data },
         } = await axios.get(
-          `${INVENTORY_BASE_URL}/inventory/${distributor?.DIST_Code}`
+          `${INVENTORY_BASE_URL}/inventory/${distributor?.DistCode}`
         );
 
-        let availableProducts = data.filter((product) => product.quantity > 0);
+        // let availableProducts = data.filter((product) => product.quantity > 0);
+        let availableProducts = data;
 
         if (componentMounted) {
           setInventory(availableProducts);
@@ -92,7 +93,9 @@ const OrderFooter = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {distributor?.company_name}
+          {distributor?.companyName
+            ? distributor?.companyName
+            : distributor?.company_name}
         </Text>
 
         <View
@@ -184,7 +187,7 @@ const OrderFooter = ({ distributor }) => {
                 lat: customer?.latitude,
                 lon: customer?.longitude,
               },
-              { lat: distributor?.lat, lon: distributor?.long }
+              { lat: distributor?.latitude, lon: distributor?.longitude }
             )}
             km
           </Text>
@@ -218,7 +221,9 @@ const OrderFooter = ({ distributor }) => {
         }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`tel:+234${distributor.Owner_Phone}}`)}
+          onPress={() =>
+            Linking.openURL(`tel:+234${distributor?.phoneNumber}}`)
+          }
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -244,7 +249,7 @@ const OrderFooter = ({ distributor }) => {
         <TouchableOpacity
           onPress={() => {
             Linking.openURL(
-              `http://api.whatsapp.com/send?phone=234${distributor.Owner_Phone}`
+              `http://api.whatsapp.com/send?phone=234${distributor?.phoneNumber}`
             );
           }}
           style={{

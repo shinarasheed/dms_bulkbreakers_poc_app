@@ -21,7 +21,6 @@ export const Header = () => {
         flexDirection: "row",
         alignItems: "flex-end",
         paddingHorizontal: 20,
-        height: StatusBar.currentHeight * 3.2,
         paddingBottom: 10,
       }}
     >

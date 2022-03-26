@@ -199,11 +199,22 @@ export default (state = initialState, action) => {
 
     case LOGOUT:
       return {
-        ...state,
+        // isLoading: false,
+        // isAuthenticated: false,
+        // token: null,
+        // distributors: [],
+
         isLoading: false,
-        isAuthenticated: false,
-        token: null,
+        error: null,
+        customer: null,
+        distributor: null,
         distributors: [],
+        token: null,
+        isAuthenticated: false,
+        assigned: false,
+        customerDetails: null,
+        myInventory: [],
+        sellersNotNear: false,
       };
 
     default:

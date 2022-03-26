@@ -39,9 +39,9 @@ const Location = () => {
           backgroundColor: appTheme.COLORS.mainRed,
           flexDirection: "row",
           paddingBottom: 15,
-          alignItems: "flex-end",
+          alignItems: "center",
           paddingHorizontal: 20,
-          height: StatusBar.currentHeight * 3.5,
+          paddingTop: StatusBar.currentHeight,
         }}
       >
         <Pressable onPress={() => navigation.navigate(Routes.HOME_SCREEN)}>

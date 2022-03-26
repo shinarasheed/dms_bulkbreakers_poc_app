@@ -18,7 +18,7 @@ import { Slide, Box } from "native-base";
 import appTheme from "../../../constants/theme";
 import { icons } from "../../../constants";
 import { Header } from "../../../components/orders/bulkbreakers/HeaderReceivedOrders";
-import Product from "../../../components/orders/Product";
+import Product from "../../../components/orders/bulkbreakers/Product";
 import OrderTimeLineReceived from "../../../components/orders/bulkbreakers/OrderTimeLineReceived";
 import RejectedOrderTimeLine from "../../../components/orders/bulkbreakers/RejectedOrderTimeLine";
 import OrderFooter from "../../../components/orders/pocs/OrderFooter";
@@ -137,7 +137,7 @@ const ReceivedOrderDetails = () => {
         <View
           style={{
             paddingHorizontal: 10,
-            paddingTop: 40,
+            paddingTop: 20,
           }}
         >
           {/* <CountDownTimer hoursMinSecs={hoursMinSecs} /> */}
@@ -199,6 +199,8 @@ const ReceivedOrderDetails = () => {
                   : singleOrder?.orderStatus[0].status === "Accepted"
                   ? appTheme.COLORS.mainYellow
                   : singleOrder?.orderStatus[0].status === "Rejected"
+                  ? appTheme.COLORS.mainRed
+                  : singleOrder?.orderStatus[0].status === "Canceled"
                   ? appTheme.COLORS.mainRed
                   : item.orderStatus[0].status === "Completed"
                   ? appTheme.COLORS.lightBlue
@@ -295,9 +297,7 @@ const ReceivedOrderDetails = () => {
                     color: appTheme.COLORS.mainBrown,
                   }}
                 >
-                  {isNaN(getTotalPrice())
-                    ? null
-                    : `\u20A6${formatPrice(getTotalPrice())}`}
+                  {`\u20A6${formatPrice(item?.totalPrice)}`}
                 </Text>
               </View>
             </View>
@@ -314,7 +314,8 @@ const ReceivedOrderDetails = () => {
           singleOrder={singleOrder}
         /> */}
 
-        {singleOrder?.orderStatus[0]?.status === "Rejected" ? (
+        {singleOrder?.orderStatus[0]?.status === "Rejected" ||
+        singleOrder?.orderStatus[0]?.status === "Canceled" ? (
           <RejectedOrderTimeLine singleOrder={singleOrder} />
         ) : (
           <OrderTimeLineReceived

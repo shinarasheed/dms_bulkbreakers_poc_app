@@ -29,23 +29,44 @@ const OrderFooter = ({ item }) => {
 
   const { customer, distributors } = customerState;
 
-  const bulkbreaker = distributors.find(
-    (bulkbreaker) => bulkbreaker?.SF_Code === item?.sellerCompanyId
+  const seller = distributors.find(
+    (seller) => seller?.sellerCompanyId === item?.sellerCompanyId
   );
+
+  const { customerType } = seller;
 
   useEffect(() => {
     let componentMounted = true;
 
     const fetchInventory = async () => {
       try {
-        setLoadingInventory(true);
-        const {
-          data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/bb/${bulkbreaker?.id}`);
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
 
-        if (componentMounted) {
-          setInventory(data);
-          setLoadingInventory(false);
+        setLoadingInventory(true);
+
+        if (customerType === "Distributor") {
+          const {
+            data: { data },
+          } = await axios.get(
+            `${INVENTORY_BASE_URL}/inventory/${seller?.DistCode}`,
+            config
+          );
+          if (componentMounted) {
+            setInventory(data);
+            setLoadingInventory(false);
+          }
+        } else {
+          const {
+            data: { data },
+          } = await axios.get(`${INVENTORY_BASE_URL}/bb/${seller?.id}`);
+          if (componentMounted) {
+            setInventory(data);
+            setLoadingInventory(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -57,6 +78,11 @@ const OrderFooter = ({ item }) => {
       componentMounted = false;
     };
   }, []);
+
+  const pricesArray = inventory?.map((prod) => prod.product.price);
+
+  let minPrice = Math.min(...pricesArray);
+  let maxPrice = Math.max(...pricesArray);
   return (
     <View
       style={{
@@ -86,7 +112,9 @@ const OrderFooter = ({ item }) => {
             fontSize: 20,
           }}
         >
-          {bulkbreaker?.CUST_Name}
+          {customerType === "Distributor"
+            ? seller?.companyName
+            : seller?.sellerName}
         </Text>
 
         <View
@@ -111,8 +139,8 @@ const OrderFooter = ({ item }) => {
           >
             {" "}
             {"\u20A6"}
-            {formatPrice(1300)} - {"\u20A6"}
-            {formatPrice(2300)}
+            {formatPrice(minPrice)} - {"\u20A6"}
+            {formatPrice(maxPrice)}
           </Text>
         </View>
       </View>
@@ -137,7 +165,7 @@ const OrderFooter = ({ item }) => {
               fontFamily: "Gilroy-Light",
             }}
           >
-            {bulkbreaker?.stars}
+            {seller?.stars}
           </Text>
           <Image source={icons.starsIcon} />
           <Text
@@ -147,7 +175,7 @@ const OrderFooter = ({ item }) => {
               fontFamily: "Gilroy-Light",
             }}
           >
-            ({bulkbreaker?.raters})
+            ({seller?.raters})
           </Text>
         </View> */}
 
@@ -170,7 +198,7 @@ const OrderFooter = ({ item }) => {
                 lat: customer?.latitude,
                 lon: customer?.longitude,
               },
-              { lat: bulkbreaker?.latitude, lon: bulkbreaker?.longitude }
+              { lat: seller?.latitude, lon: seller?.longitude }
             )}
             km
           </Text>
@@ -204,7 +232,7 @@ const OrderFooter = ({ item }) => {
         }}
       >
         <Pressable
-          onPress={() => Linking.openURL(`tel:+234${bulkbreaker?.phoneNumber}`)}
+          onPress={() => Linking.openURL(`tel:+234${seller?.phoneNumber}`)}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -230,7 +258,7 @@ const OrderFooter = ({ item }) => {
         <TouchableOpacity
           onPress={() => {
             Linking.openURL(
-              `http://api.whatsapp.com/send?phone=234${bulkbreaker?.phoneNumber}`
+              `http://api.whatsapp.com/send?phone=234${seller?.phoneNumber}`
             );
           }}
           style={{
@@ -257,8 +285,8 @@ const OrderFooter = ({ item }) => {
 
         <TouchableOpacity
           // onPress={() =>
-          //   navigation.navigate(Routes.BULKBREAKER_SCREEN, {
-          //     bulkbreaker,
+          //   navigation.navigate(Routes.seller_SCREEN, {
+          //     seller,
           //   })
           // }
           style={{

@@ -17,7 +17,7 @@ import { icons } from "../../../constants";
 
 import appTheme from "../../../constants/theme";
 import { Header } from "../../../components/orders/bulkbreakers/HeaderPlacedOrder";
-import Product from "../../../components/orders/Product";
+import ProductPlaced from "../../../components/orders/bulkbreakers/ProductPlaced";
 import OrderTimeLinePlaced from "../../../components/orders/bulkbreakers/OrderTimeLinePlaced";
 import OrderTimeLinePickup from "../../../components/orders/bulkbreakers/OrderTimeLinePickup";
 import PlacedOrderFooter from "../../../components/orders/bulkbreakers/PlacedOrderFooter";
@@ -88,7 +88,7 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 1000);
+    }, 2000);
     return () => {
       clearInterval(action);
       componentMounted = false;
@@ -226,6 +226,8 @@ const PlacedOrderDetails = () => {
                     ? appTheme.COLORS.lightBlue
                     : singleOrder[0].orderStatus[0].status === "Rejected"
                     ? appTheme.COLORS.mainRed
+                    : singleOrder[0].orderStatus[0].status === "Canceled"
+                    ? appTheme.COLORS.mainRed
                     : appTheme.COLORS.mainGreen,
               }}
             >
@@ -251,8 +253,6 @@ const PlacedOrderDetails = () => {
                   ? "Delivered"
                   : singleOrder[0]?.orderStatus[0].status === "Delivered"
                   ? "Completed"
-                  : singleOrder[0]?.orderStatus[0].status === "Rejected"
-                  ? "Cancelled"
                   : singleOrder[0]?.orderStatus[0].status}
               </Text>
             </View>
@@ -270,7 +270,7 @@ const PlacedOrderDetails = () => {
           keyExtractor={(item, id) => id.toString()}
           listKey={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Product
+            <ProductPlaced
               item={item}
               productDetails={productDetails}
               singleOrder={singleOrder}
@@ -359,7 +359,7 @@ const PlacedOrderDetails = () => {
         <PlacedOrderFooter distributor={theDistributor} />
 
         {/* Remodal sheet */}
-
+        {/* 
         <ReOrder
           visible={visible}
           toggle={toggle}
@@ -369,7 +369,7 @@ const PlacedOrderDetails = () => {
           getTotalPrice={getTotalPrice}
           distributor={theDistributor}
           reorder
-        />
+        /> */}
         {/* Reorder sheet */}
 
         <Slide

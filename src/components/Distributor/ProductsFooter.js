@@ -8,16 +8,14 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
-import ProductsBottomSheet from "../../components/products/ProductsBottomSheet";
-import PlaceOrderSheet from "./PlaceOrderSheet";
+import ProductsBottomSheet from "../Distributor/ProductsBottomSheet";
+import PlaceOrderSheet from "../Distributor/PlacedOrderSheet";
 
 const ProductsFooter = ({ distributor }) => {
-  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
 
@@ -44,7 +42,7 @@ const ProductsFooter = ({ distributor }) => {
 
   const payload = {
     buyerCompanyId: customer?.SF_Code,
-    sellerCompanyId: distributor?.SYS_Code,
+    sellerCompanyId: distributor?.sysproCode,
     routeName: "shopNow",
     referenceId: "shopNow",
     emptiesReturned: 0,
@@ -52,6 +50,7 @@ const ProductsFooter = ({ distributor }) => {
     datePlaced: new Date(new Date().getTime()),
     shipToCode: customer?.SF_Code,
     billToCode: customer?.SF_Code,
+    country: customer?.country,
     buyerDetails: {
       buyerName: customer?.CUST_Name,
       buyerPhoneNumber: customer?.phoneNumber,
@@ -59,35 +58,6 @@ const ProductsFooter = ({ distributor }) => {
     },
 
     orderItems,
-  };
-
-  const payload2 = {
-    buyerCompanyId: customer?.SF_Code,
-    sellerCompanyId: distributor?.SYS_Code,
-    routeName: "shopNow",
-    referenceId: "shopNow",
-    emptiesReturned: 0,
-    costOfEmptiesReturned: 0,
-    datePlaced: new Date(new Date().getTime()),
-    shipToCode: customer?.SF_Code,
-    billToCode: customer?.SF_Code,
-    buyerDetails: {
-      buyerName: customer?.CUST_Name,
-      buyerPhoneNumber: customer?.phoneNumber,
-      buyerAddress: customer?.address,
-    },
-
-    orderItems,
-  };
-
-  const inventoryItems = productsToOder?.map((prod) => ({
-    productId: parseInt(prod.id),
-    quantity: parseInt(prod.quantity),
-  }));
-
-  const inventoryPayload = {
-    sellerCompanyId: distributor?.DIST_Code,
-    orderItems: inventoryItems,
   };
 
   const totalAmount = products?.reduce(
@@ -146,7 +116,7 @@ const ProductsFooter = ({ distributor }) => {
                 marginLeft: 8,
               }}
             >
-              {/* View order summary */}
+              View order summary
             </Text>
 
             <Image source={icons.chevronIcon} />
@@ -184,8 +154,6 @@ const ProductsFooter = ({ distributor }) => {
         orderPlaced={orderPlaced}
         loading={loading}
         payload={payload}
-        payload2={payload2}
-        inventoryPayload={inventoryPayload}
         productsToOder={productsToOder}
         distributor={distributor}
       />
@@ -196,10 +164,8 @@ const ProductsFooter = ({ distributor }) => {
         visible={visible}
         orderPlaced={orderPlaced}
         productsToOder={productsToOder}
-        inventoryPayload={inventoryPayload}
         distributor={distributor}
         payload={payload}
-        payload2={payload2}
         loading={loading}
       />
     </View>

@@ -71,7 +71,7 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
             fontSize: 15,
           }}
         >
-          {bulkbreaker?.CUST_Name}
+          {bulkbreaker?.sellerName}
         </Text>
         <Text
           style={{

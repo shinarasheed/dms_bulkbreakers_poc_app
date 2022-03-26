@@ -1,13 +1,12 @@
 import React from "react";
 import { Image, TouchableOpacity, Text, View } from "react-native";
 
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { icons } from "../../constants";
+import appTheme from "../../../constants/theme";
+import { formatPrice } from "../../../utils/formatPrice";
+import { icons } from "../../../constants";
 
 const Product = ({ item, productDetails, reorder }) => {
-  const { brand, imageUrl, price, productId, sku, quantity, buyingQuantity } =
-    item;
+  const { brand, imageUrl, price, productId, sku, quantity } = item;
 
   return (
     <View
@@ -91,10 +90,7 @@ const Product = ({ item, productDetails, reorder }) => {
             }}
           >
             {"\u20A6"}
-            {price
-              ? formatPrice(price)
-              : formatPrice(productDetails(productId)?.price)}{" "}
-            {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
+            {formatPrice(price / quantity)} x {quantity}
           </Text>
 
           <Text
@@ -112,9 +108,7 @@ const Product = ({ item, productDetails, reorder }) => {
           >
             {"\u20A6"}
 
-            {buyingQuantity
-              ? formatPrice(buyingQuantity * price)
-              : formatPrice(quantity * productDetails(productId)?.price)}
+            {formatPrice((quantity * price) / quantity)}
           </Text>
         </View>
       </View>

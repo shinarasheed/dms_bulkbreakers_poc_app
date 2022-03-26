@@ -1,13 +1,6 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import {
-  StyleSheet,
-  StatusBar,
-  Text,
-  View,
-  Pressable,
-  Image,
-} from "react-native";
+import { StatusBar, Text, View, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
 
 import appTheme from "../../constants/theme";
@@ -27,11 +20,11 @@ export const Header = ({
     <View
       style={{
         backgroundColor: appTheme.COLORS.mainRed,
-        paddingTop: StatusBar.currentHeight * 1.5,
         paddingBottom: 15,
         paddingHorizontal: 20,
         justifyContent: "space-between",
         flexDirection: "row",
+        paddingTop: StatusBar.currentHeight,
       }}
     >
       <View

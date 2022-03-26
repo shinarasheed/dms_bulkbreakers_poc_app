@@ -2,8 +2,9 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
-import Distributors from "../../components/home/Distributors.js";
-import Bulkbreakers from "../../components/home/Bulkbreakers.js";
+import Distributors from "../../components/home/Distributors";
+import Bulkbreakers from "../../components/home/Bulkbreakers";
+import Bdrs from "../../components/home/Bdrs";
 
 const HomeScreen = () => {
   const customerState = useSelector((state) => state.customer);
@@ -16,6 +17,7 @@ const HomeScreen = () => {
         <Distributors />
       ) : (
         <Bulkbreakers />
+        // <Bdrs />
       )}
     </>
   );

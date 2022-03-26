@@ -29,7 +29,7 @@ useEffect(() => {
     };
     getSingleOrder(orderId);
     console.log("checking for status...");
-  }, 1000);
+  }, 5000);
   return () => {
     clearInterval(action);
     componentMounted = false;

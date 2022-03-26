@@ -3,7 +3,7 @@ import React from "react";
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
-import Product from "../../components/orders/Product";
+import Product from "../../screens/OrdersScreen/pocs/Product";
 import { formatPrice } from "../../utils/formatPrice";
 
 const ProductsSummary = ({

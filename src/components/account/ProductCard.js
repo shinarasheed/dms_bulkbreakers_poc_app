@@ -34,10 +34,15 @@ const ProductCard = ({ theProduct }) => {
 
   const { customer } = customerState;
 
-  const { instock, product } = theProduct;
+  const { instock, price: inventoryPrice, product } = theProduct;
 
   const { id, brand, sku, imageUrl, productId, price, productType, country } =
     product;
+
+  const deletePayload = {
+    bulkbreakerId: customer?.id.toString(),
+    productId: parseInt(id),
+  };
 
   return (
     <>
@@ -109,13 +114,13 @@ const ProductCard = ({ theProduct }) => {
                   }}
                 >
                   {"\u20A6"}
-                  {formatPrice(price)}
+                  {formatPrice(inventoryPrice)}
                   /case
                 </Text>
 
                 <TouchableOpacity
                   onPress={() =>
-                    dispatch(deleteInventoryProduct(customer.id, productId))
+                    dispatch(deleteInventoryProduct(deletePayload))
                   }
                 >
                   <Image source={icons.deleteIcon} />
@@ -167,6 +172,7 @@ const ProductCard = ({ theProduct }) => {
         visible={visible}
         toggle={toggle}
         product={product}
+        inventoryPrice={inventoryPrice}
       />
     </>
   );

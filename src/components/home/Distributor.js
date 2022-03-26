@@ -31,35 +31,17 @@ export const Distributor = ({ distributor }) => {
         },
       };
 
-      // setLoading(true);
+      const {
+        data: { data },
+      } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
 
-      if (customer?.CUST_Type.toLowerCase() === "poc") {
-        const {
-          data: { data },
-        } = await axios.get(
-          `${INVENTORY_BASE_URL}/bb/${distributor?.id}`,
-          config
-        );
-
-        let availableProducts = data;
-        // setLoading(false);
-        if (componentMounted) {
-          setProducts(availableProducts);
-        }
-      } else {
-        const {
-          data: { data },
-        } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
-
-        let availableProducts = data?.filter((product) => product.quantity > 0);
-        // setLoading(false);
-        if (componentMounted) {
-          setProducts(availableProducts);
-        }
+      let availableProducts = data?.filter((product) => product.quantity > 0);
+      if (componentMounted) {
+        setProducts(availableProducts);
       }
     };
 
-    fetchInventory(distributor.DIST_Code);
+    fetchInventory(distributor?.DistCode);
 
     return () => {
       componentMounted = false;
@@ -93,7 +75,7 @@ export const Distributor = ({ distributor }) => {
         >
           {distributor?.company_name}
 
-          {truncateString(distributor?.company_name, 1)}
+          {distributor?.companyName}
         </Text>
 
         <View

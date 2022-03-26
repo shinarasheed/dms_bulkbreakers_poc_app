@@ -38,10 +38,6 @@ export default function PlacedOrders() {
 
   const { openOrders, completedOrders, myorders, loading } = myOrdersState;
 
-  // const filteredOpenOrders = openOrders?.filter((item) =>
-  //   item.orderId.includes(searchTerm)
-  // );
-
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getMyOrders(customer?.SF_Code));

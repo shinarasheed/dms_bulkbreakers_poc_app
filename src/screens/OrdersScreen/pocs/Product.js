@@ -1,13 +1,21 @@
 import React from "react";
 import { Image, TouchableOpacity, Text, View } from "react-native";
 
-import appTheme from "../../constants/theme";
-import { formatPrice } from "../../utils/formatPrice";
-import { icons } from "../../constants";
+import appTheme from "../../../constants/theme";
+import { icons } from "../../../constants";
+import { formatPrice } from "../../../utils/formatPrice";
 
 const Product = ({ item, productDetails, reorder }) => {
-  const { brand, imageUrl, price, productId, sku, quantity, buyingQuantity } =
-    item;
+  const {
+    brand,
+    imageUrl,
+    price,
+    productId,
+    sku,
+    quantity,
+    buyingQuantity,
+    sellerPrice,
+  } = item;
 
   return (
     <View
@@ -25,7 +33,9 @@ const Product = ({ item, productDetails, reorder }) => {
       <Image
         style={{ width: 30, height: 60 }}
         source={{
-          uri: imageUrl ? imageUrl : productDetails(productId)?.imageUrl,
+          uri: imageUrl
+            ? imageUrl
+            : productDetails(productId)?.product?.imageUrl,
         }}
       />
       <View
@@ -48,7 +58,7 @@ const Product = ({ item, productDetails, reorder }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            {brand ? brand : productDetails(productId)?.brand}
+            {brand ? brand : productDetails(productId)?.product?.brand}
           </Text>
           <Text
             style={{
@@ -59,7 +69,7 @@ const Product = ({ item, productDetails, reorder }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            {sku ? sku : productDetails(productId)?.sku}
+            {sku ? sku : productDetails(productId)?.product?.sku}
           </Text>
 
           {reorder && (
@@ -91,8 +101,8 @@ const Product = ({ item, productDetails, reorder }) => {
             }}
           >
             {"\u20A6"}
-            {price
-              ? formatPrice(price)
+            {sellerPrice
+              ? formatPrice(sellerPrice)
               : formatPrice(productDetails(productId)?.price)}{" "}
             {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
           </Text>
@@ -113,7 +123,7 @@ const Product = ({ item, productDetails, reorder }) => {
             {"\u20A6"}
 
             {buyingQuantity
-              ? formatPrice(buyingQuantity * price)
+              ? formatPrice(buyingQuantity * sellerPrice)
               : formatPrice(quantity * productDetails(productId)?.price)}
           </Text>
         </View>

@@ -36,7 +36,7 @@ const ProductsFooter = ({ bulkbreaker }) => {
   const { orderPlaced, placedOrder, loading } = createOrderState;
 
   const orderItems = productsToOder?.map((item) => ({
-    price: item?.price * item?.buyingQuantity,
+    price: item?.sellerPrice * item?.buyingQuantity,
     quantity: item?.buyingQuantity,
     productId: parseInt(item.productId),
     SFlineID: "shopNow",
@@ -44,7 +44,7 @@ const ProductsFooter = ({ bulkbreaker }) => {
 
   const payload = {
     buyerCompanyId: customer?.SF_Code,
-    sellerCompanyId: bulkbreaker?.SF_Code,
+    sellerCompanyId: bulkbreaker?.salesforceCode,
     routeName: "shopNow",
     referenceId: "shopNow",
     emptiesReturned: 0,
@@ -52,6 +52,7 @@ const ProductsFooter = ({ bulkbreaker }) => {
     datePlaced: new Date(new Date().getTime()),
     shipToCode: customer?.SF_Code,
     billToCode: customer?.SF_Code,
+    country: customer?.country,
     buyerDetails: {
       buyerName: customer?.CUST_Name,
       buyerPhoneNumber: customer?.phoneNumber,
@@ -62,7 +63,8 @@ const ProductsFooter = ({ bulkbreaker }) => {
   };
 
   const totalAmount = products?.reduce(
-    (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
+    (accumulator, item) =>
+      accumulator + item?.sellerPrice * item?.buyingQuantity,
     0
   );
 

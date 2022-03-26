@@ -57,10 +57,10 @@ export const TopBulkbreaker = ({ bulkbreaker }) => {
             fontSize: 15,
           }}
         >
-          {truncateString(bulkbreaker?.CUST_Name, 10)}
+          {truncateString(bulkbreaker?.companyName, 10)}
         </Text>
 
-        {bulkbreaker?.ratings && (
+        {/* {bulkbreaker?.ratings && (
           <View
             style={{
               flexDirection: "row",
@@ -79,7 +79,7 @@ export const TopBulkbreaker = ({ bulkbreaker }) => {
               ({bulkbreaker?.rating})
             </Text>
           </View>
-        )}
+        )} */}
         <View
           style={{
             flexDirection: "row",

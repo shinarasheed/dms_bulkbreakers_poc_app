@@ -116,7 +116,7 @@ export const getDistributor = (code) => async (dispatch) => {
   }
 };
 
-export const getDistributors = (navigation) => async (dispatch, getState) => {
+export const getDistributors = () => async (dispatch, getState) => {
   const { customer } = getState().customer;
 
   try {
@@ -141,7 +141,28 @@ export const getDistributors = (navigation) => async (dispatch, getState) => {
     let distributors = result;
 
     const mapdistributorsToShow = distributors.map((distributor) => ({
-      ...distributor,
+      BB_Code: distributor.DIST_Code,
+      sellerName: distributor.DD_Name,
+      companyName: distributor.Owner_Name,
+      email: distributor.email,
+      sysproCode: distributor.SYS_Code,
+      customerType: distributor.company_type,
+      DistCode: distributor.DIST_Code,
+      salesforceCode: distributor.SF_Code,
+      address: distributor.address,
+      country: distributor.country,
+      district: distributor.district,
+      phoneNumber: distributor.Owner_Phone,
+      region: distributor.region,
+      state: distributor.state,
+      id: distributor.id,
+      sellerType: distributor.country_type,
+      raters: distributor.raters,
+      ratings: distributor.ratings,
+      stars: distributor.stars,
+      status: distributor.status,
+      latitude: distributor?.lat,
+      longitude: distributor?.long,
       byFar: parseInt(
         getDistanceApart(
           { lat: customer?.latitude, lon: customer?.longitude },
@@ -161,25 +182,34 @@ export const getDistributors = (navigation) => async (dispatch, getState) => {
 
     if (nearDistributors.length > 0) {
       distributorsToShow = nearDistributors;
+
+      dispatch({
+        type: GET_SELLERS_SUCCESS,
+        payload: {
+          distributorsToShow,
+          token,
+        },
+      });
     } else {
       distributorsToShow = mapdistributorsToShow;
+
+      dispatch({
+        type: GET_SELLERS_SUCCESS,
+        payload: {
+          distributorsToShow,
+          token,
+        },
+      });
+
       dispatch({
         type: SELLERS_NOT_NEAR,
       });
     }
 
-    dispatch({
-      type: GET_SELLERS_SUCCESS,
-      payload: {
-        distributorsToShow,
-        token,
-      },
-    });
-
-    const theAction = await AsyncStorage.getItem("action");
-    if (theAction === "setupstore") {
-      navigation.navigate(Routes.ADDPRODUCTS_SCREEN);
-    }
+    // const theAction = await AsyncStorage.getItem("action");
+    // if (theAction === "setupstore") {
+    //   navigation.navigate(Routes.ADDPRODUCTS_SCREEN);
+    // }
   } catch (error) {
     console.log(error);
     dispatch({
@@ -212,30 +242,104 @@ export const getBulkbreakers = () => async (dispatch, getState) => {
       config
     );
 
-    let distributors = result;
+    const {
+      data: { result: theResult },
+    } = await axios.get(
+      `${COMPANY_BASE_URL}/company/companies/Nigeria
+      `,
+      config
+    );
 
-    const mapdistributorsToShow = distributors.map((distributor) => ({
-      ...distributor,
+    //distributors
+
+    let distributors = theResult;
+
+    const allDistributors = distributors.map((distributor) => ({
+      BB_Code: distributor.DIST_Code,
+      sellerName: distributor.DD_Name,
+      companyName: distributor.Owner_Name,
+      email: distributor.email,
+      sysproCode: distributor.SYS_Code,
+      customerType: distributor.company_type,
+      DistCode: distributor.DIST_Code,
+      salesforceCode: distributor.SF_Code,
+      sellerCompanyId: distributor.SYS_Code,
+      address: distributor.address,
+      country: distributor.country,
+      district: distributor.district,
+      phoneNumber: distributor.Owner_Phone,
+      region: distributor.region,
+      state: distributor.state,
+      id: distributor.id,
+      sellerType: distributor.country_type,
+      raters: distributor.raters,
+      ratings: distributor.ratings,
+      stars: distributor.stars,
+      status: distributor.status,
+      latitude: distributor?.lat,
+      longitude: distributor?.long,
       byFar: parseInt(
         getDistanceApart(
           { lat: customer?.latitude, lon: customer?.longitude },
-          { lat: distributor?.latitude, lon: distributor?.longitude }
+          { lat: distributor?.lat, lon: distributor?.long }
         )
       ),
     }));
 
-    const nearDistributors = mapdistributorsToShow
+    //bulkbreakers
+    let bulkbreakers = result;
+
+    const allBulkbreakers = bulkbreakers.map((bulkbreaker) => ({
+      BB_Code: bulkbreaker.BB_Code,
+      sellerName: bulkbreaker.CUST_Name,
+      companyName: bulkbreaker.CUST_Name,
+      customerType: bulkbreaker.CUST_Type,
+      DistCode: bulkbreaker.DIST_Code,
+      salesforceCode: bulkbreaker.SF_Code,
+      sellerCompanyId: bulkbreaker.SF_Code,
+      address: bulkbreaker.address,
+      country: bulkbreaker.country,
+      district: bulkbreaker.district,
+      phoneNumber: bulkbreaker.phoneNumber,
+      region: bulkbreaker.region,
+      state: bulkbreaker.state,
+      id: bulkbreaker.id,
+      latitude: bulkbreaker?.latitude,
+      longitude: bulkbreaker?.longitude,
+      byFar: parseInt(
+        getDistanceApart(
+          { lat: customer?.latitude, lon: customer?.longitude },
+          { lat: bulkbreaker?.latitude, lon: bulkbreaker?.longitude }
+        )
+      ),
+    }));
+
+    const nearDistributors = allDistributors
       .filter((distributor) => distributor.byFar <= 5)
       .sort(
         (distributorA, distributorB) => distributorA.byFar - distributorB.byFar
       );
 
+    const nearBulkbreakers = allBulkbreakers
+      .filter((bulkbreaker) => bulkbreaker.byFar <= 5)
+      .sort(
+        (bulkbreakerA, bulkbreakerB) => bulkbreakerA.byFar - bulkbreakerB.byFar
+      );
+
+    const allSellers = [...allDistributors, ...allBulkbreakers];
+
+    const nearSellers = [...nearDistributors, ...nearBulkbreakers];
+
+    // console.log(nearBulkbreakers, "bulks");
+    // console.log(nearDistributors, "dist");
+    // console.log(nearSellers.length);
+
     let distributorsToShow;
 
-    if (nearDistributors.length === 0) {
-      distributorsToShow = mapdistributorsToShow;
+    if (nearSellers.length > 0) {
+      distributorsToShow = nearSellers;
     } else {
-      distributorsToShow = nearDistributors;
+      distributorsToShow = allSellers;
     }
 
     const token = await AsyncStorage.getItem("token");
@@ -289,7 +393,7 @@ export const sortDistributors = (sortBy) => async (dispatch) => {
   });
 };
 
-export const getMyInventory = () => async (dispatch, getState) => {
+export const getMyInventory = (Id) => async (dispatch, getState) => {
   const {
     customer: { id },
   } = getState().customer;
@@ -307,7 +411,7 @@ export const getMyInventory = () => async (dispatch, getState) => {
 
     const {
       data: { data },
-    } = await axios.get(`${INVENTORY_BASE_URL}/bb/${id}`, config);
+    } = await axios.get(`${INVENTORY_BASE_URL}/bb/${Id}`, config);
 
     dispatch({
       type: GET_CUSTOMER_INVENTORY_SUCCESS,
@@ -350,37 +454,31 @@ export const updateProductStatus =
         type: UPDATE_PRODUCT_STATUS,
         payload: productId,
       });
-      dispatch(getMyInventory());
+      dispatch(getMyInventory(customerId));
     } catch (error) {
       console.log(error);
     }
   };
 
-export const deleteInventoryProduct =
-  (customerId, productId) => async (dispatch) => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+export const deleteInventoryProduct = (payload) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-      const payload = {
-        bulkBreakerId: customerId.toString(),
-        productId: parseInt(productId),
-      };
+    await axios.delete(
+      `${INVENTORY_BASE_URL}/bb/delete-product`,
+      payload,
+      config
+    );
 
-      await axios.delete(
-        `${INVENTORY_BASE_URL}/bb/delete-product`,
-        payload,
-        config
-      );
-
-      dispatch({
-        type: DELETE_INVENTORY_PRODUCT,
-        payload: productId,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    dispatch({
+      type: DELETE_INVENTORY_PRODUCT,
+      payload: productId,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

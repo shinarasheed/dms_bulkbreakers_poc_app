@@ -23,6 +23,8 @@ const OrderStatus = ({ singleOrder }) => {
             ? appTheme.COLORS.mainYellow
             : singleOrder[0]?.orderStatus[0].status === "Rejected"
             ? appTheme.COLORS.mainRed
+            : singleOrder[0]?.orderStatus[0].status === "Canceled"
+            ? appTheme.COLORS.mainRed
             : singleOrder[0]?.orderStatus[0].status === "Completed"
             ? appTheme.COLORS.lightBlue
             : appTheme.COLORS.mainGreen,

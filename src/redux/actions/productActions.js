@@ -21,14 +21,13 @@ import {
   UPDATE_INVENTORY_REQUEST,
   UPDATE_INVENTORY_SUCCESS,
   UPDATE_INVENTORY_FAIL,
+  EDIT_PRODUCT_PRICE,
+  EDIT_PRODUCT_PRICE_FAIL,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 import { getMyInventory } from "./customerActions";
 
-//this gets the inventory of the distributor/ bulkbreaker. should be renamed
 export const getProducts = (code) => async (dispatch, getState) => {
-  const { customer } = getState().customer;
-
   try {
     dispatch({
       type: GET_PRODUCTS_REQUEST,
@@ -40,59 +39,81 @@ export const getProducts = (code) => async (dispatch, getState) => {
       },
     };
 
-    if (customer?.CUST_Type.toLowerCase() === "poc") {
-      const {
-        data: { data },
-      } = await axios.get(`${INVENTORY_BASE_URL}/bb/${code}`, config);
+    const {
+      data: { data },
+    } = await axios.get(`${INVENTORY_BASE_URL}/bb/${code}`, config);
 
-      let availableProducts = data;
+    let availableProducts = data;
 
-      availableProducts = availableProducts?.map((item) => ({
-        companyCode: item.companyCode,
-        date: item.date,
-        id: item.id,
-        brand: item.product.brand,
-        country: item.product.country,
-        imageUrl: item.product.imageUrl,
-        price: item.product.price,
-        productId: item.product.productId,
-        productType: item.product.productType,
-        sku: item.product.sku,
-        quantity: item.quantity,
-        buyingQuantity: 0,
-      }));
+    availableProducts = availableProducts?.map((item) => ({
+      companyCode: item.companyCode,
+      date: item.date,
+      id: item.id,
+      brand: item.product.brand,
+      country: item.product.country,
+      imageUrl: item.product.imageUrl,
+      price: item.product.price,
+      sellerPrice: item?.price,
+      productId: item.product.productId,
+      productType: item.product.productType,
+      sku: item.product.sku,
+      quantity: item.quantity,
+      buyingQuantity: 0,
+    }));
 
-      dispatch({
-        type: GET_PRODUCTS_SUCCESS,
-        payload: availableProducts,
-      });
-    } else {
-      const {
-        data: { data },
-      } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
+    dispatch({
+      type: GET_PRODUCTS_SUCCESS,
+      payload: availableProducts,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
 
-      let availableProducts = data.filter((product) => product.quantity > 0);
+export const getDistributorProducts = (code) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PRODUCTS_REQUEST,
+    });
 
-      availableProducts = availableProducts?.map((item) => ({
-        companyCode: item.companyCode,
-        date: item.date,
-        id: item.id,
-        brand: item.product.brand,
-        country: item.product.country,
-        imageUrl: item.product.imageUrl,
-        price: item.product.price,
-        productId: item.product.productId,
-        productType: item.product.productType,
-        sku: item.product.sku,
-        quantity: item.quantity,
-        buyingQuantity: 0,
-      }));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-      dispatch({
-        type: GET_PRODUCTS_SUCCESS,
-        payload: availableProducts,
-      });
-    }
+    const {
+      data: { data },
+    } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
+
+    //is this needed?
+    let availableProducts = data.filter((product) => product.quantity > 0);
+
+    availableProducts = availableProducts?.map((item) => ({
+      companyCode: item.companyCode,
+      date: item.date,
+      id: item.id,
+      brand: item.product.brand,
+      country: item.product.country,
+      imageUrl: item.product.imageUrl,
+      price: item.product.price,
+      productId: item.product.productId,
+      productType: item.product.productType,
+      sku: item.product.sku,
+      quantity: item.quantity,
+      buyingQuantity: 0,
+    }));
+
+    dispatch({
+      type: GET_PRODUCTS_SUCCESS,
+      payload: availableProducts,
+    });
   } catch (error) {
     dispatch({
       type: GET_PRODUCTS_FAIL,
@@ -212,7 +233,11 @@ export const deleteProductToSell = (productId) => (dispatch) => {
   });
 };
 
-export const saveProductsToSell = (payload) => async (dispatch) => {
+export const saveProductsToSell = (payload) => async (dispatch, getState) => {
+  const {
+    customer: { id },
+  } = getState().customer;
+
   try {
     dispatch({
       type: SAVE_PRODUCTS_REQUEST,
@@ -232,7 +257,7 @@ export const saveProductsToSell = (payload) => async (dispatch) => {
       type: SAVE_PRODUCTS_SUCCESS,
       payload: data,
     });
-    dispatch(getMyInventory());
+    dispatch(getMyInventory(id));
   } catch (error) {
     dispatch({
       type: SAVE_PRODUCTS_FAIL,
@@ -244,7 +269,7 @@ export const saveProductsToSell = (payload) => async (dispatch) => {
   }
 };
 
-//i do not need this
+//i do not need this because we are not taking stock in shopdc
 export const updateInventory = (payload) => async (dispatch) => {
   try {
     dispatch({
@@ -271,6 +296,28 @@ export const updateInventory = (payload) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: UPDATE_INVENTORY_FAIL,
+      payload: "There was an error",
+    });
+  }
+};
+
+export const updateProductPrice = (payload) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await axios.put(`${INVENTORY_BASE_URL}/bb/stock-price`, payload, config);
+
+    dispatch({
+      type: EDIT_PRODUCT_PRICE,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: EDIT_PRODUCT_PRICE_FAIL,
       payload: "There was an error",
     });
   }

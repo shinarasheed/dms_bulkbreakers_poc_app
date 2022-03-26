@@ -41,7 +41,7 @@ const SignupScreen = () => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 10000);
+      }, 5000);
     }
   }, [error]);
 

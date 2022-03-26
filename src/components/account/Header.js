@@ -20,7 +20,7 @@ export const Header = ({ title }) => {
     <View
       style={{
         backgroundColor: appTheme.COLORS.mainRed,
-        paddingTop: StatusBar.currentHeight * 1.8,
+        paddingTop: StatusBar.currentHeight,
         paddingBottom: 15,
         paddingHorizontal: 20,
         flexDirection: "row",

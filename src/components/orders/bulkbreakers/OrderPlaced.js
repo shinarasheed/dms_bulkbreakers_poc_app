@@ -33,7 +33,13 @@ export const Order = ({ item }) => {
           `${COMPANY_BASE_URL}/company/syspro/${item?.sellerCompanyId}`
         );
         if (componentMounted) {
-          setTheDistributor(result);
+          //i do not know how some others will understand this code.
+          setTheDistributor({
+            ...result,
+            latitude: result?.lat,
+            longitude: result?.long,
+            DistCode: result.DIST_Code,
+          });
         }
       } catch (error) {
         console.log(error);
@@ -139,6 +145,8 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainBlue
                   : item.orderStatus[0].status === "Rejected"
                   ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Canceled"
+                  ? appTheme.COLORS.mainRed
                   : item.orderStatus[0].status === "Completed"
                   ? appTheme.COLORS.lightBlue
                   : appTheme.COLORS.mainGreen,
@@ -167,7 +175,9 @@ export const Order = ({ item }) => {
                 : item.orderStatus[0].status === "Delivered"
                 ? "Completed"
                 : item.orderStatus[0].status === "Rejected"
-                ? "Cancelled"
+                ? "Rejected"
+                : item.orderStatus[0].status === "Canceled"
+                ? "Canceled"
                 : item.orderStatus[0].status}
             </Text>
           </View>

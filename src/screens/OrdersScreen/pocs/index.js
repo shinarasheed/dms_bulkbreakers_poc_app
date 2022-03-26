@@ -37,10 +37,6 @@ export default function Index() {
 
   const { openOrders, completedOrders, myorders, loading } = myOrdersState;
 
-  // const filteredOpenOrders = openOrders?.filter((item) =>
-  //   item.orderId.includes(searchTerm)
-  // );
-
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getMyOrders(customer?.SF_Code));
@@ -75,8 +71,6 @@ export default function Index() {
         flex: 1,
       }}
     >
-      {/* <Header title="ORDERS" /> */}
-
       <View style={{ paddingHorizontal: 20 }}>
         <OrdersTab categories={categories} index={index} setIndex={setIndex} />
       </View>

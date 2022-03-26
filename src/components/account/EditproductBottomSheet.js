@@ -7,41 +7,46 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { BottomSheet } from "react-native-btr";
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
-import { productToSell } from "../../redux/actions/productActions";
+import { updateProductPrice } from "../../redux/actions/productActions";
 
 // import ProductCard2 from "../products/ProductCard2";
 
-const AddProductBottomSheet = ({ visible, toggle, product }) => {
+const AddProductBottomSheet = ({
+  visible,
+  toggle,
+  inventoryPrice,
+  product,
+}) => {
   const [thePrice, setThePrice] = useState("");
-  const [isVisible, SetIsVisible] = useState(visible);
+  // const [isVisible, SetIsVisible] = useState(visible);
   const dispatch = useDispatch();
-  const [price, setPrice] = useState(0);
+  // const [price, setPrice] = useState(0);
   const [error, SetError] = useState(null);
   const [disabled, SetDisabled] = useState(null);
-  const [productsToSellArray, setProductsToSellArray] = useState([]);
-  const products_tosell = useSelector((state) => state.product.products_tosell);
+  // const [productsToSellArray, setProductsToSellArray] = useState([]);
+  // const products_tosell = useSelector((state) => state.product.products_tosell);
 
   useEffect(() => {
-    setThePrice(product?.price);
+    setThePrice(inventoryPrice);
   }, []);
 
-  const save = (productID, productSku, productPrice, imageUrl) => {
-    // const index = findIndex(productsToSellArray, { productId: productID });
-    const item = {
-      productId: productID,
-      productSku: productSku,
-      price: productPrice,
-      imageUrl,
-    };
+  // const save = (productID, productSku, productPrice, imageUrl) => {
+  //   // const index = findIndex(productsToSellArray, { productId: productID });
+  //   const item = {
+  //     productId: productID,
+  //     productSku: productSku,
+  //     price: productPrice,
+  //     imageUrl,
+  //   };
 
-    dispatch(productToSell(item));
-  };
+  //   dispatch(productToSell(item));
+  // };
 
   //   const saveAction = () => {
   //     let processedArray = products_tosell?.map((item) => ({
@@ -58,6 +63,16 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
 
   //     dispatch(saveProductsToSell(toDB));
   //   };
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
+
+  const payload = {
+    bulkBreakerId: customer?.id.toString(),
+    productId: product?.id,
+    price: parseInt(thePrice),
+  };
 
   function between(x, min, max) {
     if (x < min && x > 0) {
@@ -134,10 +149,10 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
               product.price - 0.5 * product.price,
               product.price + 0.5 * product.price
             );
-            setPrice(textValue);
+            setThePrice(textValue);
           }}
           keyboardType="numeric"
-          value={thePrice}
+          value={thePrice.toString()}
         />
 
         {error && (
@@ -196,12 +211,7 @@ const AddProductBottomSheet = ({ visible, toggle, product }) => {
           }}
           disabled={disabled}
           onPress={() => {
-            save(
-              product.id,
-              product.brand + " " + product.sku,
-              price,
-              product.imageUrl
-            );
+            dispatch(updateProductPrice(payload));
             toggle();
           }}
         >

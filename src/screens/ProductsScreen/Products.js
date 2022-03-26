@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  TextInput,
-  ActivityIndicator,
-} from "react-native";
+import { SafeAreaView, StyleSheet, View, TextInput } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
@@ -36,7 +30,7 @@ export default function Index() {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getMyInventory());
+      dispatch(getMyInventory(customer?.id));
     }, [navigation])
   );
 

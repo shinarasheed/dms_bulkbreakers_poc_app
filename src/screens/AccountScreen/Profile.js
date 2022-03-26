@@ -27,6 +27,8 @@ const Profile = () => {
 
   const [myEmail, setMyEmail] = useState("");
 
+  // console.log(customer);
+
   useEffect(() => {
     setMyPhoneNumber(customer?.phoneNumber);
     setMyEmail(customer?.myEmail);
@@ -121,7 +123,7 @@ const Profile = () => {
                   width: "100%",
                 }}
               >
-                {customer?.CUST_Name}
+                {customer?.sellerName}
               </Text>
             </View>
 

@@ -60,7 +60,7 @@ export const TopDistributor = ({ distributor }) => {
             fontSize: 15,
           }}
         >
-          {truncateString(distributor?.company_name, 10)}
+          {truncateString(distributor?.companyName, 10)}
         </Text>
 
         {distributor?.ratings && (

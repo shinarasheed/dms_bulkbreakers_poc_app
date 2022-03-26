@@ -18,6 +18,8 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
   const customerState = useSelector((state) => state.customer);
   const { customer } = customerState;
 
+  const { customerType } = bulkbreaker;
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -29,16 +31,30 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
         },
       };
 
-      const {
-        data: { data },
-      } = await axios.get(
-        `${INVENTORY_BASE_URL}/bb/${bulkbreaker?.id}`,
-        config
-      );
+      if (customerType === "Distributor") {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${INVENTORY_BASE_URL}/inventory/${bulkbreaker?.DistCode}`,
+          config
+        );
 
-      let availableProducts = data;
-      if (componentMounted) {
-        setProducts(availableProducts);
+        let availableProducts = data;
+        if (componentMounted) {
+          setProducts(availableProducts);
+        }
+      } else {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${INVENTORY_BASE_URL}/bb/${bulkbreaker?.id}`,
+          config
+        );
+
+        let availableProducts = data;
+        if (componentMounted) {
+          setProducts(availableProducts);
+        }
       }
     };
 
@@ -76,7 +92,7 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
         >
           {bulkbreaker?.company_name}
 
-          {truncateString(bulkbreaker?.CUST_Name, 15)}
+          {truncateString(bulkbreaker?.companyName, 15)}
         </Text>
 
         <View
@@ -91,7 +107,6 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  alignSelf: "center",
                   marginBottom: 5,
                 }}
               >
@@ -123,13 +138,17 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
             )}
 
             <View style={{ flexDirection: "row", marginBottom: 10 }}>
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Light",
-                }}
-              >
-                Beers selling from{" "}
-              </Text>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Gilroy-Light",
+                  }}
+                >
+                  Beers selling from{" "}
+                </Text>
+
+                <Text>{bulkbreaker?.customerType}</Text>
+              </View>
 
               {products.length > 0 ? (
                 <Text

@@ -88,7 +88,7 @@ const PlaceOrderSheet = ({
                   textAlign: "center",
                 }}
               >
-                {bulkbreaker?.CUST_Name}
+                {bulkbreaker?.sellerName}
               </Text>
 
               <TouchableOpacity

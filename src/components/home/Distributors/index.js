@@ -15,15 +15,15 @@ import { ScrollView } from "react-native-virtualized-view";
 
 import appTheme from "../../../constants/theme";
 import { Routes } from "../../../navigation/Routes";
-import { TopDistributor } from "../../../components/home/TopDistributor";
-import { Distributor } from "../../../components/home/Distributor";
-import BottomFilter from "../../../components/home/BottomFilter";
+import { TopDistributor } from "../TopDistributor";
+import { Distributor } from "../Distributor";
+import BottomFilter from "../BottomFilter";
 
 import {
   getDistributors,
   getMyInventory,
 } from "../../../redux/actions/customerActions";
-import { Header } from "../../../components/home/Header";
+import { Header } from "../Header";
 import { icons } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logOut } from "../../../redux/actions/customerActions";
@@ -42,7 +42,7 @@ const Distributors = () => {
   const topDistributors = distributors?.slice(0, 5);
 
   const filteredDistributors = distributors?.filter((dist) =>
-    dist?.company_name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    dist?.companyName.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
   function toggle() {
@@ -73,7 +73,7 @@ const Distributors = () => {
   }, [sellersNotNear]);
 
   useEffect(() => {
-    dispatch(getMyInventory());
+    dispatch(getMyInventory(customer?.id));
   }, []);
 
   useEffect(() => {

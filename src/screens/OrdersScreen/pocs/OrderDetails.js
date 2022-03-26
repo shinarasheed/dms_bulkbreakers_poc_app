@@ -18,6 +18,7 @@ import OrderDetailsHeader from "../../../components/orders/pocs/OrderDetailsHead
 import appTheme from "../../../constants/theme";
 import { icons } from "../../../constants";
 import { Routes } from "../../../navigation/Routes";
+import { getMyInventory } from "../../../redux/actions/customerActions";
 
 const OrderDetails = () => {
   const route = useRoute();
@@ -30,26 +31,28 @@ const OrderDetails = () => {
 
   const { orderId } = item;
 
-  const totalAmount = productsToOder?.reduce(
-    (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
-    0
-  );
-
   const [visible, setVisible] = useState(false);
 
   function toggle() {
     setVisible((visible) => !visible);
   }
 
-  const productsState = useSelector((state) => state.product);
-
-  const { allCompanyProducts } = productsState;
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
   }, []);
+
+  useEffect(() => {
+    dispatch(getMyInventory(theDistributor?.id));
+  }, []);
+
+  const customerState = useSelector((state) => state.customer);
+  const productsState = useSelector((state) => state.product);
+
+  const { myInventory } = customerState;
+
+  const { allCompanyProducts } = productsState;
 
   const getSingleOrder = async (orderId) => {
     try {
@@ -78,13 +81,14 @@ const OrderDetails = () => {
     const action = setInterval(() => {
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 1000);
+    }, 2000);
     return () => {
       clearInterval(action);
     };
   }, [singleOrder]);
 
   const updateOrderStatus = async (status) => {
+    console.log("hello");
     try {
       const config = {
         headers: {
@@ -95,7 +99,6 @@ const OrderDetails = () => {
       const body = {
         status,
       };
-      setLoading(true);
 
       const {
         data: { order },
@@ -104,30 +107,34 @@ const OrderDetails = () => {
         body,
         config
       );
-      // setTheOrder(order?.order[0]);
       setSingleOrder(order[0]);
-      setLoading(false);
-      setShowMdal(true);
-      setMessage(status);
-      setTimeout(() => {
-        setShowMdal(false);
-      }, 1000);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // console.log(allCompanyProducts);
+
+  // console.log(myInventory);
+
   const productDetails = (productId) => {
-    const x = allCompanyProducts?.filter(
-      (product) => product?.productId === productId.toString()
+    const x = myInventory?.filter(
+      (item) => item?.product?.productId === productId.toString()
     )[0];
     return x;
   };
 
+  // const getTotalPrice = () => {
+  //   return item?.orderItems.reduce(
+  //     (accumulator, order) =>
+  //       accumulator + productDetails(order?.productId)?.price * order?.quantity,
+  //     0
+  //   );
+  // };
+
   const getTotalPrice = () => {
     return item?.orderItems.reduce(
-      (accumulator, order) =>
-        accumulator + productDetails(order?.productId)?.price * order?.quantity,
+      (accumulator, item) => accumulator + parseInt(item?.price),
       0
     );
   };
@@ -149,7 +156,7 @@ const OrderDetails = () => {
         <View
           style={{
             paddingHorizontal: 10,
-            paddingTop: 40,
+            paddingTop: 20,
           }}
         >
           {/* <CountDownTimer hoursMinSecs={hoursMinSecs} /> */}
@@ -239,7 +246,7 @@ const OrderDetails = () => {
                 </Text>
               </Pressable>
               <Pressable
-                // onPress={() => updateOrderStatus("Cancelled")}
+                onPress={() => updateOrderStatus("Canceled")}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",

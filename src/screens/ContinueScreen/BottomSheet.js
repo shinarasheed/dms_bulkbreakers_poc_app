@@ -47,7 +47,7 @@ const SelectBottomSheet = ({ visible, toggle }) => {
     let theAction = action;
     await AsyncStorage.setItem("action", theAction);
 
-    dispatch(getDistributors(navigation));
+    dispatch(getDistributors());
   };
 
   return (

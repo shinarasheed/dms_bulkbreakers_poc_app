@@ -24,7 +24,7 @@ export const Order = ({ item }) => {
   const productsToOder = item.orderItems;
 
   const theDistributor = distributors.find(
-    (distributor) => distributor?.SF_Code === item?.sellerCompanyId
+    (distributor) => distributor?.sellerCompanyId === item?.sellerCompanyId
   );
 
   return (
@@ -99,7 +99,7 @@ export const Order = ({ item }) => {
               color: appTheme.COLORS.black,
             }}
           >
-            {theDistributor?.CUST_Name}
+            {theDistributor?.companyName}
           </Text>
 
           <View
@@ -118,6 +118,10 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainYellow
                   : item.orderStatus[0].status === "Assigned"
                   ? appTheme.COLORS.mainBlue
+                  : item.orderStatus[0].status === "Canceled"
+                  ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Rejected"
+                  ? appTheme.COLORS.mainRed
                   : appTheme.COLORS.mainGreen,
             }}
           >

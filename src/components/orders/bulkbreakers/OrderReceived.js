@@ -139,6 +139,8 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainYellow
                   : item.orderStatus[0].status === "Rejected"
                   ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Canceled"
+                  ? appTheme.COLORS.mainRed
                   : appTheme.COLORS.mainGreen,
             }}
           >
