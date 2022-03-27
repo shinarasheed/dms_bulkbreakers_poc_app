@@ -11,7 +11,7 @@ import { Header } from "../../../components/orders/Header";
 import OrderTimeLine from "../../../components/orders/pocs/OrderTimeLine";
 import OrderFooter from "../../../components/orders/pocs/OrderFooter";
 import ReOrder from "../../../components/orders/pocs/ReOrder";
-import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActions";
+import { getDistributorProducts } from "../../../redux/actions/productActions";
 import { ORDER_BASE_URL } from "../../../confg";
 import ProductsSummary from "../../../components/orders/ProductsSummary";
 import OrderDetailsHeader from "../../../components/orders/pocs/OrderDetailsHeader";
@@ -28,6 +28,12 @@ const OrderDetails = () => {
   const navigation = useNavigation();
 
   const { productsToOder, theDistributor, item } = route.params;
+  const customerState = useSelector((state) => state.customer);
+  const productsState = useSelector((state) => state.product);
+
+  const { products } = productsState;
+
+  const { customer, myInventory } = customerState;
 
   const { orderId } = item;
 
@@ -39,24 +45,18 @@ const OrderDetails = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchAllProductsIntheCompany());
-  }, []);
+  const { customerType } = theDistributor;
 
   useEffect(() => {
-    dispatch(getMyInventory(theDistributor?.id));
+    if (customerType === "Distributor") {
+      dispatch(getDistributorProducts(theDistributor?.DistCode));
+    } else {
+      dispatch(getMyInventory(theDistributor?.id));
+    }
   }, []);
-
-  const customerState = useSelector((state) => state.customer);
-  const productsState = useSelector((state) => state.product);
-
-  const { myInventory } = customerState;
-
-  const { allCompanyProducts } = productsState;
 
   const getSingleOrder = async (orderId) => {
     try {
-      // setLoadingSingleOrder(true);
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,6 @@ const OrderDetails = () => {
       );
 
       setSingleOrder(order);
-      // setLoadingSingleOrder(false);
     } catch (error) {
       console.log(error);
     }
@@ -112,10 +111,6 @@ const OrderDetails = () => {
       console.log(error);
     }
   };
-
-  // console.log(allCompanyProducts);
-
-  // console.log(myInventory);
 
   const productDetails = (productId) => {
     const x = myInventory?.filter(
