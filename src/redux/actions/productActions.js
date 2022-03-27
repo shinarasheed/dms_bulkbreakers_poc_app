@@ -93,9 +93,9 @@ export const getDistributorProducts = (code) => async (dispatch, getState) => {
     } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
 
     //is this needed?
-    let availableProducts = data.filter((product) => product.quantity > 0);
+    // let availableProducts = data.filter((product) => product.quantity > 0);
 
-    availableProducts = availableProducts?.map((item) => ({
+    let availableProducts = data?.map((item) => ({
       companyCode: item.companyCode,
       date: item.date,
       id: item.id,
@@ -108,6 +108,7 @@ export const getDistributorProducts = (code) => async (dispatch, getState) => {
       sku: item.product.sku,
       quantity: item.quantity,
       buyingQuantity: 0,
+      pocPrice: item.product.poc_price,
     }));
 
     dispatch({
@@ -123,27 +124,6 @@ export const getDistributorProducts = (code) => async (dispatch, getState) => {
           : error.message,
     });
   }
-};
-
-export const getAllProducts = (codes) => async (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  await Promise.all(
-    codes.map(async (code) => {
-      const {
-        data: { data },
-      } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
-      // const newData = [...new Set(data)];
-      dispatch({
-        type: GET_ALLPRODUCTS_SUCCESS,
-        payload: data,
-      });
-    })
-  );
 };
 
 export const incrementQuantity = (productId) => async (dispatch, getState) => {

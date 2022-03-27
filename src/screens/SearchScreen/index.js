@@ -22,8 +22,6 @@ import BottomFilter from "../../components/home/BottomFilter";
 import { Filter } from "../../components/search/Filter";
 import { icons } from "../../constants";
 
-import { getAllProducts } from "../../redux/actions/productActions";
-
 const SearchScreen = () => {
   const [showMoreProducts, setShowMoreProducts] = useState(false);
   const [showMoreDistributors, setShowMoreDistributors] = useState(false);

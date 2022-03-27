@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   Image,
@@ -24,8 +24,24 @@ const ProductCard = ({ theProduct }) => {
     dispatch(incrementQuantityByTyping(text, id));
   };
 
-  const { id, brand, imageUrl, price, sku, buyingQuantity, quantity } =
-    theProduct;
+  const {
+    id,
+    brand,
+    imageUrl,
+    price: bulkbreakerPrice,
+    pocPrice,
+    sku,
+    buyingQuantity,
+    quantity,
+  } = theProduct;
+
+  const customerState = useSelector((state) => state.customer);
+  const { customer } = customerState;
+
+  const { CUST_Type } = customer;
+
+  const price = CUST_Type === "POC" ? pocPrice : bulkbreakerPrice;
+
   return (
     <View
       key={id}
