@@ -16,7 +16,7 @@ const DistributorScreen = () => {
 
   const { products, loading } = productsState;
 
-  //gets inventory
+  //this gets the distributor's inventory
   useEffect(() => {
     dispatch(getDistributorProducts(distributor?.DistCode));
   }, []);
