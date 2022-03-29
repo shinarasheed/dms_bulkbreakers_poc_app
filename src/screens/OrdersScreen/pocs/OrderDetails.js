@@ -27,7 +27,7 @@ const OrderDetails = () => {
 
   const navigation = useNavigation();
 
-  const { productsToOder, theDistributor, item } = route.params;
+  const { productsToOder, bulkbreaker: theDistributor, item } = route.params;
   const customerState = useSelector((state) => state.customer);
   const productsState = useSelector((state) => state.product);
 

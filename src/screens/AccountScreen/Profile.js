@@ -17,27 +17,48 @@ import { Header } from "../../components/orders/Header";
 import { CUSTOMER_BASE_URL } from "../../confg";
 
 const Profile = () => {
-  const customerState = useSelector((state) => state.customer);
   const [updating, setUpdating] = useState(false);
+  const [theCustomer, setTheCustomer] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [whatsAppNumber, setWhatsApNumber] = useState("");
+
+  const customerState = useSelector((state) => state.customer);
 
   const { customer } = customerState;
 
-  const [myPhoneNumber, setMyPhoneNumber] = useState("");
-  const [myPhoneNumberWhatsApp, setMyPhoneNumberWhatsApp] = useState("123456");
+  const getCustomerDetails = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-  const [myEmail, setMyEmail] = useState("");
+      setLoading(true);
 
-  // console.log(customer);
+      const {
+        data: { result },
+      } = await axios.get(`${CUSTOMER_BASE_URL}/customer/${customer?.id}`);
+      setTheCustomer(result);
+      setPhoneNumber(result?.phoneNumber);
+      setWhatsApNumber(result?.phoneNumber);
+      setEmail(result?.email);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    setMyPhoneNumber(customer?.phoneNumber);
-    setMyEmail(customer?.myEmail);
+    getCustomerDetails();
   }, []);
 
   const updatePhoneNumber = async () => {
     const body = {
       code: customer?.BB_Code,
-      phoneNumber: myPhoneNumber,
+      phoneNumber: phoneNumber,
     };
 
     try {
@@ -55,13 +76,18 @@ const Profile = () => {
         config
       );
 
-      const { phoneNumber } = data;
-      setMyPhoneNumber(phoneNumber);
+      getCustomerDetails();
       setUpdating(false);
     } catch (error) {
       console.log(error);
       setUpdating(false);
     }
+  };
+
+  const discardChanges = () => {
+    setPhoneNumber(theCustomer?.phoneNumber);
+    setWhatsApNumber(theCustomer?.phoneNumber);
+    setEmail(theCustomer?.email);
   };
 
   return (
@@ -123,7 +149,7 @@ const Profile = () => {
                   width: "100%",
                 }}
               >
-                {customer?.sellerName}
+                {theCustomer?.CUST_Name}
               </Text>
             </View>
 
@@ -163,9 +189,11 @@ const Profile = () => {
                   fontFamily: "Gilroy-Medium",
                 }}
                 value={
-                  myEmail == null ? "You do not have an email address" : myEmail
+                  theCustomer?.email == null
+                    ? "You do not have an email address"
+                    : email
                 }
-                onChangeText={(value) => setMyEmail(value)}
+                onChangeText={(value) => setEmail(value)}
               />
             </View>
 
@@ -211,8 +239,8 @@ const Profile = () => {
                   color: appTheme.COLORS.mainTextGray,
                   fontFamily: "Gilroy-Medium",
                 }}
-                value={myPhoneNumber}
-                onChangeText={(value) => setMyPhoneNumber(value)}
+                value={phoneNumber}
+                onChangeText={(value) => setPhoneNumber(value)}
               />
             </View>
 
@@ -255,8 +283,8 @@ const Profile = () => {
                   color: appTheme.COLORS.mainTextGray,
                   fontFamily: "Gilroy-Medium",
                 }}
-                value={myPhoneNumberWhatsApp}
-                onChangeText={(value) => setMyPhoneNumberWhatsApp(value)}
+                value={whatsAppNumber}
+                onChangeText={(value) => setWhatsApNumber(value)}
               />
             </View>
 
@@ -290,7 +318,7 @@ const Profile = () => {
                     color: appTheme.COLORS.MainGray,
                   }}
                 >
-                  {customer?.address}
+                  {theCustomer?.address}
                 </Text>
                 <Text
                   style={{
@@ -299,7 +327,7 @@ const Profile = () => {
                     fontFamily: "Gilroy-Medium",
                   }}
                 >
-                  {customer?.district}
+                  {theCustomer?.district}
                 </Text>
               </View>
               <View
@@ -496,7 +524,7 @@ const Profile = () => {
                   Platform.OS === "android" ? appTheme.COLORS.white : undefined
                 }
                 animating={updating}
-                size="small"
+                size="large"
               />
             ) : (
               <Text
@@ -512,6 +540,7 @@ const Profile = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={() => discardChanges()}
             style={{
               backgroundColor: appTheme.COLORS.white,
               width: "100%",

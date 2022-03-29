@@ -23,6 +23,7 @@ import {
   UPDATE_INVENTORY_FAIL,
   EDIT_PRODUCT_PRICE,
   EDIT_PRODUCT_PRICE_FAIL,
+  EDIT_PRODUCT_PRICE_REQUEST,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
 import { getMyInventory } from "./customerActions";
@@ -285,6 +286,9 @@ export const updateInventory = (payload) => async (dispatch) => {
 
 export const updateProductPrice = (payload) => async (dispatch) => {
   try {
+    dispatch({
+      type: EDIT_PRODUCT_PRICE_REQUEST,
+    });
     const config = {
       headers: {
         "Content-Type": "application/json",

@@ -6,14 +6,18 @@ import {
   Image,
   Pressable,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 import { BottomSheet } from "react-native-btr";
 import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
 import { updateProductPrice } from "../../redux/actions/productActions";
+import { INVENTORY_BASE_URL } from "../../confg";
+import { getMyInventory } from "../../redux/actions/customerActions";
 
 // import ProductCard2 from "../products/ProductCard2";
 
@@ -31,6 +35,9 @@ const AddProductBottomSheet = ({
   const [disabled, SetDisabled] = useState(null);
   // const [productsToSellArray, setProductsToSellArray] = useState([]);
   // const products_tosell = useSelector((state) => state.product.products_tosell);
+
+  const [loading, setLoading] = useState(false);
+  const [priceUpdated, setPriceUpdated] = useState(false);
 
   useEffect(() => {
     setThePrice(inventoryPrice);
@@ -89,6 +96,32 @@ const AddProductBottomSheet = ({
     }
   }
 
+  const updateProductPricing = async (payload) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      setLoading(true);
+
+      const { data } = await axios.put(
+        `${INVENTORY_BASE_URL}/bb/stock-price`,
+        payload,
+        config
+      );
+
+      const { status } = data;
+
+      dispatch(getMyInventory(customer?.id));
+      setLoading(false);
+      setPriceUpdated(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <BottomSheet
       visible={visible}
@@ -104,127 +137,192 @@ const AddProductBottomSheet = ({
           paddingHorizontal: 20,
         }}
       >
-        <Image
-          source={{ uri: product.imageUrl }}
-          style={{ width: 30, height: 60, alignSelf: "center" }}
-        />
-        <Pressable
-          onPress={() => toggle()}
-          style={{
-            position: "absolute",
-            alignSelf: "flex-end",
-            paddingRight: 20,
-            paddingTop: 20,
-            marginBottom: 9,
-          }}
-        >
-          <Image source={icons.cancelIcon} />
-        </Pressable>
-        <Text
-          style={{
-            color: appTheme.COLORS.Grey84,
-            fontSize: 15,
-            alignSelf: "center",
-            marginBottom: 32,
-            fontFamily: "Gilroy-Medium",
-          }}
-        >
-          {product.brand + " " + product.sku}
-        </Text>
-        <Text style={{ color: appTheme.COLORS.unFocusColor }}>
-          Price per case (₦)
-        </Text>
-        <TextInput
-          style={{
-            paddingVertical: 8,
-            borderWidth: 0,
-            borderBottomWidth: 1,
-            borderBottomColor: appTheme.COLORS.mainYellow,
-            fontFamily: "Gilroy-Medium",
-            marginBottom: 16,
-          }}
-          onChangeText={(textValue) => {
-            between(
-              textValue,
-              product.price - 0.5 * product.price,
-              product.price + 0.5 * product.price
-            );
-            setThePrice(textValue);
-          }}
-          keyboardType="numeric"
-          value={thePrice.toString()}
-        />
-
-        {error && (
+        {priceUpdated ? (
           <View
             style={{
-              flexDirection: "row",
+              paddingVertical: 20,
               alignItems: "center",
-              marginBottom: 10,
             }}
           >
-            <Image source={icons.ErrorIcon} />
-            <Text style={{ color: "#D82C0D", marginLeft: 5 }}>{error}</Text>
+            <Text
+              style={{
+                fontSize: 15,
+                textAlign: "center",
+                fontFamily: "Gilroy-Medium",
+                marginBottom: 10,
+              }}
+            >
+              product price successfully updated
+            </Text>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: appTheme.COLORS.mainRed,
+                opacity: disabled ? 0.3 : 1,
+                width: 150,
+                height: 50,
+                justifyContent: "center",
+                borderRadius: 5,
+                marginTop: 10,
+                alignItems: "center",
+                justifyContent: "center",
+                elevation: 50,
+              }}
+              onPress={() => toggle()}
+            >
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontSize: 16,
+                  fontFamily: "Gilroy-Bold",
+                }}
+              >
+                ok
+              </Text>
+            </TouchableOpacity>
           </View>
+        ) : (
+          <>
+            <View>
+              <Image
+                source={{ uri: product.imageUrl }}
+                style={{ width: 30, height: 60, alignSelf: "center" }}
+              />
+              <Pressable
+                onPress={() => toggle()}
+                style={{
+                  position: "absolute",
+                  alignSelf: "flex-end",
+                  paddingRight: 20,
+                  paddingTop: 20,
+                  marginBottom: 9,
+                }}
+              >
+                <Image source={icons.cancelIcon} />
+              </Pressable>
+              <Text
+                style={{
+                  color: appTheme.COLORS.Grey84,
+                  fontSize: 15,
+                  alignSelf: "center",
+                  marginBottom: 32,
+                  fontFamily: "Gilroy-Medium",
+                }}
+              >
+                {product.brand + " " + product.sku}
+              </Text>
+              <Text style={{ color: appTheme.COLORS.unFocusColor }}>
+                Price per case (₦)
+              </Text>
+              <TextInput
+                style={{
+                  paddingVertical: 8,
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  borderBottomColor: appTheme.COLORS.mainYellow,
+                  fontFamily: "Gilroy-Medium",
+                  marginBottom: 16,
+                }}
+                onChangeText={(textValue) => {
+                  between(
+                    textValue,
+                    product.price - 0.5 * product.price,
+                    product.price + 0.5 * product.price
+                  );
+                  setThePrice(textValue);
+                }}
+                keyboardType="numeric"
+                value={thePrice.toString()}
+              />
+
+              {error && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 10,
+                  }}
+                >
+                  <Image source={icons.ErrorIcon} />
+                  <Text style={{ color: "#D82C0D", marginLeft: 5 }}>
+                    {error}
+                  </Text>
+                </View>
+              )}
+
+              <Text
+                style={{
+                  marginBottom: 8,
+                  color: "#2D2F39",
+                }}
+              >
+                Recommended price:{" "}
+                <Text style={{ fontWeight: "600" }}>
+                  ₦{formatPrice(product.price)}
+                </Text>
+              </Text>
+              <Text style={{ marginBottom: 8, color: "#2D2F39" }}>
+                Suggested price range:{" "}
+                <Text style={{ fontWeight: "600" }}>
+                  ₦{formatPrice(product.price - 0.5 * product.price)} - ₦
+                  {formatPrice(product.price + 0.5 * product.price)}
+                </Text>
+              </Text>
+            </View>
+
+            <View
+              style={{
+                paddingHorizontal: 20,
+                backgroundColor: appTheme.COLORS.white,
+                paddingVertical: 20,
+                elevation: 50,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: appTheme.COLORS.mainRed,
+                  opacity: disabled ? 0.3 : 1,
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  borderRadius: 5,
+                  marginTop: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  elevation: 50,
+                }}
+                disabled={disabled}
+                onPress={() => {
+                  // dispatch(updateProductPrice(payload));
+                  updateProductPricing(payload);
+                  // toggle();
+                }}
+              >
+                {loading ? (
+                  <ActivityIndicator
+                    color={
+                      Platform.OS === "android"
+                        ? appTheme.COLORS.white
+                        : undefined
+                    }
+                    animating={loading}
+                    size="small"
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      color: appTheme.COLORS.white,
+                      fontSize: 16,
+                      fontFamily: "Gilroy-Bold",
+                    }}
+                  >
+                    Done
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </>
         )}
-
-        <Text
-          style={{
-            marginBottom: 8,
-            color: "#2D2F39",
-          }}
-        >
-          Recommended price:{" "}
-          <Text style={{ fontWeight: "600" }}>
-            ₦{formatPrice(product.price)}
-          </Text>
-        </Text>
-        <Text style={{ marginBottom: 8, color: "#2D2F39" }}>
-          Suggested price range:{" "}
-          <Text style={{ fontWeight: "600" }}>
-            ₦{formatPrice(product.price - 0.5 * product.price)} - ₦
-            {formatPrice(product.price + 0.5 * product.price)}
-          </Text>
-        </Text>
-      </View>
-
-      <View
-        style={{
-          paddingHorizontal: 20,
-          backgroundColor: appTheme.COLORS.white,
-          paddingVertical: 20,
-          elevation: 50,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: appTheme.COLORS.mainRed,
-            opacity: disabled ? 0.3 : 1,
-            width: "100%",
-            height: 50,
-            justifyContent: "center",
-            borderRadius: 5,
-            marginTop: 10,
-            alignItems: "center",
-            justifyContent: "center",
-            elevation: 50,
-          }}
-          disabled={disabled}
-          onPress={() => {
-            dispatch(updateProductPrice(payload));
-            toggle();
-          }}
-        >
-          <Text
-            style={{
-              color: appTheme.COLORS.white,
-              fontSize: 16,
-              fontFamily: "Gilroy-Bold",
-            }}
-          >
-            Done
-          </Text>
-        </TouchableOpacity>
       </View>
     </BottomSheet>
   );

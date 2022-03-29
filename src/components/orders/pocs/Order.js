@@ -23,7 +23,7 @@ export const Order = ({ item }) => {
 
   const productsToOder = item.orderItems;
 
-  const theDistributor = distributors.find(
+  const bulkbreaker = distributors.find(
     (distributor) => distributor?.sellerCompanyId === item?.sellerCompanyId
   );
 
@@ -33,7 +33,7 @@ export const Order = ({ item }) => {
         navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
           productsToOder,
           item,
-          theDistributor,
+          bulkbreaker,
         })
       }
       style={{
@@ -99,7 +99,7 @@ export const Order = ({ item }) => {
               color: appTheme.COLORS.black,
             }}
           >
-            {theDistributor?.companyName}
+            {bulkbreaker?.companyName}
           </Text>
 
           <View

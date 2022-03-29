@@ -101,8 +101,8 @@ const Product = ({ item, productDetails, reorder }) => {
             }}
           >
             {"\u20A6"}
-            {price
-              ? formatPrice(price)
+            {sellerPrice
+              ? formatPrice(sellerPrice)
               : formatPrice(productDetails(productId)?.price)}{" "}
             {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
           </Text>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   StatusBar,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
