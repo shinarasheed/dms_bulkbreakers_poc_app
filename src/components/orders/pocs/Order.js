@@ -30,11 +30,17 @@ export const Order = ({ item }) => {
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
-          productsToOder,
-          item,
-          bulkbreaker,
-        })
+        bulkbreaker?.customerType === "Distributor"
+          ? navigation.navigate(Routes.PLACED_ORDER_DETAILS, {
+              productsToOder,
+              theDistributor: bulkbreaker,
+              item,
+            })
+          : navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
+              productsToOder,
+              item,
+              bulkbreaker,
+            })
       }
       style={{
         marginBottom: 10,
@@ -122,6 +128,8 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainRed
                   : item.orderStatus[0].status === "Rejected"
                   ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Completed"
+                  ? appTheme.COLORS.lightBlue
                   : appTheme.COLORS.mainGreen,
             }}
           >

@@ -32,8 +32,11 @@ const OrderDetails = () => {
   const productsState = useSelector((state) => state.product);
 
   const { products } = productsState;
+  // console.log(products, "products");
 
   const { customer, myInventory } = customerState;
+
+  // console.log(myInventory, "myInventory");
 
   const { orderId } = item;
 
@@ -44,6 +47,8 @@ const OrderDetails = () => {
   }
 
   const dispatch = useDispatch();
+
+  // console.log(theDistributor, "new");
 
   const { customerType } = theDistributor;
 

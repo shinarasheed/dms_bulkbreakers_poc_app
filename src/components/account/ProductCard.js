@@ -169,10 +169,7 @@ const ProductCard = ({ theProduct }) => {
             top: 10,
             right: 20,
           }}
-          onPress={() => {
-            dispatch(deleteInventoryProduct(deletePayload));
-            console.log(deletePayload);
-          }}
+          onPress={() => dispatch(deleteInventoryProduct(deletePayload))}
         >
           <Image source={icons.deleteIcon} />
         </TouchableOpacity>

@@ -141,6 +141,8 @@ export const Order = ({ item }) => {
                   ? appTheme.COLORS.mainRed
                   : item.orderStatus[0].status === "Canceled"
                   ? appTheme.COLORS.mainRed
+                  : item.orderStatus[0].status === "Completed"
+                  ? appTheme.COLORS.lightBlue
                   : appTheme.COLORS.mainGreen,
             }}
           >

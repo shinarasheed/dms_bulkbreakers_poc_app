@@ -21,7 +21,6 @@ import { placeOrder } from "../../redux/actions/orderActions";
 const ProductsBottomSheet = ({
   confirmVisible,
   toggleConfirm,
-  distributor,
   bulkbreaker,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -63,7 +62,7 @@ const ProductsBottomSheet = ({
     billToCode: customer?.SF_Code,
     country: customer?.country,
     buyerDetails: {
-      buyerName: customer?.sellerName,
+      buyerName: customer?.CUST_Name,
       buyerPhoneNumber: customer?.phoneNumber,
       buyerAddress: customer?.address,
     },
@@ -154,7 +153,7 @@ const ProductsBottomSheet = ({
             toggle={toggle}
             visible={visible}
             productsToOder={productsToOder}
-            distributor={distributor}
+            bulkbreaker={bulkbreaker}
           />
         )}
       </View>

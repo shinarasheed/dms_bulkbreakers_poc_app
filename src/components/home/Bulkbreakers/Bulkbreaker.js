@@ -147,7 +147,7 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
                   Beers selling from{" "}
                 </Text>
 
-                <Text>{bulkbreaker?.customerType}</Text>
+                {/* <Text>{bulkbreaker?.customerType}</Text> */}
               </View>
 
               {products.length > 0 ? (

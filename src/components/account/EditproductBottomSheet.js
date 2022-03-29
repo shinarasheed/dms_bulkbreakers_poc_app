@@ -272,10 +272,7 @@ const AddProductBottomSheet = ({
 
             <View
               style={{
-                paddingHorizontal: 20,
-                backgroundColor: appTheme.COLORS.white,
                 paddingVertical: 20,
-                elevation: 50,
               }}
             >
               <TouchableOpacity

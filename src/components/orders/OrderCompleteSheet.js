@@ -86,7 +86,7 @@ const OrderCompleteSheet = ({
                 onPress={() =>
                   navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
                     productsToOder,
-                    theDistributor,
+                    bulkbreaker: theDistributor,
                     item,
                   })
                 }

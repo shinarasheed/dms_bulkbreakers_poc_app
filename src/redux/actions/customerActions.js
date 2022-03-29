@@ -460,24 +460,27 @@ export const updateProductStatus =
     }
   };
 
-export const deleteInventoryProduct = (payload) => async (dispatch) => {
+export const deleteInventoryProduct = (deletePayload) => async (dispatch) => {
+  const { bulkBreakerId } = deletePayload;
   try {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    await axios.delete(
+    const { data } = await axios.delete(
       `${INVENTORY_BASE_URL}/bb/delete-product`,
-      payload,
-      config
+      {
+        data: deletePayload,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
+
+    const { message } = data;
 
     dispatch({
       type: DELETE_INVENTORY_PRODUCT,
-      payload: productId,
+      payload: message,
     });
+
+    dispatch(getMyInventory(bulkBreakerId));
   } catch (error) {
     console.log(error);
   }

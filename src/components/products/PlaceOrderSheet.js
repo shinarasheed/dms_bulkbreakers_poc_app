@@ -257,7 +257,7 @@ import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { updateInventory } from "../../redux/actions/productActions";
 
-const BottomFilter = ({ productsToOder, distributor }) => {
+const BottomFilter = ({ productsToOder, bulkbreaker }) => {
   const createOrderState = useSelector((state) => state.createOrder);
   const navigation = useNavigation();
 
@@ -298,7 +298,7 @@ const BottomFilter = ({ productsToOder, distributor }) => {
           dispatch(toggleOrderPlaced());
           navigation.navigate(Routes.ORDER_DETAILS_SCREEN, {
             productsToOder,
-            theDistributor: distributor,
+            bulkbreaker,
             item: placedOrder,
           });
         }}
