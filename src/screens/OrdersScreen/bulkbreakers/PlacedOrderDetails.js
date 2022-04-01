@@ -82,8 +82,8 @@ const PlacedOrderDetails = () => {
           );
 
           if (componentMounted) {
-            // setSingleOrder(order);
-            // setOrderStatus(order[0]?.orderStatus[0]);
+            setSingleOrder(order);
+            setOrderStatus(order[0]?.orderStatus[0]);
           }
         } catch (error) {
           console.log(error);
@@ -91,7 +91,7 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 3000);
+    }, 2000);
     return () => {
       clearInterval(action);
       componentMounted = false;
@@ -148,7 +148,7 @@ const PlacedOrderDetails = () => {
         orderId={orderId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        // singleOrder
+        singleOrder
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
@@ -182,9 +182,11 @@ const PlacedOrderDetails = () => {
                 fontFamily: "Gilroy-Light",
               }}
             >
-              {orderStatus !== null &&
-                orderStatus?.datePlaced !== null &&
-                moment(orderStatus?.datePlaced).format("MMM Do, YYYY")}
+              {singleOrder !== null &&
+                singleOrder[0]?.orderStatus[0]?.datePlaced !== null &&
+                moment(singleOrder[0]?.orderStatus[0]?.datePlaced).format(
+                  "MMM Do, YYYY"
+                )}
             </Text>
             <Text
               style={{
@@ -192,13 +194,13 @@ const PlacedOrderDetails = () => {
                 marginLeft: 5,
               }}
             >
-              {orderStatus?.timePlaced !== undefined
-                ? `at ${orderStatus?.timePlaced}`
+              {singleOrder[0]?.orderStatus[0]?.timePlaced !== undefined
+                ? `at ${singleOrder[0]?.orderStatus[0]?.timePlaced}`
                 : null}
             </Text>
           </View>
 
-          {!orderStatus ? (
+          {!singleOrder[0]?.orderStatus[0] ? (
             <ActivityIndicator
               color={
                 Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
@@ -217,17 +219,17 @@ const PlacedOrderDetails = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor:
-                  orderStatus?.status === "Placed"
+                  singleOrder[0]?.orderStatus[0].status === "Placed"
                     ? appTheme.COLORS.borderGRey1
-                    : orderStatus?.status === "Assigned"
+                    : singleOrder[0]?.orderStatus[0].status === "Assigned"
                     ? appTheme.COLORS.mainYellow
-                    : orderStatus?.status === "Accepted"
+                    : singleOrder[0]?.orderStatus[0].status === "Accepted"
                     ? appTheme.COLORS.mainBlue
-                    : orderStatus?.status === "Completed"
+                    : singleOrder[0].orderStatus[0].status === "Completed"
                     ? appTheme.COLORS.lightBlue
-                    : orderStatus?.status === "Rejected"
+                    : singleOrder[0].orderStatus[0].status === "Rejected"
                     ? appTheme.COLORS.mainRed
-                    : orderStatus?.status === "Canceled"
+                    : singleOrder[0].orderStatus[0].status === "Canceled"
                     ? appTheme.COLORS.mainRed
                     : appTheme.COLORS.mainGreen,
               }}
@@ -237,24 +239,24 @@ const PlacedOrderDetails = () => {
                   fontFamily: "Gilroy-Medium",
                   fontSize: 13,
                   color:
-                    orderStatus?.status === "Placed"
+                    singleOrder[0]?.orderStatus[0].status === "Placed"
                       ? appTheme.COLORS.black
-                      : orderStatus?.status === "Accepted"
+                      : singleOrder[0]?.orderStatus[0].status === "Accepted"
                       ? appTheme.COLORS.white
-                      : orderStatus?.status === "Completed"
+                      : singleOrder[0]?.orderStatus[0].status === "Completed"
                       ? appTheme.COLORS.white
                       : appTheme.COLORS.white,
                 }}
               >
-                {orderStatus?.status === "Assigned"
+                {singleOrder[0]?.orderStatus[0].status === "Assigned"
                   ? "Confirmed"
-                  : orderStatus?.status === "Accepted"
+                  : singleOrder[0]?.orderStatus[0].status === "Accepted"
                   ? "Dispatched"
-                  : orderStatus?.status === "Completed"
+                  : singleOrder[0]?.orderStatus[0].status === "Completed"
                   ? "Delivered"
-                  : orderStatus?.status === "Delivered"
+                  : singleOrder[0]?.orderStatus[0].status === "Delivered"
                   ? "Completed"
-                  : orderStatus?.status}
+                  : singleOrder[0]?.orderStatus[0].status}
               </Text>
             </View>
           )}
@@ -274,7 +276,7 @@ const PlacedOrderDetails = () => {
             <ProductPlaced
               item={item}
               productDetails={productDetails}
-              // singleOrder={singleOrder}
+              singleOrder={singleOrder}
             />
           )}
           ListHeaderComponent={() => (
@@ -335,7 +337,7 @@ const PlacedOrderDetails = () => {
 
         {/* order TimeLine */}
 
-        {/* {singleOrder[0]?.deliveryType === "Pick-Up" ? (
+        {singleOrder[0]?.deliveryType === "Pick-Up" ? (
           <OrderTimeLinePickup
             item={item}
             singleOrder={singleOrder}
@@ -349,11 +351,11 @@ const PlacedOrderDetails = () => {
             theDistributor={theDistributor}
             productsToOder={productsToOder}
           />
-        )} */}
+        )}
 
         {/* delivery method */}
 
-        {/* <DeliveryMethodPlaced deliveryType={singleOrder[0]?.deliveryType} /> */}
+        <DeliveryMethodPlaced deliveryType={singleOrder[0]?.deliveryType} />
 
         {/* footer */}
 

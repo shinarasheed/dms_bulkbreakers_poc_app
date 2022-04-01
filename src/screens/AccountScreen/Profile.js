@@ -24,6 +24,7 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [whatsAppNumber, setWhatsApNumber] = useState("");
   const [editing, setEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   const customerState = useSelector((state) => state.customer);
 
@@ -48,7 +49,7 @@ const Profile = () => {
       setEmail(result?.email);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      setError("please provide a valid phone number");
     }
   };
 
@@ -252,6 +253,18 @@ const Profile = () => {
                   Phone number
                 </Text>
               </View>
+              {error && (
+                <View>
+                  <Text
+                    style={{
+                      color: appTheme.COLORS.mainRed,
+                      fontSize: 15,
+                    }}
+                  >
+                    {error}
+                  </Text>
+                </View>
+              )}
 
               <TextInput
                 keyboardType="numeric"
