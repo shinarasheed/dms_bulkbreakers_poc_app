@@ -27,13 +27,16 @@ import { formatPrice } from "../../../utils/formatPrice";
 import { fetchAllProductsIntheCompany } from "../../../redux/actions/productActions";
 import { ORDER_BASE_URL } from "../../../confg";
 import { Routes } from "../../../navigation/Routes";
+import CancelOrderSheet from "../../../components/orders/CancelOrderSheet";
 
 const PlacedOrderDetails = () => {
   const route = useRoute();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   const navigation = useNavigation();
   const [singleOrder, setSingleOrder] = useState([]);
+  const [orderStatus, setOrderStatus] = useState(null);
   const [loadingSingleOrder, setLoadingSingleOrder] = useState(false);
 
   const { productsToOder, theDistributor, item } = route.params;
@@ -44,8 +47,6 @@ const PlacedOrderDetails = () => {
     (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
     0
   );
-
-  const [visible, setVisible] = useState(false);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -60,6 +61,7 @@ const PlacedOrderDetails = () => {
   useEffect(() => {
     dispatch(fetchAllProductsIntheCompany());
   }, []);
+
   useEffect(() => {
     let componentMounted = true;
 
@@ -80,7 +82,8 @@ const PlacedOrderDetails = () => {
           );
 
           if (componentMounted) {
-            setSingleOrder(order);
+            // setSingleOrder(order);
+            // setOrderStatus(order[0]?.orderStatus[0]);
           }
         } catch (error) {
           console.log(error);
@@ -88,12 +91,12 @@ const PlacedOrderDetails = () => {
       };
       getSingleOrder(orderId);
       console.log("checking for status...");
-    }, 2000);
+    }, 3000);
     return () => {
       clearInterval(action);
       componentMounted = false;
     };
-  }, [singleOrder]);
+  }, []);
 
   const updateOrderStatus = async (status) => {
     try {
@@ -145,7 +148,7 @@ const PlacedOrderDetails = () => {
         orderId={orderId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        singleOrder
+        // singleOrder
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
@@ -179,11 +182,9 @@ const PlacedOrderDetails = () => {
                 fontFamily: "Gilroy-Light",
               }}
             >
-              {singleOrder !== null &&
-                singleOrder[0]?.orderStatus[0]?.datePlaced !== null &&
-                moment(singleOrder[0]?.orderStatus[0]?.datePlaced).format(
-                  "MMM Do, YYYY"
-                )}
+              {orderStatus !== null &&
+                orderStatus?.datePlaced !== null &&
+                moment(orderStatus?.datePlaced).format("MMM Do, YYYY")}
             </Text>
             <Text
               style={{
@@ -191,13 +192,13 @@ const PlacedOrderDetails = () => {
                 marginLeft: 5,
               }}
             >
-              {singleOrder[0]?.orderStatus[0]?.timePlaced !== undefined
-                ? `at ${singleOrder[0]?.orderStatus[0]?.timePlaced}`
+              {orderStatus?.timePlaced !== undefined
+                ? `at ${orderStatus?.timePlaced}`
                 : null}
             </Text>
           </View>
 
-          {!singleOrder[0]?.orderStatus[0] ? (
+          {!orderStatus ? (
             <ActivityIndicator
               color={
                 Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
@@ -216,17 +217,17 @@ const PlacedOrderDetails = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor:
-                  singleOrder[0]?.orderStatus[0].status === "Placed"
+                  orderStatus?.status === "Placed"
                     ? appTheme.COLORS.borderGRey1
-                    : singleOrder[0]?.orderStatus[0].status === "Assigned"
+                    : orderStatus?.status === "Assigned"
                     ? appTheme.COLORS.mainYellow
-                    : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                    : orderStatus?.status === "Accepted"
                     ? appTheme.COLORS.mainBlue
-                    : singleOrder[0].orderStatus[0].status === "Completed"
+                    : orderStatus?.status === "Completed"
                     ? appTheme.COLORS.lightBlue
-                    : singleOrder[0].orderStatus[0].status === "Rejected"
+                    : orderStatus?.status === "Rejected"
                     ? appTheme.COLORS.mainRed
-                    : singleOrder[0].orderStatus[0].status === "Canceled"
+                    : orderStatus?.status === "Canceled"
                     ? appTheme.COLORS.mainRed
                     : appTheme.COLORS.mainGreen,
               }}
@@ -236,24 +237,24 @@ const PlacedOrderDetails = () => {
                   fontFamily: "Gilroy-Medium",
                   fontSize: 13,
                   color:
-                    singleOrder[0]?.orderStatus[0].status === "Placed"
+                    orderStatus?.status === "Placed"
                       ? appTheme.COLORS.black
-                      : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                      : orderStatus?.status === "Accepted"
                       ? appTheme.COLORS.white
-                      : singleOrder[0]?.orderStatus[0].status === "Completed"
+                      : orderStatus?.status === "Completed"
                       ? appTheme.COLORS.white
                       : appTheme.COLORS.white,
                 }}
               >
-                {singleOrder[0]?.orderStatus[0].status === "Assigned"
+                {orderStatus?.status === "Assigned"
                   ? "Confirmed"
-                  : singleOrder[0]?.orderStatus[0].status === "Accepted"
+                  : orderStatus?.status === "Accepted"
                   ? "Dispatched"
-                  : singleOrder[0]?.orderStatus[0].status === "Completed"
+                  : orderStatus?.status === "Completed"
                   ? "Delivered"
-                  : singleOrder[0]?.orderStatus[0].status === "Delivered"
+                  : orderStatus?.status === "Delivered"
                   ? "Completed"
-                  : singleOrder[0]?.orderStatus[0].status}
+                  : orderStatus?.status}
               </Text>
             </View>
           )}
@@ -273,7 +274,7 @@ const PlacedOrderDetails = () => {
             <ProductPlaced
               item={item}
               productDetails={productDetails}
-              singleOrder={singleOrder}
+              // singleOrder={singleOrder}
             />
           )}
           ListHeaderComponent={() => (
@@ -334,7 +335,7 @@ const PlacedOrderDetails = () => {
 
         {/* order TimeLine */}
 
-        {singleOrder[0]?.deliveryType === "Pick-Up" ? (
+        {/* {singleOrder[0]?.deliveryType === "Pick-Up" ? (
           <OrderTimeLinePickup
             item={item}
             singleOrder={singleOrder}
@@ -348,11 +349,11 @@ const PlacedOrderDetails = () => {
             theDistributor={theDistributor}
             productsToOder={productsToOder}
           />
-        )}
+        )} */}
 
         {/* delivery method */}
 
-        <DeliveryMethodPlaced deliveryType={singleOrder[0]?.deliveryType} />
+        {/* <DeliveryMethodPlaced deliveryType={singleOrder[0]?.deliveryType} /> */}
 
         {/* footer */}
 
@@ -371,6 +372,8 @@ const PlacedOrderDetails = () => {
           reorder
         /> */}
         {/* Reorder sheet */}
+
+        <CancelOrderSheet toggle={toggle} visible={visible} orderId={orderId} />
 
         <Slide
           in={isOpen}
@@ -443,7 +446,8 @@ const PlacedOrderDetails = () => {
 
               <Pressable
                 onPress={() => {
-                  updateOrderStatus("Canceled");
+                  toggle();
+                  // updateOrderStatus("Canceled");
                   setIsOpen(!isOpen);
                 }}
                 style={{

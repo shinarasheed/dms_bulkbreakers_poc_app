@@ -23,6 +23,7 @@ const Profile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [whatsAppNumber, setWhatsApNumber] = useState("");
+  const [editing, setEditing] = useState(false);
 
   const customerState = useSelector((state) => state.customer);
 
@@ -90,6 +91,11 @@ const Profile = () => {
     setEmail(theCustomer?.email);
   };
 
+  const handleOnchange = (value) => {
+    setEditing(true);
+    setPhoneNumber(value);
+  };
+
   return (
     <View
       style={{
@@ -151,6 +157,27 @@ const Profile = () => {
               >
                 {theCustomer?.CUST_Name}
               </Text>
+
+              <View
+                style={{
+                  marginTop: 10,
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  borderBottomColor: appTheme.COLORS.borderGRey,
+                  paddingBottom: 2,
+                }}
+              >
+                <Text
+                  style={{
+                    color: appTheme.COLORS.black,
+                    fontSize: 15,
+                    fontFamily: "Gilroy-Medium",
+                    width: "100%",
+                  }}
+                >
+                  {theCustomer?.BB_Code}
+                </Text>
+              </View>
             </View>
 
             <View
@@ -238,9 +265,10 @@ const Profile = () => {
                   textAlign: "left",
                   color: appTheme.COLORS.mainTextGray,
                   fontFamily: "Gilroy-Medium",
+                  fontSize: 16,
                 }}
                 value={phoneNumber}
-                onChangeText={(value) => setPhoneNumber(value)}
+                onChangeText={(value) => handleOnchange(value)}
               />
             </View>
 
@@ -282,6 +310,7 @@ const Profile = () => {
                   textAlign: "left",
                   color: appTheme.COLORS.mainTextGray,
                   fontFamily: "Gilroy-Medium",
+                  fontSize: 16,
                 }}
                 value={whatsAppNumber}
                 onChangeText={(value) => setWhatsApNumber(value)}
@@ -322,9 +351,10 @@ const Profile = () => {
                 </Text>
                 <Text
                   style={{
-                    color: appTheme.COLORS.MainGray,
+                    color: appTheme.COLORS.black,
                     fontSize: 15,
                     fontFamily: "Gilroy-Medium",
+                    fontSize: 16,
                   }}
                 >
                   {theCustomer?.district}
@@ -494,76 +524,80 @@ const Profile = () => {
           </View>
         </View>
 
-        <View
-          style={{
-            backgroundColor: appTheme.COLORS.white,
-            paddingHorizontal: 20,
-            justifyContent: "center",
-            marginTop: 20,
-            paddingVertical: 20,
-            elevation: 20,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => updatePhoneNumber()}
+        {editing && (
+          <View
             style={{
-              backgroundColor: appTheme.COLORS.mainRed,
-              width: "100%",
-              height: 50,
+              backgroundColor: appTheme.COLORS.white,
+              paddingHorizontal: 20,
               justifyContent: "center",
-              borderRadius: 5,
-              marginTop: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              elevation: 50,
+              marginTop: 20,
+              paddingVertical: 20,
+              elevation: 20,
             }}
           >
-            {updating ? (
-              <ActivityIndicator
-                color={
-                  Platform.OS === "android" ? appTheme.COLORS.white : undefined
-                }
-                animating={updating}
-                size="large"
-              />
-            ) : (
+            <TouchableOpacity
+              onPress={() => updatePhoneNumber()}
+              style={{
+                backgroundColor: appTheme.COLORS.mainRed,
+                width: "100%",
+                height: 50,
+                justifyContent: "center",
+                borderRadius: 5,
+                marginTop: 10,
+                alignItems: "center",
+                justifyContent: "center",
+                elevation: 50,
+              }}
+            >
+              {updating ? (
+                <ActivityIndicator
+                  color={
+                    Platform.OS === "android"
+                      ? appTheme.COLORS.white
+                      : undefined
+                  }
+                  animating={updating}
+                  size="large"
+                />
+              ) : (
+                <Text
+                  style={{
+                    color: appTheme.COLORS.white,
+                    fontSize: 16,
+                    fontFamily: "Gilroy-Bold",
+                  }}
+                >
+                  Save Changes
+                </Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => discardChanges()}
+              style={{
+                backgroundColor: appTheme.COLORS.white,
+                width: "100%",
+                height: 50,
+                justifyContent: "center",
+                borderRadius: 5,
+                marginTop: 10,
+                alignItems: "center",
+                justifyContent: "center",
+                elevation: 50,
+              }}
+            >
               <Text
                 style={{
-                  color: appTheme.COLORS.white,
+                  color: appTheme.COLORS.black,
                   fontSize: 16,
                   fontFamily: "Gilroy-Bold",
                 }}
               >
-                Save Changes
+                Discard Changes
               </Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => discardChanges()}
-            style={{
-              backgroundColor: appTheme.COLORS.white,
-              width: "100%",
-              height: 50,
-              justifyContent: "center",
-              borderRadius: 5,
-              marginTop: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              elevation: 50,
-            }}
-          >
-            <Text
-              style={{
-                color: appTheme.COLORS.black,
-                fontSize: 16,
-                fontFamily: "Gilroy-Bold",
-              }}
-            >
-              Discard Changes
-            </Text>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

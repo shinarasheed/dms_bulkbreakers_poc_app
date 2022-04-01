@@ -14,7 +14,9 @@ import React from "react";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
+import axios from "axios";
 import { getCustomerDetails } from "../../redux/actions/customerActions";
+import { CUSTOMER_BASE_URL } from "../../confg";
 
 const ContinueScreen = () => {
   const [authCode, setAuthCode] = useState("");
@@ -30,8 +32,34 @@ const ContinueScreen = () => {
     setAuthCode(textValue);
   };
 
-  const handleContinue = () => {
-    dispatch(getCustomerDetails(authCode, navigation));
+  const handleContinue = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        sfDigit: authCode,
+      };
+
+      const { data } = await axios.post(
+        `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
+        body,
+        config
+      );
+
+      const { success } = data;
+      dispatch(getCustomerDetails(authCode));
+      if (success) {
+        navigation.navigate(Routes.SELECT_CUSTOMER_SCREEN);
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <View

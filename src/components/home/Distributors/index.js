@@ -42,7 +42,7 @@ const Distributors = () => {
   const topDistributors = distributors?.slice(0, 5);
 
   const filteredDistributors = distributors?.filter((dist) =>
-    dist?.companyName.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    dist?.companyName?.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
   function toggle() {

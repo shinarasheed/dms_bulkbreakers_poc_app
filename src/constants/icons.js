@@ -48,6 +48,7 @@ const veryGoodRating = require("../../assets/icons/excellentRating.png");
 const rating = require("../../assets/icons/rating.png");
 const homeColored = require("../../assets/icons/HomeColored.png");
 const RestaurantColored = require("../../assets/icons/RestaurantColored.png");
+const BackButton2 = require("../../assets/icons/BackButton2.png");
 
 export default {
   home,
@@ -100,4 +101,5 @@ export default {
   rating,
   homeColored,
   RestaurantColored,
+  BackButton2,
 };

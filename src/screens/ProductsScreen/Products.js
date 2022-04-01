@@ -52,6 +52,7 @@ export default function Index() {
       style={{
         backgroundColor: appTheme.COLORS.mainBackground,
         flex: 1,
+        paddingBottom: 30,
       }}
     >
       <Header title="products" />

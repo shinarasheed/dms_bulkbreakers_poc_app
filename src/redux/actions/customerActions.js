@@ -16,12 +16,14 @@ import {
   GET_CUSTOMER_INVENTORY_SUCCESS,
   GET_CUSTOMER_INVENTORY_FAIL,
   UPDATE_PRODUCT_STATUS,
-  DELETE_INVENTORY_PRODUCT,
   SORT_SELLERS,
   GET_BULKBREAKERS_REQUEST,
   GET_BULKBREAKERS_SUCCESS,
   GET_BULKBREAKERS_FAIL,
   SELLERS_NOT_NEAR,
+  DELETE_INVENTORY_PRODUCT_REQUEST,
+  DELETE_INVENTORY_PRODUCT_FAIL,
+  DELETE_INVENTORY_PRODUCT_SUCCESS,
 } from "../constants/customerConstants";
 import {
   COMPANY_BASE_URL,
@@ -32,7 +34,7 @@ import { Routes } from "../../navigation/Routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistanceApart } from "../../utils/calCulateDistance";
 
-export const getCustomerDetails = (code, navigation) => async (dispatch) => {
+export const getCustomerDetails = (code) => async (dispatch) => {
   try {
     dispatch({
       type: GET_CUSTOMER_REQUEST,
@@ -48,20 +50,21 @@ export const getCustomerDetails = (code, navigation) => async (dispatch) => {
       sfDigit: code,
     };
 
-    const {
-      data: { results },
-    } = await axios.post(
+    const { data } = await axios.post(
       `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
       body,
       config
     );
 
+    const { results, success } = data;
+
     dispatch({
       type: GET_CUSTOMER_SUCCESS,
-      payload: results[0],
+      payload: {
+        result: results[0],
+        status: success,
+      },
     });
-
-    navigation.navigate(Routes.SELECT_CUSTOMER_SCREEN);
   } catch (error) {
     console.log(error);
     dispatch({
@@ -461,8 +464,11 @@ export const updateProductStatus =
   };
 
 export const deleteInventoryProduct = (deletePayload) => async (dispatch) => {
-  const { bulkBreakerId } = deletePayload;
+  const { bulkBreakerId, productId } = deletePayload;
   try {
+    dispatch({
+      type: DELETE_INVENTORY_PRODUCT_REQUEST,
+    });
     const { data } = await axios.delete(
       `${INVENTORY_BASE_URL}/bb/delete-product`,
       {
@@ -473,15 +479,19 @@ export const deleteInventoryProduct = (deletePayload) => async (dispatch) => {
       }
     );
 
-    const { message } = data;
+    const { status } = data;
 
     dispatch({
-      type: DELETE_INVENTORY_PRODUCT,
-      payload: message,
+      type: DELETE_INVENTORY_PRODUCT_SUCCESS,
+      payload: {
+        productId,
+        status,
+      },
     });
-
-    dispatch(getMyInventory(bulkBreakerId));
   } catch (error) {
+    dispatch({
+      type: DELETE_INVENTORY_PRODUCT_FAIL,
+    });
     console.log(error);
   }
 };

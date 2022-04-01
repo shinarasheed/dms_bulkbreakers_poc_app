@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -10,24 +10,26 @@ import {
 } from "react-native";
 import { Switch } from "react-native-elements";
 
-import {
-  deleteInventoryProduct,
-  getMyInventory,
-} from "../../redux/actions//customerActions";
 import appTheme from "../../constants/theme";
 import { updateProductStatus } from "../../redux/actions//customerActions";
 import { formatPrice } from "../../utils/formatPrice";
 import { icons } from "../../constants";
 import AddProductBottomSheet from "./AddProductBottomSheet";
 import EditProductBottomSheet from "./EditproductBottomSheet";
+import DeleteProductBottomSheet from "./DeleteProductBottomSheet";
 
 const ProductCard = ({ theProduct }) => {
   const [checked, setChecked] = useState(true);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
 
   function toggle() {
     setVisible((visible) => !visible);
+  }
+
+  function toggleDelete() {
+    setDeleteVisible((deleteVisible) => !deleteVisible);
   }
 
   const customerState = useSelector((state) => state.customer);
@@ -52,10 +54,9 @@ const ProductCard = ({ theProduct }) => {
           style={{
             flexDirection: "row",
             paddingHorizontal: 20,
-            borderBottomWidth: 1,
-            borderBottomColor: appTheme.COLORS.borderGRey,
-            paddingVertical: 10,
+            paddingVertical: 5,
             alignItems: "flex-start",
+            width: "80%",
           }}
         >
           <Image style={{ width: 30, height: 60 }} source={{ uri: imageUrl }} />
@@ -162,16 +163,29 @@ const ProductCard = ({ theProduct }) => {
             </View>
           </View>
         </Pressable>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: appTheme.COLORS.borderGRey,
+            marginBottom: 10,
+          }}
+        ></View>
 
         <TouchableOpacity
           style={{
             position: "absolute",
             top: 10,
-            right: 20,
+            right: 30,
           }}
-          onPress={() => dispatch(deleteInventoryProduct(deletePayload))}
+          onPress={() => toggleDelete()}
         >
-          <Image source={icons.deleteIcon} />
+          <Image
+            style={{
+              width: 20,
+              height: 20,
+            }}
+            source={icons.deleteIcon}
+          />
         </TouchableOpacity>
       </View>
 
@@ -180,6 +194,12 @@ const ProductCard = ({ theProduct }) => {
         toggle={toggle}
         product={product}
         inventoryPrice={inventoryPrice}
+      />
+
+      <DeleteProductBottomSheet
+        deleteVisible={deleteVisible}
+        toggleDelete={toggleDelete}
+        deletePayload={deletePayload}
       />
     </>
   );

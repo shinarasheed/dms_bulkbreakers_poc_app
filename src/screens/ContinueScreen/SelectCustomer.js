@@ -6,6 +6,7 @@ import {
   View,
   Image,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -50,9 +51,24 @@ const SelectCustomer = () => {
     >
       <View
         style={{
-          marginTop: 40,
+          marginTop: 20,
         }}
       >
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={{
+            paddingLeft: 20,
+            marginBottom: 20,
+          }}
+        >
+          <Image
+            style={{
+              width: 25,
+              height: 25,
+            }}
+            source={icons.BackButton2}
+          />
+        </Pressable>
         <Text
           style={{
             color: appTheme.COLORS.black,
@@ -62,7 +78,7 @@ const SelectCustomer = () => {
             paddingLeft: 20,
           }}
         >
-          Continue as...
+          Continue...
         </Text>
 
         {customer && (

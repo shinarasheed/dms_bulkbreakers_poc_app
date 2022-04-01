@@ -21,6 +21,9 @@ import {
   GET_BULKBREAKERS_SUCCESS,
   GET_BULKBREAKERS_REQUEST,
   SELLERS_NOT_NEAR,
+  DELETE_INVENTORY_PRODUCT_REQUEST,
+  DELETE_INVENTORY_PRODUCT_SUCCESS,
+  DELETE_INVENTORY_PRODUCT_FAIL,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -35,6 +38,8 @@ const initialState = {
   customerDetails: null,
   myInventory: [],
   sellersNotNear: false,
+  deleteStatus: false,
+  status: null,
 };
 
 export default (state = initialState, action) => {
@@ -49,7 +54,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        customer: action.payload,
+        customer: action.payload.result,
+        status: action.payload.status,
       };
     case GET_CUSTOMER_FAIL:
       return {
@@ -215,6 +221,27 @@ export default (state = initialState, action) => {
         customerDetails: null,
         myInventory: [],
         sellersNotNear: false,
+      };
+
+    case DELETE_INVENTORY_PRODUCT_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case DELETE_INVENTORY_PRODUCT_SUCCESS:
+      return {
+        isLoading: false,
+        deleteStatus: action.payload.status,
+        myInventory: state.myInventory.filter(
+          (item) => item?.product.id !== action.payload.productId
+        ),
+      };
+
+    case DELETE_INVENTORY_PRODUCT_FAIL:
+      return {
+        ...state,
+        isLoading: false,
       };
 
     default:
