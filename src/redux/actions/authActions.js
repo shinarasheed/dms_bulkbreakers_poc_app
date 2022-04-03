@@ -21,10 +21,9 @@ export const register = (navigation) => async (dispatch) => {
 
     const token = await adService.getIdToken();
     const decoded = await jwt_decode(token);
+    const email = decoded?.emails[0];
 
     console.log(decoded);
-
-    console.log("register");
 
     // if the user is new
     if (decoded.newUser) {
