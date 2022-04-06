@@ -12,6 +12,7 @@ import {
   CLEAR_ERRORS,
 } from "../constants/authConstants";
 import { USER_BASE_URL } from "../../confg";
+import { getBdrCustomers } from "./customerActions";
 
 export const register = (navigation) => async (dispatch) => {
   try {
@@ -23,7 +24,7 @@ export const register = (navigation) => async (dispatch) => {
     const decoded = await jwt_decode(token);
     const email = decoded?.emails[0];
 
-    console.log(decoded);
+    // console.log(decoded);
 
     // if the user is new
     if (decoded.newUser) {
@@ -48,8 +49,15 @@ export const register = (navigation) => async (dispatch) => {
       });
     } else {
       //log them in
-      await AsyncStorage.setItem("token", token);
-      navigation.navigate(Routes.CONTINUE_SCREEN);
+
+      if (email) {
+        await AsyncStorage.setItem("token", token);
+        navigation.navigate(Routes.CUSTOMERS_SCREEN);
+        dispatch(getBdrCustomers(email));
+      } else {
+        await AsyncStorage.setItem("token", token);
+        navigation.navigate(Routes.CONTINUE_SCREEN);
+      }
 
       dispatch({
         type: LOGIN_SUCCESS,

@@ -1,7 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { SignupScreen, ContinueScreen, SelectCustomer } from "../screens";
+import {
+  SignupScreen,
+  ContinueScreen,
+  SelectCustomer,
+  CustomersScreen,
+} from "../screens";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +28,7 @@ export const AuthStackNavigation = () => {
       <Stack.Screen name="SignupScreen" component={SignupScreen} />
       <Stack.Screen name="ContinueScreen" component={ContinueScreen} />
       <Stack.Screen name="SelectCustomer" component={SelectCustomer} />
+      <Stack.Screen name="CustomersScreen" component={CustomersScreen} />
     </Stack.Navigator>
   );
 };

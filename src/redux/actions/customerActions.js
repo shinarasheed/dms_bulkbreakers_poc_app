@@ -24,6 +24,9 @@ import {
   DELETE_INVENTORY_PRODUCT_REQUEST,
   DELETE_INVENTORY_PRODUCT_FAIL,
   DELETE_INVENTORY_PRODUCT_SUCCESS,
+  GET_BDR_CUSTOMERS_REQUEST,
+  GET_BDR_CUSTOMERS_SUCCESS,
+  GET_BDR_CUSTOMERS_FAIL,
 } from "../constants/customerConstants";
 import {
   COMPANY_BASE_URL,
@@ -65,6 +68,42 @@ export const getCustomerDetails = (code) => async (dispatch) => {
         status: success,
       },
     });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: GET_CUSTOMER_FAIL,
+      payload:
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : error.msg,
+    });
+  }
+};
+
+export const getBdrCustomer = (customerId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_CUSTOMER_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { result },
+    } = await axios.get(`${CUSTOMER_BASE_URL}/customer/${customerId}`);
+
+    dispatch({
+      type: GET_CUSTOMER_SUCCESS,
+      payload: {
+        result: result,
+      },
+    });
+
+    dispatch(getDistributors());
   } catch (error) {
     console.log(error);
     dispatch({
@@ -491,6 +530,42 @@ export const deleteInventoryProduct = (deletePayload) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_INVENTORY_PRODUCT_FAIL,
+    });
+    console.log(error);
+  }
+};
+
+export const getBdrCustomers = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_BDR_CUSTOMERS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const payload = {
+      country: "Nigeria",
+      email,
+    };
+    const {
+      data: { result },
+    } = await axios.post(
+      `${CUSTOMER_BASE_URL}/customer/bdr-customers`,
+      payload,
+      config
+    );
+
+    dispatch({
+      type: GET_BDR_CUSTOMERS_SUCCESS,
+      payload: result,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_BDR_CUSTOMERS_FAIL,
     });
     console.log(error);
   }

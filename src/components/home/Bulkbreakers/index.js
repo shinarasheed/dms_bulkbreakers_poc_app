@@ -36,10 +36,8 @@ const Bulkbreakers = () => {
   const topBulkbreakers = bulkbreakers?.slice(0, 5);
 
   const filteredBulkbreakers = bulkbreakers?.filter((bb) =>
-    bb?.companyName.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    bb?.companyName?.toLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
-
-  // console.log(bulkbreakers);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -123,8 +121,8 @@ const Bulkbreakers = () => {
                 showsHorizontalScrollIndicator={false}
                 horizontal
                 data={topBulkbreakers}
-                listKey={(item) => item.id.toString()}
-                keyExtractor={(distributor) => distributor?.id.toString()}
+                // listKey={(item) => item.id.toString()}
+                keyExtractor={(distributor) => distributor?.BB_Code?.toString()}
                 renderItem={({ item }) => (
                   <TopBulkbreaker bulkbreaker={item} customer={customer} />
                 )}

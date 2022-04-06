@@ -32,6 +32,7 @@ import TermsOfUse from "./AccountScreen/TermsOfUse";
 import PrivacyPolicy from "./AccountScreen/PrivacyPolicy";
 import ReturnPolicy from "./AccountScreen/ReturnPolicy";
 import RatingsBulkbreaker from "./RatingsBulkbreaker";
+import CustomersScreen from "./CustomersScreen";
 
 export {
   LocationScreen,
@@ -67,4 +68,5 @@ export {
   PrivacyPolicy,
   ReturnPolicy,
   RatingsBulkbreaker,
+  CustomersScreen,
 };

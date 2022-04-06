@@ -24,6 +24,9 @@ import {
   DELETE_INVENTORY_PRODUCT_REQUEST,
   DELETE_INVENTORY_PRODUCT_SUCCESS,
   DELETE_INVENTORY_PRODUCT_FAIL,
+  GET_BDR_CUSTOMERS_REQUEST,
+  GET_BDR_CUSTOMERS_SUCCESS,
+  GET_BDR_CUSTOMERS_FAIL,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -40,6 +43,7 @@ const initialState = {
   sellersNotNear: false,
   deleteStatus: false,
   status: null,
+  bdrCustomers: [],
 };
 
 export default (state = initialState, action) => {
@@ -242,6 +246,26 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+
+    case GET_BDR_CUSTOMERS_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case GET_BDR_CUSTOMERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        bdrCustomers: action.payload,
+      };
+
+    case GET_BDR_CUSTOMERS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
 
     default:
