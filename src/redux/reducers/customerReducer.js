@@ -27,6 +27,9 @@ import {
   GET_BDR_CUSTOMERS_REQUEST,
   GET_BDR_CUSTOMERS_SUCCESS,
   GET_BDR_CUSTOMERS_FAIL,
+  GET_BDR_REQUEST,
+  GET_BDR_SUCCESS,
+  GET_BDR_FAIL,
 } from "../constants/customerConstants";
 
 const initialState = {
@@ -44,6 +47,7 @@ const initialState = {
   deleteStatus: false,
   status: null,
   bdrCustomers: [],
+  bdr: null,
 };
 
 export default (state = initialState, action) => {
@@ -258,10 +262,31 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        bdrCustomers: action.payload,
+        bdrCustomers: action.payload.result,
+        token: action.payload.token,
       };
 
     case GET_BDR_CUSTOMERS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case GET_BDR_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case GET_BDR_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        bdr: action.payload,
+      };
+
+    case GET_BDR_FAIL:
       return {
         ...state,
         isLoading: false,

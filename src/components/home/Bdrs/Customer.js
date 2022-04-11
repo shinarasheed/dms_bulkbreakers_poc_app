@@ -5,19 +5,25 @@ import React from "react";
 import { icons } from "../../../constants";
 import appTheme from "../../../constants/theme";
 import { getBdrCustomer } from "../../../redux/actions/customerActions";
+import { Routes } from "../../../navigation/Routes";
 
 const Customer = ({ customer }) => {
   const dispatch = useDispatch();
 
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
-      onPress={() => dispatch(getBdrCustomer(customer?.id))}
+      onPress={() => {
+        dispatch(getBdrCustomer(customer?.id));
+        navigation.navigate(Routes.HOME_SCREEN);
+      }}
       style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
         backgroundColor: appTheme.COLORS.white,
-        paddingVertical: 30,
+        paddingVertical: 25,
         borderBottomWidth: 1,
         borderBottomColor: appTheme.COLORS.borderGRey,
         flex: 1,

@@ -27,13 +27,16 @@ import {
   GET_BDR_CUSTOMERS_REQUEST,
   GET_BDR_CUSTOMERS_SUCCESS,
   GET_BDR_CUSTOMERS_FAIL,
+  GET_BDR_REQUEST,
+  GET_BDR_SUCCESS,
+  GET_BDR_FAIL,
 } from "../constants/customerConstants";
 import {
   COMPANY_BASE_URL,
   CUSTOMER_BASE_URL,
   INVENTORY_BASE_URL,
+  USER_BASE_URL,
 } from "../../confg";
-import { Routes } from "../../navigation/Routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistanceApart } from "../../utils/calCulateDistance";
 
@@ -92,18 +95,19 @@ export const getBdrCustomer = (customerId) => async (dispatch) => {
       },
     };
 
-    const {
-      data: { result },
-    } = await axios.get(`${CUSTOMER_BASE_URL}/customer/${customerId}`);
+    const { data } = await axios.get(
+      `${CUSTOMER_BASE_URL}/customer/${customerId}`
+    );
+
+    const { result, success } = data;
 
     dispatch({
       type: GET_CUSTOMER_SUCCESS,
       payload: {
         result: result,
+        status: success,
       },
     });
-
-    dispatch(getDistributors());
   } catch (error) {
     console.log(error);
     dispatch({
@@ -372,10 +376,6 @@ export const getBulkbreakers = () => async (dispatch, getState) => {
 
     const nearSellers = [...nearDistributors, ...nearBulkbreakers];
 
-    // console.log(nearBulkbreakers, "bulks");
-    // console.log(nearDistributors, "dist");
-    // console.log(nearSellers.length);
-
     let distributorsToShow;
 
     if (nearSellers.length > 0) {
@@ -535,6 +535,34 @@ export const deleteInventoryProduct = (deletePayload) => async (dispatch) => {
   }
 };
 
+export const getBdr = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_BDR_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const {
+      data: { data },
+    } = await axios.get(`${USER_BASE_URL}/fetchuser/${email}`);
+
+    dispatch({
+      type: GET_BDR_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_BDR_FAIL,
+    });
+    console.log(error);
+  }
+};
+
 export const getBdrCustomers = (email) => async (dispatch) => {
   try {
     dispatch({
@@ -559,9 +587,14 @@ export const getBdrCustomers = (email) => async (dispatch) => {
       config
     );
 
+    const token = await AsyncStorage.getItem("token");
+
     dispatch({
       type: GET_BDR_CUSTOMERS_SUCCESS,
-      payload: result,
+      payload: {
+        result,
+        token,
+      },
     });
   } catch (error) {
     dispatch({

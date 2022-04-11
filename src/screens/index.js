@@ -33,6 +33,7 @@ import PrivacyPolicy from "./AccountScreen/PrivacyPolicy";
 import ReturnPolicy from "./AccountScreen/ReturnPolicy";
 import RatingsBulkbreaker from "./RatingsBulkbreaker";
 import CustomersScreen from "./CustomersScreen";
+import BdrScreen from "./BdrScreen";
 
 export {
   LocationScreen,
@@ -69,4 +70,5 @@ export {
   ReturnPolicy,
   RatingsBulkbreaker,
   CustomersScreen,
+  BdrScreen,
 };

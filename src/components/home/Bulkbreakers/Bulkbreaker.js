@@ -20,6 +20,8 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
 
   const { customerType } = bulkbreaker;
 
+  console.log();
+
   const navigation = useNavigation();
 
   useEffect(() => {
