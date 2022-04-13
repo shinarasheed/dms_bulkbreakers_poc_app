@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StatusBar,
   Text,
@@ -9,9 +9,12 @@ import {
   Pressable,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import { getBulkbreakers } from "../../redux/actions/customerActions";
+import {
+  getBulkbreakers,
+  getCustomerDetails,
+} from "../../redux/actions/customerActions";
 
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
@@ -22,6 +25,13 @@ const SelectCustomer = () => {
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
+  const route = useRoute();
+
+  const { authCode } = route.params;
+
+  useEffect(() => {
+    dispatch(getCustomerDetails(authCode));
+  }, [authCode]);
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -29,7 +39,7 @@ const SelectCustomer = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { isLoading, customer } = customerState;
+  const { loadingSellers, customer } = customerState;
 
   const handleGetDistributors = async () => {
     try {
@@ -81,7 +91,7 @@ const SelectCustomer = () => {
           Continue...
         </Text>
 
-        {customer && (
+        {customer ? (
           <TouchableOpacity
             onPress={() => setSelectedCustomer(customer)}
             key={customer?.id}
@@ -136,6 +146,17 @@ const SelectCustomer = () => {
               </Text>
             </View>
           </TouchableOpacity>
+        ) : (
+          <Text
+            style={{
+              textAlign: "center",
+              color: appTheme.COLORS.mainRed,
+              fontFamily: "Gilroy-Medium",
+              fontSize: 15,
+            }}
+          >
+            Loading customer...
+          </Text>
         )}
 
         {customer?.CUST_Type.toLowerCase() === "bulkbreaker" ? (
@@ -190,14 +211,14 @@ const SelectCustomer = () => {
                   fontSize: 18,
                 }}
               >
-                {isLoading ? (
+                {loadingSellers ? (
                   <ActivityIndicator
                     color={
                       Platform.OS === "android"
                         ? appTheme.COLORS.white
                         : undefined
                     }
-                    animating={isLoading}
+                    animating={loadingSellers}
                     size="large"
                   />
                 ) : (

@@ -2,7 +2,7 @@
   "expo": {
     "name": "shopdc",
     "slug": "shopdc",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,8 +22,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFF"
       },
-      "package": "app.dmsmarketplace",
-      "versionCode": 2
+      "package": "app.shopdc",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/icon.png"

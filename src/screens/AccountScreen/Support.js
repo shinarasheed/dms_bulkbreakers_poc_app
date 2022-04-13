@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Linking,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useSelector } from "react-redux";
 import React from "react";
 import { icons } from "../../constants";
@@ -118,7 +125,8 @@ const Support = () => {
             flexDirection: "row",
           }}
         >
-          <View
+          <TouchableOpacity
+            onPress={() => Linking.openURL(`tel:+2349062829447}`)}
             style={{
               flexDirection: "row",
               marginBottom: 30,
@@ -138,6 +146,7 @@ const Support = () => {
               >
                 Phone
               </Text>
+
               <Text
                 style={{
                   color: appTheme.COLORS.black,
@@ -146,13 +155,16 @@ const Support = () => {
                   marginTop: 10,
                 }}
               >
-                {customer?.phoneNumber}
+                09062829447
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
-        <View
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(`mailto:chidinma.nwoke@ng.ab-inbev.com}`)
+          }
           style={{
             flexDirection: "row",
           }}
@@ -177,10 +189,10 @@ const Support = () => {
                 fontFamily: "Gilroy-Medium",
               }}
             >
-              {customer?.email}
+              chidinma.nwoke@ng.ab-inbev.com
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -131,17 +131,19 @@ const OrderFooter = ({ item }) => {
             Sells From
           </Text>
 
-          <Text
-            style={{
-              fontFamily: "Gilroy-Medium",
-              fontSize: 14,
-            }}
-          >
-            {" "}
-            {"\u20A6"}
-            {formatPrice(minPrice)} - {"\u20A6"}
-            {formatPrice(maxPrice)}
-          </Text>
+          {isFinite(minPrice) && isFinite(maxPrice) && (
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                fontSize: 14,
+                marginLeft: 10,
+              }}
+            >
+              {"\u20A6"}
+              {formatPrice(minPrice)} - {"\u20A6"}
+              {formatPrice(maxPrice)}
+            </Text>
+          )}
         </View>
       </View>
 

@@ -106,14 +106,17 @@ export const Distributor = ({ distributor }) => {
                 Beers selling from{" "}
               </Text>
 
-              {minPrice !== Infinity && maxPrice !== Infinity && (
+              {isFinite(minPrice) && isFinite(maxPrice) && (
                 <Text
                   style={{
                     fontFamily: "Gilroy-Medium",
+                    fontSize: 14,
+                    marginLeft: 10,
                   }}
                 >
-                  {`\u20A6${formatPrice(minPrice)}`} -{" "}
-                  {`\u20A6${formatPrice(maxPrice)}`}
+                  {"\u20A6"}
+                  {formatPrice(minPrice)} - {"\u20A6"}
+                  {formatPrice(maxPrice)}
                 </Text>
               )}
             </View>

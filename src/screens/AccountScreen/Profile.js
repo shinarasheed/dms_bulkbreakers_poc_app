@@ -383,8 +383,10 @@ const Profile = () => {
             </View>
           </View>
 
-          {/* rating */}
+          {/* poc should not see rating */}
 
+          {/* rating */}
+          {/* 
           <View
             style={{
               marginTop: 40,
@@ -534,7 +536,7 @@ const Profile = () => {
                 </Text>
               </View>
             </View>
-          </View>
+          </View> */}
         </View>
 
         {editing && (

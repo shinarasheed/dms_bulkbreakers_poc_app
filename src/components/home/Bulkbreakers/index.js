@@ -108,7 +108,7 @@ const Bulkbreakers = () => {
                     fontFamily: "Gilroy-Bold",
                   }}
                 >
-                  View All
+                  {/* View All */}
                 </Text>
               </TouchableOpacity>
             </View>

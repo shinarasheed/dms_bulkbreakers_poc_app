@@ -34,6 +34,7 @@ import {
 
 const initialState = {
   isLoading: false,
+  loadingSellers: false,
   error: null,
   customer: null,
   distributor: null,
@@ -178,12 +179,12 @@ export default (state = initialState, action) => {
     case GET_BULKBREAKERS_REQUEST:
       return {
         ...state,
-        isLoading: true,
+        loadingSellers: true,
       };
     case GET_BULKBREAKERS_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        loadingSellers: false,
         distributors: action.payload.distributorsToShow,
         token: action.payload.token,
         isAuthenticated: true,
@@ -194,7 +195,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        isLoading: false,
+        loadingSellers: false,
       };
 
     case RESTORE_TOKEN:

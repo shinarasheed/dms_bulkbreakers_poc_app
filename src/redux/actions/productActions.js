@@ -93,7 +93,7 @@ export const getDistributorProducts = (code) => async (dispatch, getState) => {
       data: { data },
     } = await axios.get(`${INVENTORY_BASE_URL}/inventory/${code}`, config);
 
-    // console.log(data, "here");
+    console.log(data, "here");
 
     //is this needed?
     // let availableProducts = data.filter((product) => product.quantity > 0);

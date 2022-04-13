@@ -7,7 +7,6 @@ import { icons } from "../../../constants";
 
 const Product = ({ item, productDetails, reorder }) => {
   const { brand, imageUrl, price, productId, sku, quantity } = item;
-
   return (
     <View
       style={{

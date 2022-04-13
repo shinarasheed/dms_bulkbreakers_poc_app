@@ -21,7 +21,10 @@ export const register = (navigation) => async (dispatch) => {
 
     const token = await adService.getIdToken();
     const decoded = await jwt_decode(token);
-    const email = decoded?.emails[0];
+
+    console.log(decoded);
+
+    console.log("register");
 
     // if the user is new
     if (decoded.newUser) {
@@ -39,14 +42,13 @@ export const register = (navigation) => async (dispatch) => {
       //continue
       await axios.post(`${USER_BASE_URL}/register`, body, config);
       await AsyncStorage.setItem("token", token);
-      navigation.navigate(Routes.CUSTOMERS_SCREEN);
+      navigation.navigate(Routes.CONTINUE_SCREEN);
 
       dispatch({
         type: REGISTER_SUCCESS,
       });
     } else {
       //log them in
-
       await AsyncStorage.setItem("token", token);
       navigation.navigate(Routes.CONTINUE_SCREEN);
 

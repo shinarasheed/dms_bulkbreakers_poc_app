@@ -9,28 +9,20 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import axios from "axios";
-import { getCustomerDetails } from "../../redux/actions/customerActions";
 import { CUSTOMER_BASE_URL } from "../../confg";
 
 const ContinueScreen = () => {
   const [authCode, setAuthCode] = useState("");
   const navigation = useNavigation();
 
-  const dispatch = useDispatch();
-
-  const customerState = useSelector((state) => state.customer);
-
-  const { error, isLoading } = customerState;
-
-  const handleOnchange = (textValue) => {
-    setAuthCode(textValue);
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [status, setStatus] = useState(null);
 
   const handleContinue = async () => {
     try {
@@ -44,6 +36,8 @@ const ContinueScreen = () => {
         sfDigit: authCode,
       };
 
+      setLoading(true);
+
       const { data } = await axios.post(
         `${CUSTOMER_BASE_URL}/customer/get-by-lastdigit/Nigeria`,
         body,
@@ -51,14 +45,20 @@ const ContinueScreen = () => {
       );
 
       const { success } = data;
-      dispatch(getCustomerDetails(authCode));
+
       if (success) {
-        navigation.navigate(Routes.SELECT_CUSTOMER_SCREEN);
+        navigation.navigate(Routes.SELECT_CUSTOMER_SCREEN, { authCode });
+        setLoading(false);
+        setError(false);
       } else {
-        return;
+        setLoading(false);
+        setError(true);
       }
     } catch (error) {
       console.log(error);
+      setError(true);
+      setStatus(error.response.status);
+      setLoading(false);
     }
   };
   return (
@@ -118,17 +118,21 @@ const ContinueScreen = () => {
               borderBottomColor: appTheme.COLORS.borderGRey1,
               fontFamily: "Gilroy-Medium",
             }}
-            onChangeText={(textValue) => handleOnchange(textValue)}
+            onChangeText={(textValue) => setAuthCode(textValue)}
           />
           {error && (
-            <Text
-              style={{
-                color: appTheme.COLORS.mainRed,
-                fontFamily: "Gilroy-Medium",
-              }}
-            >
-              {error}
-            </Text>
+            <>
+              <Text
+                style={{
+                  color: appTheme.COLORS.mainRed,
+                  fontFamily: "Gilroy-Medium",
+                }}
+              >
+                {status === 404
+                  ? "Customer not found"
+                  : "something went wrong. please try again"}
+              </Text>
+            </>
           )}
         </View>
 
@@ -150,14 +154,14 @@ const ContinueScreen = () => {
                 fontSize: 18,
               }}
             >
-              {isLoading ? (
+              {loading ? (
                 <ActivityIndicator
                   color={
                     Platform.OS === "android"
                       ? appTheme.COLORS.white
                       : undefined
                   }
-                  animating={isLoading}
+                  animating={loading}
                   size="large"
                 />
               ) : (

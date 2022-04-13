@@ -184,6 +184,7 @@ export const getDistributors = () => async (dispatch, getState) => {
       config
     );
 
+    // console.log(data);
     let distributors = result;
 
     const mapdistributorsToShow = distributors.map((distributor) => ({
@@ -251,11 +252,6 @@ export const getDistributors = () => async (dispatch, getState) => {
         type: SELLERS_NOT_NEAR,
       });
     }
-
-    // const theAction = await AsyncStorage.getItem("action");
-    // if (theAction === "setupstore") {
-    //   navigation.navigate(Routes.ADDPRODUCTS_SCREEN);
-    // }
   } catch (error) {
     console.log(error);
     dispatch({
