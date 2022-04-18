@@ -36,6 +36,7 @@ import CustomersScreen from "./CustomersScreen";
 import BdrScreen from "./BdrScreen";
 import Dreams from "./AccountScreen/Dreams";
 import DreamScreen from "./AccountScreen/DreamScreen";
+import MyDreamScreen from "./AccountScreen/MyDreamScreen";
 
 export {
   LocationScreen,
@@ -75,4 +76,5 @@ export {
   BdrScreen,
   Dreams,
   DreamScreen,
+  MyDreamScreen,
 };

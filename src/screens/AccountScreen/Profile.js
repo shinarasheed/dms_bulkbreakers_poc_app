@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   Image,
@@ -7,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -15,6 +15,8 @@ import { icons } from "../../constants";
 import appTheme from "../../constants/theme";
 import { Header } from "../../components/orders/Header";
 import { CUSTOMER_BASE_URL } from "../../confg";
+import { Spinner } from "../../components/Loaders/Spinner";
+import { LottieLoader } from "../../components/Loaders/LottieLoader";
 
 const Profile = () => {
   const [updating, setUpdating] = useState(false);
@@ -96,6 +98,17 @@ const Profile = () => {
     setEditing(true);
     setPhoneNumber(value);
   };
+
+  if (loading)
+    return (
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <LottieLoader />
+      </View>
+    );
 
   return (
     <View
@@ -387,23 +400,134 @@ const Profile = () => {
 
           {/* rating */}
           {/* 
+        <View
+          style={{
+            marginTop: 40,
+            backgroundColor: appTheme.COLORS.white,
+            paddingVertical: 20,
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 18,
+              fontFamily: "Gilroy-Medium",
+              marginBottom: 10,
+            }}
+          >
+            Your current rating
+          </Text>
+
           <View
             style={{
-              marginTop: 40,
-              backgroundColor: appTheme.COLORS.white,
-              paddingVertical: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 10,
+              borderRadius: 10,
             }}
           >
             <Text
               style={{
-                textAlign: "center",
-                fontSize: 18,
-                fontFamily: "Gilroy-Medium",
-                marginBottom: 10,
+                fontWeight: "bold",
+                fontSize: 17,
+                marginRight: 10,
               }}
             >
-              Your current rating
+              4.9
             </Text>
+            <Image source={icons.rating} />
+            <Text
+              style={{
+                marginLeft: 10,
+                fontFamily: "Gilroy-Medium",
+                fontSize: 15,
+              }}
+            >
+              (109 Orders)
+            </Text>
+          </View>
+
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Image source={icons.excellentRating} />
+              <Text
+                style={{
+                  fontFamily: "Gilroy-Medium",
+                  textTransform: "capitalize",
+                  marginLeft: 10,
+                }}
+              >
+                excellent
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Image source={icons.excellentRating} />
+              <Text
+                style={{
+                  fontFamily: "Gilroy-Medium",
+                  textTransform: "capitalize",
+                  marginLeft: 10,
+                }}
+              >
+                good
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Image source={icons.excellentRating} />
+              <Text
+                style={{
+                  fontFamily: "Gilroy-Medium",
+                  textTransform: "capitalize",
+                  marginLeft: 10,
+                }}
+              >
+                average
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Image source={icons.excellentRating} />
+              <Text
+                style={{
+                  fontFamily: "Gilroy-Medium",
+                  textTransform: "capitalize",
+                  marginLeft: 10,
+                }}
+              >
+                poor
+              </Text>
+            </View>
 
             <View
               style={{
@@ -411,132 +535,21 @@ const Profile = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: 10,
-                borderRadius: 10,
               }}
             >
+              <Image source={icons.excellentRating} />
               <Text
                 style={{
-                  fontWeight: "bold",
-                  fontSize: 17,
-                  marginRight: 10,
-                }}
-              >
-                4.9
-              </Text>
-              <Image source={icons.rating} />
-              <Text
-                style={{
-                  marginLeft: 10,
                   fontFamily: "Gilroy-Medium",
-                  fontSize: 15,
+                  textTransform: "capitalize",
+                  marginLeft: 10,
                 }}
               >
-                (109 Orders)
+                very poor
               </Text>
             </View>
-
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 15,
-                }}
-              >
-                <Image source={icons.excellentRating} />
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    textTransform: "capitalize",
-                    marginLeft: 10,
-                  }}
-                >
-                  excellent
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 15,
-                }}
-              >
-                <Image source={icons.excellentRating} />
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    textTransform: "capitalize",
-                    marginLeft: 10,
-                  }}
-                >
-                  good
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 15,
-                }}
-              >
-                <Image source={icons.excellentRating} />
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    textTransform: "capitalize",
-                    marginLeft: 10,
-                  }}
-                >
-                  average
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 15,
-                }}
-              >
-                <Image source={icons.excellentRating} />
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    textTransform: "capitalize",
-                    marginLeft: 10,
-                  }}
-                >
-                  poor
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Image source={icons.excellentRating} />
-                <Text
-                  style={{
-                    fontFamily: "Gilroy-Medium",
-                    textTransform: "capitalize",
-                    marginLeft: 10,
-                  }}
-                >
-                  very poor
-                </Text>
-              </View>
-            </View>
-          </View> */}
+          </View>
+        </View> */}
         </View>
 
         {editing && (
@@ -619,5 +632,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({});

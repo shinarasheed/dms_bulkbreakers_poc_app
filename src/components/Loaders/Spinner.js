@@ -1,13 +1,12 @@
 import React from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Platform } from "react-native";
 import appTheme from "../../constants/theme";
 
-export const Spinner = ({ animating, style }) => {
+export const Spinner = ({ animating }) => {
   return (
     <ActivityIndicator
-      style={style}
       color={Platform.OS === "android" ? appTheme.COLORS.white : undefined}
-      animating={animating || true}
+      animating={animating}
       size="medium"
     />
   );

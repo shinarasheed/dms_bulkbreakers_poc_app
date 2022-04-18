@@ -33,4 +33,5 @@ export const Routes = {
   CUSTOMERS_SCREEN: "CustomersScreen",
   DREAMS_SCREEN: "Dreams",
   DREAM_SCREEN: "DreamScreen",
+  MYDREAM_SCREEN: "MyDreamScreen",
 };

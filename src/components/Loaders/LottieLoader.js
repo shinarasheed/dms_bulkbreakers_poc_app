@@ -12,7 +12,7 @@ export const LottieLoader = () => {
           width: 150,
           height: 150,
         }}
-        source={require("../../assets/loader-animation.json")}
+        source={require("../../assets/loader.json")}
         autoPlay
         loop
       />

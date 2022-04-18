@@ -5,15 +5,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Header } from "../../components/orders/Header";
 import appTheme from "../../constants/theme";
 import TermsConditions from "./TermsConditions";
+import { Routes } from "../../navigation/Routes";
 
 const DreamScreen = () => {
   const route = useRoute();
   const [visible, setVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   function toggle() {
     setVisible((visible) => !visible);
@@ -135,6 +138,7 @@ const DreamScreen = () => {
         }}
       >
         <TouchableOpacity
+          onPress={() => navigation.navigate(Routes.MYDREAM_SCREEN, { dream })}
           style={{
             backgroundColor: appTheme.COLORS.mainRed,
             width: "100%",
