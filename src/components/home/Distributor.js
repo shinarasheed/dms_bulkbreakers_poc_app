@@ -12,6 +12,7 @@ import { INVENTORY_BASE_URL } from "../../confg";
 import { truncateString } from "../../utils/truncateString";
 import { formatPrice } from "../../utils/formatPrice";
 import { StarRating } from "../starRating";
+import { showRating } from "../../utils/showRating";
 
 export const Distributor = ({ distributor }) => {
   const [products, setProducts] = useState([]);
@@ -52,26 +53,6 @@ export const Distributor = ({ distributor }) => {
 
   let minPrice = Math.min(...pricesArray);
   let maxPrice = Math.max(...pricesArray);
-
-  const showRating = (rating) => {
-    switch (rating) {
-      case 5:
-        return <Image source={icons.excellentRating} />;
-
-      case 4:
-        return <Image source={icons.goodRating} />;
-
-      case 3:
-        return <Image source={icons.averageRating} />;
-      case 2:
-        return <Image source={icons.poorRating} />;
-
-      case 1:
-        return <Image source={icons.veryPoorRating} />;
-      default:
-        return <Image source={icons.excellentRating} />;
-    }
-  };
 
   return (
     <TouchableOpacity

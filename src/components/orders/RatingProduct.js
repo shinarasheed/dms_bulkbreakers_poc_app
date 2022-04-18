@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TouchableOpacity, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
@@ -19,6 +19,7 @@ const Product = ({ item, productDetails }) => {
     sku,
     quantity,
     buyingQuantity,
+    sellerPrice,
   } = item;
 
   return (
@@ -60,7 +61,7 @@ const Product = ({ item, productDetails }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            {productId !== undefined && productDetails(productId)?.brand}
+            {brand ? brand : productDetails(productId)?.brand}
           </Text>
           <Text
             style={{
@@ -71,7 +72,7 @@ const Product = ({ item, productDetails }) => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            {productId !== undefined && productDetails(productId)?.sku}
+            {sku ? sku : productDetails(productId)?.sku}
           </Text>
         </View>
 
@@ -90,8 +91,10 @@ const Product = ({ item, productDetails }) => {
             }}
           >
             {"\u20A6"}
-            {productId !== undefined && formatPrice(price / quantity)} X{" "}
-            {quantity}
+            {sellerPrice
+              ? formatPrice(sellerPrice)
+              : formatPrice(price / quantity)}{" "}
+            X {buyingQuantity ? buyingQuantity : quantity}
           </Text>
 
           <Text
@@ -102,8 +105,9 @@ const Product = ({ item, productDetails }) => {
             }}
           >
             {"\u20A6"}
-            {productId !== undefined &&
-              formatPrice((price / quantity) * quantity)}
+            {sellerPrice
+              ? formatPrice(sellerPrice * buyingQuantity)
+              : formatPrice((price / quantity) * quantity)}
           </Text>
         </View>
       </View>

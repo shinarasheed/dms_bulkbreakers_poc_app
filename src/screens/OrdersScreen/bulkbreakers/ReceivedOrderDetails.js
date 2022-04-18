@@ -342,6 +342,7 @@ const ReceivedOrderDetails = () => {
         <ReceivedOrderFooter
           updateOrderStatus={updateOrderStatus}
           singleOrder={singleOrder}
+          loading={loading}
         />
 
         <Slide

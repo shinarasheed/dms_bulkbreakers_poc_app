@@ -11,6 +11,7 @@ import { INVENTORY_BASE_URL } from "../../../confg";
 import { truncateString } from "../../../utils/truncateString";
 import { formatPrice } from "../../../utils/formatPrice";
 import { StarRating } from "../../starRating";
+import { showRating } from "../../../utils/showRating";
 
 export const Bulkbreaker = ({ bulkbreaker }) => {
   const [products, setProducts] = useState([]);
@@ -19,8 +20,6 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
   const { customer } = customerState;
 
   const { customerType } = bulkbreaker;
-
-  console.log();
 
   const navigation = useNavigation();
 
@@ -109,32 +108,29 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginBottom: 5,
+                  marginRight: 15,
+                  marginVertical: 5,
                 }}
               >
                 <Text
                   style={{
-                    marginRight: 5,
-                    fontFamily: "Gilroy-Medium",
+                    marginRight: 3,
+                    color: appTheme.COLORS.mainTextGray,
+                    fontFamily: "Gilroy-Light",
                   }}
                 >
                   {bulkbreaker?.stars.toFixed(1)}
                 </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <StarRating number={bulkbreaker?.stars?.toFixed(1)} />
-                </View>
+                {showRating(bulkbreaker?.rating)}
+
                 <Text
                   style={{
-                    fontFamily: "Gilroy-Medium",
-                    fontSize: 14,
+                    marginRight: 3,
+                    color: appTheme.COLORS.mainTextGray,
+                    fontFamily: "Gilroy-Light",
                   }}
                 >
-                  ({bulkbreaker?.raters})
+                  ({`${bulkbreaker?.ratings} Orders`})
                 </Text>
               </View>
             )}

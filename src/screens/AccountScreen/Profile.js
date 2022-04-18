@@ -16,7 +16,11 @@ import appTheme from "../../constants/theme";
 import { Header } from "../../components/orders/Header";
 import { CUSTOMER_BASE_URL } from "../../confg";
 import { Spinner } from "../../components/Loaders/Spinner";
-import { LottieLoader } from "../../components/Loaders/LottieLoader";
+import {
+  LottieLoader,
+  LottieLoader2,
+} from "../../components/Loaders/LottieLoader";
+import { showRating } from "../../utils/showRating";
 
 const Profile = () => {
   const [updating, setUpdating] = useState(false);
@@ -93,30 +97,34 @@ const Profile = () => {
 
   useEffect(() => {
     const getCustomerRating = async () => {
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+      if (customer?.CUST_Type === "Bulkbreaker") {
+        try {
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
 
-        const payload = {
-          country: customer?.country,
-          outletCode: customer?.BB_Code,
-        };
+          const payload = {
+            country: customer?.country,
+            outletCode: customer?.BB_Code,
+          };
 
-        const {
-          data: { result },
-        } = await axios.post(
-          `${CUSTOMER_BASE_URL}/customer/getcustomer-rating
-          `,
-          payload,
-          config
-        );
+          const {
+            data: { result },
+          } = await axios.post(
+            `${CUSTOMER_BASE_URL}/customer/getcustomer-rating
+            `,
+            payload,
+            config
+          );
 
-        setRating(result);
-      } catch (error) {
-        console.log(error);
+          setRating(result);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        return;
       }
     };
     getCustomerRating();
@@ -132,26 +140,6 @@ const Profile = () => {
     setPhoneNumber(value);
   };
 
-  const showRating = (rating) => {
-    switch (rating) {
-      case 5:
-        return <Image source={icons.excellentRating} />;
-
-      case 4:
-        return <Image source={icons.goodRating} />;
-
-      case 3:
-        return <Image source={icons.averageRating} />;
-      case 2:
-        return <Image source={icons.poorRating} />;
-
-      case 1:
-        return <Image source={icons.veryPoorRating} />;
-      default:
-        return <Image source={icons.excellentRating} />;
-    }
-  };
-
   if (loading)
     return (
       <View
@@ -159,7 +147,7 @@ const Profile = () => {
           flex: 1,
         }}
       >
-        <LottieLoader />
+        <LottieLoader2 />
       </View>
     );
 

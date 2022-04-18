@@ -8,16 +8,16 @@ const MessageModal = ({ showModal, message }) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#fff",
+        // backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
       <Modal
         isVisible={showModal}
-        animationIn="fadeIn"
+        animationIn="zoomIn"
         animationOut="fadeOut"
-        animationInTiming={2000}
+        animationInTiming={500}
         animationOutTiming={100}
       >
         <View style={styles.modalView}>

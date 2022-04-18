@@ -23,9 +23,10 @@ import { Routes } from "../../navigation/Routes";
 
 // import { Rating, AirbnbRating } from "react-native-ratings";
 import { AirbnbRating } from "react-native-elements";
-import { updateOrderStatus } from "../../redux/actions/orderActions";
-import { CUSTOMER_BASE_URL } from "../../confg";
+// import { updateOrderStatus } from "../../redux/actions/orderActions";
+import { CUSTOMER_BASE_URL, ORDER_BASE_URL } from "../../confg";
 import { fetchAllProductsIntheCompany } from "../../redux/actions/productActions";
+import { ActivityIndicator } from "react-native-paper";
 
 const Ratings = () => {
   const navigation = useNavigation();
@@ -40,11 +41,15 @@ const Ratings = () => {
   });
 
   const [ratingValue, setRatingValue] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const dispatch = useDispatch();
   const route = useRoute();
 
   const { productsToOder, theDistributor, item } = route.params;
+
+  // console.log(productsToOder);
 
   const { orderId } = item;
 
@@ -77,6 +82,40 @@ const Ratings = () => {
     setRatingValue(rating);
   };
 
+  const updateOrderStatus = async (status) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        status,
+      };
+
+      setUpdating(true);
+
+      const { data } = await axios.patch(
+        `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
+        body,
+        config
+      );
+
+      const { isSuccess } = data;
+
+      if (isSuccess) {
+        setUpdating(false);
+        toggle();
+      } else {
+        setUpdating(false);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const rateDistributor = async (data) => {
     const { comment } = data;
     try {
@@ -95,17 +134,35 @@ const Ratings = () => {
         country: customer?.country,
       };
 
-      await axios.patch(
+      setLoading(true);
+      const { data } = await axios.patch(
         `${CUSTOMER_BASE_URL}/customer/rate-customer`,
         body,
         config
       );
-      dispatch(updateOrderStatus("Delivered", orderId));
-      toggle();
+
+      const { success } = data;
+
+      if (success) {
+        setLoading(false);
+        updateOrderStatus("Delivered");
+      } else {
+        setLoading(false);
+        return;
+      }
+
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  //for when the order is just placed
+  const totalAmount = productsToOder?.reduce(
+    (accumulator, item) =>
+      accumulator + item?.sellerPrice * item?.buyingQuantity,
+    0
+  );
 
   return (
     <View
@@ -210,8 +267,8 @@ const Ratings = () => {
               onPress={handleSubmit(rateDistributor)}
               style={{
                 backgroundColor: appTheme.COLORS.mainRed,
-                height: 40,
-                width: 130,
+                height: 45,
+                width: 140,
                 justifyContent: "center",
                 borderRadius: 5,
                 marginTop: 10,
@@ -219,15 +276,27 @@ const Ratings = () => {
                 justifyContent: "center",
               }}
             >
-              <Text
-                style={{
-                  color: appTheme.COLORS.white,
-                  fontSize: 16,
-                  fontFamily: "Gilroy-Bold",
-                }}
-              >
-                Submit
-              </Text>
+              {loading ? (
+                <ActivityIndicator
+                  color={
+                    Platform.OS === "android"
+                      ? appTheme.COLORS.white
+                      : undefined
+                  }
+                  animating={loading}
+                  size="small"
+                />
+              ) : (
+                <Text
+                  style={{
+                    color: appTheme.COLORS.white,
+                    fontSize: 16,
+                    fontFamily: "Gilroy-Bold",
+                  }}
+                >
+                  Submit
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -297,8 +366,9 @@ const Ratings = () => {
                       color: appTheme.COLORS.mainBrown,
                     }}
                   >
-                    {item !== undefined &&
-                      `\u20A6${formatPrice(item?.totalPrice)}`}
+                    {totalAmount
+                      ? `\u20A6${formatPrice(totalAmount)}`
+                      : `\u20A6${formatPrice(item?.totalPrice)}`}
                   </Text>
                 </View>
               </View>

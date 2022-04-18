@@ -92,7 +92,6 @@ const OrderDetails = () => {
   }, [singleOrder]);
 
   const updateOrderStatus = async (status) => {
-    console.log("hello");
     try {
       const config = {
         headers: {

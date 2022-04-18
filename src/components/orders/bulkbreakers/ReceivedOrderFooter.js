@@ -1,10 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
-import axios from "axios";
+import {
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React from "react";
 
 import appTheme from "../../../constants/theme";
 
-const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
+const ReceivedOrderFooter = ({ updateOrderStatus, loading, singleOrder }) => {
   return (
     <View
       style={{
@@ -30,15 +35,27 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
               borderColor: appTheme.COLORS.borderGRey1,
             }}
           >
-            <Text
-              style={{
-                color: appTheme.COLORS.black,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Reject Order
-            </Text>
+            {loading ? (
+              <ActivityIndicator
+                color={
+                  Platform.OS === "android"
+                    ? appTheme.COLORS.mainRed
+                    : undefined
+                }
+                animating={loading}
+                size="large"
+              />
+            ) : (
+              <Text
+                style={{
+                  color: appTheme.COLORS.black,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 17,
+                }}
+              >
+                Reject Order
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -53,15 +70,25 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
               elevation: 5,
             }}
           >
-            <Text
-              style={{
-                color: appTheme.COLORS.white,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Accept Order
-            </Text>
+            {loading ? (
+              <ActivityIndicator
+                color={
+                  Platform.OS === "android" ? appTheme.COLORS.white : undefined
+                }
+                animating={loading}
+                size="large"
+              />
+            ) : (
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 17,
+                }}
+              >
+                Accept Order
+              </Text>
+            )}
           </TouchableOpacity>
         </>
       )}
@@ -82,15 +109,25 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
               elevation: 5,
             }}
           >
-            <Text
-              style={{
-                color: appTheme.COLORS.white,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Mark as Dispatched
-            </Text>
+            {loading ? (
+              <ActivityIndicator
+                color={
+                  Platform.OS === "android" ? appTheme.COLORS.white : undefined
+                }
+                animating={loading}
+                size="large"
+              />
+            ) : (
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 17,
+                }}
+              >
+                Mark as Dispatched
+              </Text>
+            )}
           </TouchableOpacity>
         </>
       )}
@@ -111,47 +148,30 @@ const ReceivedOrderFooter = ({ updateOrderStatus, singleOrder }) => {
               elevation: 5,
             }}
           >
-            <Text
-              style={{
-                color: appTheme.COLORS.white,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Mark as Delivered
-            </Text>
+            {loading ? (
+              <ActivityIndicator
+                color={
+                  Platform.OS === "android" ? appTheme.COLORS.white : undefined
+                }
+                animating={loading}
+                size="large"
+              />
+            ) : (
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
+                  fontFamily: "Gilroy-Medium",
+                  fontSize: 17,
+                }}
+              >
+                Mark as Delivered
+              </Text>
+            )}
           </TouchableOpacity>
         </>
       )}
 
       {/* delivered */}
-
-      {/* {singleOrder?.status === "Delivered" && ( */}
-      <>
-        {/* <TouchableOpacity
-            onPress={() => updateOrderStatus("Completed")}
-            style={{
-              backgroundColor: appTheme.COLORS.mainRed,
-              justifyContent: "center",
-              alignItems: "center",
-              height: 50,
-              borderRadius: 4,
-              flex: 1,
-              elevation: 5,
-            }}
-          >
-            <Text
-              style={{
-                color: appTheme.COLORS.white,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 17,
-              }}
-            >
-              Mark as Completed
-            </Text>
-          </TouchableOpacity> */}
-      </>
-      {/* )} */}
 
       {singleOrder?.status === "Completed" && <></>}
     </View>

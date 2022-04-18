@@ -21,6 +21,7 @@ import BottomFilter from "../BottomFilter";
 import { getBulkbreakers } from "../../../redux/actions/customerActions";
 import { Header } from "../Header";
 import { icons } from "../../../constants";
+import { LottieLoader2 } from "../../Loaders/LottieLoader";
 
 const Bulkbreakers = () => {
   const navigation = useNavigation();
@@ -31,7 +32,11 @@ const Bulkbreakers = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { distributors: bulkbreakers, customer } = customerState;
+  const {
+    distributors: bulkbreakers,
+    customer,
+    loadingSellers,
+  } = customerState;
 
   const topBulkbreakers = bulkbreakers?.slice(0, 5);
 
@@ -46,6 +51,8 @@ const Bulkbreakers = () => {
   useEffect(() => {
     dispatch(getBulkbreakers());
   }, []);
+
+  if (loadingSellers) return <LottieLoader2 />;
 
   return (
     <View
@@ -75,121 +82,103 @@ const Bulkbreakers = () => {
         />
       </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {bulkbreakers?.length > 0 ? (
+        <View
+          style={{
+            paddingHorizontal: 15,
+            marginTop: 20,
+          }}
+        >
           <View
             style={{
-              paddingHorizontal: 15,
-              marginTop: 20,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  fontSize: 15,
-                }}
-              >
-                Delivers in 24 hours
-              </Text>
-              <TouchableOpacity
-                onPress={() => navigation.navigate(Routes.BULKBREAKERS_SCREEN)}
-              >
-                <Text
-                  style={{
-                    textTransform: "uppercase",
-                    color: appTheme.COLORS.mainRed,
-                    fontSize: 12,
-                    fontFamily: "Gilroy-Bold",
-                  }}
-                >
-                  {/* View All */}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* distributors */}
-
-            <ScrollView showsHorizontalScrollIndicator={false}>
-              <FlatList
-                contentContainerStyle={{ marginTop: 20, marginBottom: 20 }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={topBulkbreakers}
-                // listKey={(item) => item.id.toString()}
-                keyExtractor={(distributor) => distributor?.BB_Code?.toString()}
-                renderItem={({ item }) => (
-                  <TopBulkbreaker bulkbreaker={item} customer={customer} />
-                )}
-              />
-            </ScrollView>
-
-            <FlatList
-              ListHeaderComponent={() => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: 20,
-                      marginBottom: 20,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Gilroy-Bold",
-                        fontSize: 16,
-                      }}
-                    >
-                      Sellers in your area ({bulkbreakers?.length})
-                    </Text>
-                    <TouchableOpacity onPress={() => toggle()}>
-                      <Text
-                        style={{
-                          textTransform: "uppercase",
-                          color: appTheme.COLORS.mainRed,
-                          fontSize: 12,
-                          fontFamily: "Gilroy-Bold",
-                        }}
-                      >
-                        Sort by
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              data={filteredBulkbreakers}
-              listKey={(item) => item.id.toString()}
-              keyExtractor={(item, id) => id.toString()}
-              renderItem={({ item }) => (
-                <Bulkbreaker bulkbreaker={item} customer={customer} />
-              )}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
+              flexDirection: "row",
+              justifyContent: "space-between",
               alignItems: "center",
             }}
           >
-            <ActivityIndicator
-              color={
-                Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
-              }
-              animating={true}
-              size="large"
-            />
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                fontSize: 15,
+              }}
+            >
+              Delivers in 24 hours
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(Routes.BULKBREAKERS_SCREEN)}
+            >
+              <Text
+                style={{
+                  textTransform: "uppercase",
+                  color: appTheme.COLORS.mainRed,
+                  fontSize: 12,
+                  fontFamily: "Gilroy-Bold",
+                }}
+              >
+                {/* View All */}
+              </Text>
+            </TouchableOpacity>
           </View>
-        )}
+
+          {/* distributors */}
+
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <FlatList
+              contentContainerStyle={{ marginTop: 20, marginBottom: 20 }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={topBulkbreakers}
+              // listKey={(item) => item.id.toString()}
+              keyExtractor={(distributor) => distributor?.BB_Code?.toString()}
+              renderItem={({ item }) => (
+                <TopBulkbreaker bulkbreaker={item} customer={customer} />
+              )}
+            />
+          </ScrollView>
+
+          <FlatList
+            ListHeaderComponent={() => {
+              return (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 20,
+                    marginBottom: 20,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Bold",
+                      fontSize: 16,
+                    }}
+                  >
+                    Sellers in your area ({bulkbreakers?.length})
+                  </Text>
+                  <TouchableOpacity onPress={() => toggle()}>
+                    <Text
+                      style={{
+                        textTransform: "uppercase",
+                        color: appTheme.COLORS.mainRed,
+                        fontSize: 12,
+                        fontFamily: "Gilroy-Bold",
+                      }}
+                    >
+                      Sort by
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            data={filteredBulkbreakers}
+            listKey={(item) => item.id.toString()}
+            keyExtractor={(item, id) => id.toString()}
+            renderItem={({ item }) => (
+              <Bulkbreaker bulkbreaker={item} customer={customer} />
+            )}
+          />
+        </View>
       </ScrollView>
 
       <BottomFilter visible={visible} toggle={toggle} />
@@ -209,25 +198,3 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
 });
-
-// import { StyleSheet, Text, View } from "react-native";
-// import React, { useEffect } from "react";
-// import { useDispatch } from "react-redux";
-// import { getBulkbreakers } from "../../../redux/actions/customerActions";
-
-// const index = () => {
-//   const dispatch = useDispatch();
-
-//   useEffect(() => {
-//     dispatch(getBulkbreakers());
-//   }, []);
-//   return (
-//     <View>
-//       <Text>index</Text>
-//     </View>
-//   );
-// };
-
-// export default index;
-
-// const styles = StyleSheet.create({});

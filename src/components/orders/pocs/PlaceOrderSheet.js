@@ -136,8 +136,8 @@ const PlaceOrderSheet = ({
             >
               <Image
                 style={{
-                  width: 35,
-                  height: 35,
+                  width: 26,
+                  height: 26,
                   marginBottom: 10,
                 }}
                 source={icons.statusIcon}
