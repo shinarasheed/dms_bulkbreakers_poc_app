@@ -44,10 +44,13 @@ const SelectBottomSheet = ({ visible, toggle }) => {
 
   const handleNextAction = async () => {
     // save customer in asyncstorage
-    let theAction = action;
-    await AsyncStorage.setItem("action", theAction);
-
-    dispatch(getDistributors());
+    if (action !== null) {
+      let theAction = action;
+      await AsyncStorage.setItem("action", theAction);
+      dispatch(getDistributors());
+    } else {
+      return;
+    }
   };
 
   return (

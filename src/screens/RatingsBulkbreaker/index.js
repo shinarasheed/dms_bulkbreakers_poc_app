@@ -15,7 +15,7 @@ import axios from "axios";
 
 import appTheme from "../../constants/theme";
 import { formatPrice } from "../../utils/formatPrice";
-import RatingProduct from "../../components/orders/RatingProduct";
+import RatingProduct2 from "../../components/orders/RatingProducts2";
 import OrderCompleteSheetBulk from "../../components/orders/OrderCompleteSheetBulk";
 
 import { AirbnbRating } from "react-native-ratings";
@@ -58,19 +58,19 @@ const RatingsBulkbreaker = () => {
     setVisible((visible) => !visible);
   }
 
+  const productDetails = (productId) => {
+    const x = allCompanyProducts?.filter(
+      (product) => product?.productId === productId.toString()
+    )[0];
+    return x;
+  };
+
   const getTotalPrice = () => {
     return item?.orderItems.reduce(
       (accumulator, order) =>
         accumulator + productDetails(order?.productId)?.price * order?.quantity,
       0
     );
-  };
-
-  const productDetails = (productId) => {
-    const x = allCompanyProducts?.filter(
-      (product) => product?.productId === productId.toString()
-    )[0];
-    return x;
   };
 
   const ratingCompleted = (rating) => {
@@ -241,7 +241,7 @@ const RatingsBulkbreaker = () => {
             listKey={(item) => item.id.toString()}
             keyExtractor={(item, id) => id.toString()}
             renderItem={({ item }) => (
-              <RatingProduct item={item} productDetails={productDetails} />
+              <RatingProduct2 item={item} productDetails={productDetails} />
             )}
             ListHeaderComponent={() => (
               <View

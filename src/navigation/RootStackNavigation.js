@@ -27,6 +27,8 @@ import {
   PrivacyPolicy,
   ReturnPolicy,
   RatingsBulkbreaker,
+  Dreams,
+  DreamScreen,
 } from "../screens";
 import { BottomTabs } from "./BottomTabNavigation";
 import appTheme from "../constants/theme";
@@ -97,6 +99,8 @@ export const RootStackNavigation = () => {
       <Stack.Screen name="TermsOfUse" component={TermsOfUse} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="ReturnPolicy" component={ReturnPolicy} />
+      <Stack.Screen name="Dreams" component={Dreams} />
+      <Stack.Screen name="DreamScreen" component={DreamScreen} />
     </Stack.Navigator>
   );
 };

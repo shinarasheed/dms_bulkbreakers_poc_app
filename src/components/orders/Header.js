@@ -33,7 +33,7 @@ export const Header = ({
           alignItems: "center",
         }}
       >
-        <Pressable onPress={() => navigation.navigate(Routes.HOME_SCREEN)}>
+        <Pressable onPress={() => navigation.goBack()}>
           <Image source={icons.backIcon} style={{ marginRight: 18 }} />
         </Pressable>
 

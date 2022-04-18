@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -24,7 +24,8 @@ import { Routes } from "../../navigation/Routes";
 // import { Rating, AirbnbRating } from "react-native-ratings";
 import { AirbnbRating } from "react-native-elements";
 import { updateOrderStatus } from "../../redux/actions/orderActions";
-import { COMPANY_BASE_URL, CUSTOMER_BASE_URL } from "../../confg";
+import { CUSTOMER_BASE_URL } from "../../confg";
+import { fetchAllProductsIntheCompany } from "../../redux/actions/productActions";
 
 const Ratings = () => {
   const navigation = useNavigation();
@@ -55,19 +56,15 @@ const Ratings = () => {
 
   const { allCompanyProducts } = productsState;
 
+  useEffect(() => {
+    dispatch(fetchAllProductsIntheCompany());
+  }, []);
+
   const [visible, setVisible] = useState(false);
 
   function toggle() {
     setVisible((visible) => !visible);
   }
-
-  const getTotalPrice = () => {
-    return item?.orderItems.reduce(
-      (accumulator, order) =>
-        accumulator + productDetails(order?.productId)?.price * order?.quantity,
-      0
-    );
-  };
 
   const productDetails = (productId) => {
     const x = allCompanyProducts?.filter(
@@ -79,8 +76,6 @@ const Ratings = () => {
   const ratingCompleted = (rating) => {
     setRatingValue(rating);
   };
-
-  // console.log(customer);
 
   const rateDistributor = async (data) => {
     const { comment } = data;
@@ -302,9 +297,8 @@ const Ratings = () => {
                       color: appTheme.COLORS.mainBrown,
                     }}
                   >
-                    {isNaN(getTotalPrice())
-                      ? null
-                      : `\u20A6${formatPrice(getTotalPrice())}`}
+                    {item !== undefined &&
+                      `\u20A6${formatPrice(item?.totalPrice)}`}
                   </Text>
                 </View>
               </View>

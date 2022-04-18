@@ -26,7 +26,7 @@ import {
   EDIT_PRODUCT_PRICE_REQUEST,
 } from "../constants/products";
 import { INVENTORY_BASE_URL, PRODUCTS_BASE_URL } from "../../confg";
-import { getMyInventory } from "./customerActions";
+import { getMyInventory, logOut } from "./customerActions";
 
 export const getProducts = (code) => async (dispatch, getState) => {
   try {

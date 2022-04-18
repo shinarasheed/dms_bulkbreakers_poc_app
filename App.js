@@ -18,7 +18,7 @@ import { RootStackNavigation } from "./src/navigation/RootStackNavigation";
 const AppWrapper = () => {
   const customerState = useSelector((state) => state.customer);
 
-  const { token } = customerState;
+  const { token, customer } = customerState;
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const AppWrapper = () => {
       <NavigationContainer theme={theme}>
         <NativeBaseProvider>
           <PersistGate loading={null} persistor={persistor}>
-            {!token ? <AuthStackNavigation /> : <RootStackNavigation />}
+            {token ? <RootStackNavigation /> : <AuthStackNavigation />}
           </PersistGate>
         </NativeBaseProvider>
       </NavigationContainer>

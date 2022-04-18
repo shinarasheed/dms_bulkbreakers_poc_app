@@ -33,7 +33,7 @@ const ContinueScreen = () => {
       };
 
       const body = {
-        sfDigit: authCode,
+        sfDigit: authCode.trim(),
       };
 
       setLoading(true);

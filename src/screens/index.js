@@ -34,6 +34,8 @@ import ReturnPolicy from "./AccountScreen/ReturnPolicy";
 import RatingsBulkbreaker from "./RatingsBulkbreaker";
 import CustomersScreen from "./CustomersScreen";
 import BdrScreen from "./BdrScreen";
+import Dreams from "./AccountScreen/Dreams";
+import DreamScreen from "./AccountScreen/DreamScreen";
 
 export {
   LocationScreen,
@@ -71,4 +73,6 @@ export {
   RatingsBulkbreaker,
   CustomersScreen,
   BdrScreen,
+  Dreams,
+  DreamScreen,
 };

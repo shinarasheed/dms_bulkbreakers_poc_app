@@ -11,8 +11,13 @@ import { Routes } from "../../navigation/Routes";
 
 const AccountScreen = () => {
   const dispatch = useDispatch();
-  const { PRODUCTS_SCREEN, PROFILE_SCREEN, SUPPORT_SCREEN, LEGAL_SCREEN } =
-    Routes;
+  const {
+    PRODUCTS_SCREEN,
+    PROFILE_SCREEN,
+    SUPPORT_SCREEN,
+    LEGAL_SCREEN,
+    DREAMS_SCREEN,
+  } = Routes;
 
   const customerState = useSelector((state) => state.customer);
 
@@ -39,6 +44,15 @@ const AccountScreen = () => {
             description="Manage the products you sell"
             destination={PRODUCTS_SCREEN}
             icon={require("../../../assets/icons/smallprofile.png")}
+          />
+        )}
+
+        {customer?.CUST_Type.toLowerCase() === "bulkbreaker" && (
+          <AccountSection
+            title="I have a dream"
+            description="Get rewarded for selling your drinks"
+            destination={DREAMS_SCREEN}
+            icon={require("../../../assets/icons/dream.png")}
           />
         )}
 

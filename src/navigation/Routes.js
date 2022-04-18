@@ -31,4 +31,6 @@ export const Routes = {
   RETURN_POLICY: "ReturnPolicy",
   RATING_SCREEN_BULKBREAKER: "RatingsBulkbreaker",
   CUSTOMERS_SCREEN: "CustomersScreen",
+  DREAMS_SCREEN: "Dreams",
+  DREAM_SCREEN: "DreamScreen",
 };
