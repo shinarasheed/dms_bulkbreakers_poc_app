@@ -21,6 +21,7 @@ import appTheme from "../../constants/theme";
 import { icons } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { updateInventory } from "../../redux/actions/productActions";
+import { CheckMarkLottie } from "../Loaders/LottieLoader";
 
 const BottomFilter = ({
   visible,
@@ -172,17 +173,10 @@ const BottomFilter = ({
           <View
             style={{
               alignItems: "center",
-              paddingTop: 30,
+              paddingTop: 40,
             }}
           >
-            <Image
-              style={{
-                width: 35,
-                height: 35,
-                marginBottom: 10,
-              }}
-              source={icons.statusIcon}
-            />
+            <CheckMarkLottie />
             <Text
               style={{
                 fontSize: 15,
@@ -190,6 +184,7 @@ const BottomFilter = ({
                 marginBottom: 20,
                 color: appTheme.COLORS.black,
                 textAlign: "center",
+                marginTop: 10,
               }}
             >
               Your Order has been placed successfully

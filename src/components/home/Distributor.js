@@ -53,6 +53,26 @@ export const Distributor = ({ distributor }) => {
   let minPrice = Math.min(...pricesArray);
   let maxPrice = Math.max(...pricesArray);
 
+  const showRating = (rating) => {
+    switch (rating) {
+      case 5:
+        return <Image source={icons.excellentRating} />;
+
+      case 4:
+        return <Image source={icons.goodRating} />;
+
+      case 3:
+        return <Image source={icons.averageRating} />;
+      case 2:
+        return <Image source={icons.poorRating} />;
+
+      case 1:
+        return <Image source={icons.veryPoorRating} />;
+      default:
+        return <Image source={icons.excellentRating} />;
+    }
+  };
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -85,28 +105,35 @@ export const Distributor = ({ distributor }) => {
           }}
         >
           <View>
-            {distributor?.ratings && (
+            {distributor?.stars && (
               <View
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
                   marginRight: 15,
+                  marginVertical: 5,
                 }}
               >
-                <StarRating number={distributor?.stars?.toFixed(1)} />
+                <Text
+                  style={{
+                    marginRight: 3,
+                    color: appTheme.COLORS.mainTextGray,
+                    fontFamily: "Gilroy-Light",
+                  }}
+                >
+                  {distributor?.stars.toFixed(1)}
+                </Text>
+                {showRating(distributor?.rating)}
 
-                {distributor?.rating && (
-                  <Text
-                    style={{
-                      marginRight: 3,
-                      marginLeft: 15,
-                      color: appTheme.COLORS.mainTextGray,
-                      fontFamily: "Gilroy-Light",
-                    }}
-                  >
-                    ({distributor?.rating})
-                  </Text>
-                )}
+                <Text
+                  style={{
+                    marginRight: 3,
+                    color: appTheme.COLORS.mainTextGray,
+                    fontFamily: "Gilroy-Light",
+                  }}
+                >
+                  ({`${distributor?.ratings} Orders`})
+                </Text>
               </View>
             )}
 

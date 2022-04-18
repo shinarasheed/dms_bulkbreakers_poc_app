@@ -27,6 +27,7 @@ import { Header } from "../Header";
 import { icons } from "../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logOut } from "../../../redux/actions/customerActions";
+import { LottieLoader, LottieLoader2 } from "../../Loaders/LottieLoader";
 
 const Distributors = () => {
   const navigation = useNavigation();
@@ -37,7 +38,8 @@ const Distributors = () => {
 
   const customerState = useSelector((state) => state.customer);
 
-  const { distributors, myInventory, sellersNotNear, customer } = customerState;
+  const { distributors, myInventory, sellersNotNear, customer, isLoading } =
+    customerState;
 
   const topDistributors = distributors?.slice(0, 5);
 
@@ -80,6 +82,7 @@ const Distributors = () => {
     dispatch(getDistributors());
   }, []);
 
+  if (isLoading) return <LottieLoader2 />;
   return (
     <View
       style={{
@@ -172,121 +175,103 @@ const Distributors = () => {
           </TouchableOpacity>
         )}
 
-        {distributors?.length > 0 ? (
+        <View
+          style={{
+            paddingHorizontal: 15,
+            marginTop: 20,
+          }}
+        >
           <View
             style={{
-              paddingHorizontal: 15,
-              marginTop: 20,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  fontSize: 15,
-                }}
-              >
-                Delivers in 24 hours
-              </Text>
-              <TouchableOpacity
-                onPress={() => navigation.navigate(Routes.DISTRIBUTORS_SCREEN)}
-              >
-                <Text
-                  style={{
-                    textTransform: "uppercase",
-                    color: appTheme.COLORS.mainRed,
-                    fontSize: 12,
-                    fontFamily: "Gilroy-Bold",
-                  }}
-                >
-                  {/* View All */}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* distributors */}
-
-            <ScrollView showsHorizontalScrollIndicator={false}>
-              <FlatList
-                contentContainerStyle={{ marginTop: 20, marginBottom: 20 }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={topDistributors}
-                listKey={(item) => item.id.toString()}
-                keyExtractor={(distributor) => distributor.id.toString()}
-                renderItem={({ item }) => (
-                  <TopDistributor distributor={item} customer={customer} />
-                )}
-              />
-            </ScrollView>
-
-            <FlatList
-              ListHeaderComponent={() => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: 20,
-                      marginBottom: 20,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Gilroy-Bold",
-                        fontSize: 16,
-                      }}
-                    >
-                      Sellers in your area ({distributors?.length})
-                    </Text>
-                    <TouchableOpacity onPress={() => toggle()}>
-                      <Text
-                        style={{
-                          textTransform: "uppercase",
-                          color: appTheme.COLORS.mainRed,
-                          fontSize: 12,
-                          fontFamily: "Gilroy-Bold",
-                        }}
-                      >
-                        Sort by
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              data={filteredDistributors}
-              listKey={(item) => item.id.toString()}
-              keyExtractor={(item, id) => id.toString()}
-              renderItem={({ item }) => (
-                <Distributor distributor={item} customer={customer} />
-              )}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
+              flexDirection: "row",
+              justifyContent: "space-between",
               alignItems: "center",
             }}
           >
-            <ActivityIndicator
-              color={
-                Platform.OS === "android" ? appTheme.COLORS.mainRed : undefined
-              }
-              animating={true}
-              size="large"
-            />
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                fontSize: 15,
+              }}
+            >
+              Delivers in 24 hours
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(Routes.DISTRIBUTORS_SCREEN)}
+            >
+              <Text
+                style={{
+                  textTransform: "uppercase",
+                  color: appTheme.COLORS.mainRed,
+                  fontSize: 12,
+                  fontFamily: "Gilroy-Bold",
+                }}
+              >
+                {/* View All */}
+              </Text>
+            </TouchableOpacity>
           </View>
-        )}
+
+          {/* distributors */}
+
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <FlatList
+              contentContainerStyle={{ marginTop: 20, marginBottom: 20 }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={topDistributors}
+              listKey={(item) => item.id.toString()}
+              keyExtractor={(distributor) => distributor.id.toString()}
+              renderItem={({ item }) => (
+                <TopDistributor distributor={item} customer={customer} />
+              )}
+            />
+          </ScrollView>
+
+          <FlatList
+            ListHeaderComponent={() => {
+              return (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 20,
+                    marginBottom: 20,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Bold",
+                      fontSize: 16,
+                    }}
+                  >
+                    Sellers in your area ({distributors?.length})
+                  </Text>
+                  <TouchableOpacity onPress={() => toggle()}>
+                    <Text
+                      style={{
+                        textTransform: "uppercase",
+                        color: appTheme.COLORS.mainRed,
+                        fontSize: 12,
+                        fontFamily: "Gilroy-Bold",
+                      }}
+                    >
+                      Sort by
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            data={filteredDistributors}
+            listKey={(item) => item.id.toString()}
+            keyExtractor={(item, id) => id.toString()}
+            renderItem={({ item }) => (
+              <Distributor distributor={item} customer={customer} />
+            )}
+          />
+        </View>
       </ScrollView>
 
       <BottomFilter visible={visible} toggle={toggle} />

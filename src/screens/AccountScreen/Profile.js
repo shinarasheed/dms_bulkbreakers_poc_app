@@ -497,7 +497,7 @@ const Profile = () => {
                     fontSize: 15,
                   }}
                 >
-                  ({`${rating?.raters} Orders`})
+                  ({`${rating?.ratings} Orders`})
                 </Text>
               </View>
 
@@ -530,7 +530,7 @@ const Profile = () => {
                     marginBottom: 15,
                   }}
                 >
-                  <Image source={icons.excellentRating} />
+                  <Image source={icons.goodRating} />
                   <Text
                     style={{
                       fontFamily: "Gilroy-Medium",
