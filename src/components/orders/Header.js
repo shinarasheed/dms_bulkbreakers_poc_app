@@ -14,6 +14,7 @@ export const Header = ({
   isOpen,
   setIsOpen,
   singleOrder,
+  uppercase,
 }) => {
   const navigation = useNavigation();
   return (
@@ -42,6 +43,7 @@ export const Header = ({
             fontSize: 16,
             color: appTheme.COLORS.white,
             fontFamily: "Gilroy-Bold",
+            textTransform: uppercase ? "uppercase" : "capitalize",
           }}
         >
           {single ? `ORDER ${orderId}` : `${title}`}

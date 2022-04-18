@@ -26,7 +26,7 @@ const DreamScreen = () => {
         flex: 1,
       }}
     >
-      <Header title={`${dream?.name} dream`} />
+      <Header uppercase title={`${dream?.name} dream`} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -171,7 +171,7 @@ const DreamScreen = () => {
               fontFamily: "Gilroy-Medium",
             }}
           >
-            Promo Terms & Conditions{" "}
+            Promo Terms & Conditions
           </Text>
         </Pressable>
       </View>
