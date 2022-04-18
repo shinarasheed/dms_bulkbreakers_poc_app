@@ -21,6 +21,7 @@ import { LottieLoader } from "../../components/Loaders/LottieLoader";
 const Profile = () => {
   const [updating, setUpdating] = useState(false);
   const [theCustomer, setTheCustomer] = useState(null);
+  const [rating, setRating] = useState(null);
   const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -32,30 +33,32 @@ const Profile = () => {
 
   const { customer } = customerState;
 
-  const getCustomerDetails = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      setLoading(true);
-
-      const {
-        data: { result },
-      } = await axios.get(`${CUSTOMER_BASE_URL}/customer/${customer?.id}`);
-      setTheCustomer(result);
-      setPhoneNumber(result?.phoneNumber);
-      setWhatsApNumber(result?.phoneNumber);
-      setEmail(result?.email);
-      setLoading(false);
-    } catch (error) {
-      setError("please provide a valid phone number");
-    }
-  };
-
   useEffect(() => {
+    const getCustomerDetails = async () => {
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        setLoading(true);
+
+        const {
+          data: { result },
+        } = await axios.get(
+          `${CUSTOMER_BASE_URL}/customer/${customer?.id}`,
+          config
+        );
+        setTheCustomer(result);
+        setPhoneNumber(result?.phoneNumber);
+        setWhatsApNumber(result?.phoneNumber);
+        setEmail(result?.email);
+        setLoading(false);
+      } catch (error) {
+        setError("please provide a valid phone number");
+      }
+    };
     getCustomerDetails();
   }, []);
 
@@ -88,6 +91,36 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    const getCustomerRating = async () => {
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const payload = {
+          country: customer?.country,
+          outletCode: customer?.BB_Code,
+        };
+
+        const {
+          data: { result },
+        } = await axios.post(
+          `${CUSTOMER_BASE_URL}/customer/getcustomer-rating
+          `,
+          payload,
+          config
+        );
+
+        setRating(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCustomerRating();
+  }, []);
   const discardChanges = () => {
     setPhoneNumber(theCustomer?.phoneNumber);
     setWhatsApNumber(theCustomer?.phoneNumber);
@@ -97,6 +130,26 @@ const Profile = () => {
   const handleOnchange = (value) => {
     setEditing(true);
     setPhoneNumber(value);
+  };
+
+  const showRating = (rating) => {
+    switch (rating) {
+      case 5:
+        return <Image source={icons.excellentRating} />;
+
+      case 4:
+        return <Image source={icons.goodRating} />;
+
+      case 3:
+        return <Image source={icons.averageRating} />;
+      case 2:
+        return <Image source={icons.poorRating} />;
+
+      case 1:
+        return <Image source={icons.veryPoorRating} />;
+      default:
+        return <Image source={icons.excellentRating} />;
+    }
   };
 
   if (loading)
@@ -122,6 +175,7 @@ const Profile = () => {
         showsVerticalScrollIndicator={false}
         style={{
           backgroundColor: appTheme.COLORS.mainBackground,
+          flex: 1,
         }}
       >
         <View
@@ -396,237 +450,234 @@ const Profile = () => {
             </View>
           </View>
 
-          {/* poc should not see rating */}
-
           {/* rating */}
-          {/* 
-        <View
-          style={{
-            marginTop: 40,
-            backgroundColor: appTheme.COLORS.white,
-            paddingVertical: 20,
-          }}
-        >
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 18,
-              fontFamily: "Gilroy-Medium",
-              marginBottom: 10,
-            }}
-          >
-            Your current rating
-          </Text>
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 10,
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                fontSize: 17,
-                marginRight: 10,
-              }}
-            >
-              4.9
-            </Text>
-            <Image source={icons.rating} />
-            <Text
-              style={{
-                marginLeft: 10,
-                fontFamily: "Gilroy-Medium",
-                fontSize: 15,
-              }}
-            >
-              (109 Orders)
-            </Text>
-          </View>
-
-          <View>
+          {customer?.CUST_Type === "Bulkbreaker" && (
             <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 15,
-              }}
-            >
-              <Image source={icons.excellentRating} />
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  textTransform: "capitalize",
-                  marginLeft: 10,
-                }}
-              >
-                excellent
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 15,
-              }}
-            >
-              <Image source={icons.excellentRating} />
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  textTransform: "capitalize",
-                  marginLeft: 10,
-                }}
-              >
-                good
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 15,
-              }}
-            >
-              <Image source={icons.excellentRating} />
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  textTransform: "capitalize",
-                  marginLeft: 10,
-                }}
-              >
-                average
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 15,
-              }}
-            >
-              <Image source={icons.excellentRating} />
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  textTransform: "capitalize",
-                  marginLeft: 10,
-                }}
-              >
-                poor
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 10,
-              }}
-            >
-              <Image source={icons.excellentRating} />
-              <Text
-                style={{
-                  fontFamily: "Gilroy-Medium",
-                  textTransform: "capitalize",
-                  marginLeft: 10,
-                }}
-              >
-                very poor
-              </Text>
-            </View>
-          </View>
-        </View> */}
-        </View>
-
-        {editing && (
-          <View
-            style={{
-              backgroundColor: appTheme.COLORS.white,
-              paddingHorizontal: 20,
-              justifyContent: "center",
-              marginTop: 20,
-              paddingVertical: 20,
-              elevation: 20,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => updatePhoneNumber()}
-              style={{
-                backgroundColor: appTheme.COLORS.mainRed,
-                width: "100%",
-                height: 50,
-                justifyContent: "center",
-                borderRadius: 5,
-                marginTop: 10,
-                alignItems: "center",
-                justifyContent: "center",
-                elevation: 50,
-              }}
-            >
-              {updating ? (
-                <ActivityIndicator
-                  color={
-                    Platform.OS === "android"
-                      ? appTheme.COLORS.white
-                      : undefined
-                  }
-                  animating={updating}
-                  size="large"
-                />
-              ) : (
-                <Text
-                  style={{
-                    color: appTheme.COLORS.white,
-                    fontSize: 16,
-                    fontFamily: "Gilroy-Bold",
-                  }}
-                >
-                  Save Changes
-                </Text>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => discardChanges()}
               style={{
                 backgroundColor: appTheme.COLORS.white,
-                width: "100%",
-                height: 50,
-                justifyContent: "center",
-                borderRadius: 5,
-                marginTop: 10,
-                alignItems: "center",
-                justifyContent: "center",
-                elevation: 50,
+                paddingVertical: 20,
+                marginVertical: 30,
               }}
             >
               <Text
                 style={{
-                  color: appTheme.COLORS.black,
+                  textAlign: "center",
+                  fontSize: 18,
+                  fontFamily: "Gilroy-Medium",
+                  marginBottom: 10,
+                }}
+              >
+                Your current rating
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 10,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 17,
+                    marginRight: 10,
+                  }}
+                >
+                  {rating?.stars.toFixed(1)}
+                </Text>
+                {showRating(rating?.stars)}
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontFamily: "Gilroy-Medium",
+                    fontSize: 15,
+                  }}
+                >
+                  ({`${rating?.raters} Orders`})
+                </Text>
+              </View>
+
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 15,
+                  }}
+                >
+                  <Image source={icons.excellentRating} />
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Medium",
+                      textTransform: "capitalize",
+                      marginLeft: 10,
+                    }}
+                  >
+                    excellent
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 15,
+                  }}
+                >
+                  <Image source={icons.excellentRating} />
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Medium",
+                      textTransform: "capitalize",
+                      marginLeft: 10,
+                    }}
+                  >
+                    good
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 15,
+                  }}
+                >
+                  <Image source={icons.averageRating} />
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Medium",
+                      textTransform: "capitalize",
+                      marginLeft: 10,
+                    }}
+                  >
+                    average
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 15,
+                  }}
+                >
+                  <Image source={icons.poorRating} />
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Medium",
+                      textTransform: "capitalize",
+                      marginLeft: 10,
+                    }}
+                  >
+                    poor
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 10,
+                  }}
+                >
+                  <Image source={icons.veryPoorRating} />
+                  <Text
+                    style={{
+                      fontFamily: "Gilroy-Medium",
+                      textTransform: "capitalize",
+                      marginLeft: 10,
+                    }}
+                  >
+                    very poor
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+
+      {editing && (
+        <View
+          style={{
+            backgroundColor: appTheme.COLORS.white,
+            paddingHorizontal: 20,
+            justifyContent: "center",
+            paddingVertical: 20,
+            elevation: 20,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => updatePhoneNumber()}
+            style={{
+              backgroundColor: appTheme.COLORS.mainRed,
+              width: "100%",
+              height: 50,
+              justifyContent: "center",
+              borderRadius: 5,
+              marginTop: 10,
+              alignItems: "center",
+              justifyContent: "center",
+              elevation: 50,
+            }}
+          >
+            {updating ? (
+              <ActivityIndicator
+                color={
+                  Platform.OS === "android" ? appTheme.COLORS.white : undefined
+                }
+                animating={updating}
+                size="large"
+              />
+            ) : (
+              <Text
+                style={{
+                  color: appTheme.COLORS.white,
                   fontSize: 16,
                   fontFamily: "Gilroy-Bold",
                 }}
               >
-                Discard Changes
+                Save Changes
               </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => discardChanges()}
+            style={{
+              backgroundColor: appTheme.COLORS.white,
+              width: "100%",
+              height: 50,
+              justifyContent: "center",
+              borderRadius: 5,
+              marginTop: 10,
+              alignItems: "center",
+              justifyContent: "center",
+              elevation: 50,
+            }}
+          >
+            <Text
+              style={{
+                color: appTheme.COLORS.black,
+                fontSize: 16,
+                fontFamily: "Gilroy-Bold",
+              }}
+            >
+              Discard Changes
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

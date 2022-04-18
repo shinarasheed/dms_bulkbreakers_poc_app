@@ -42,9 +42,10 @@ const InfoIcon = require("../../assets/icons/InfoIcon.png");
 const rejectedIcon = require("../../assets/icons/Rejected.png");
 const excellentRating = require("../../assets/icons/excellentRating.png");
 const goodRating = require("../../assets/icons/goodStar.png");
-const veryPoorRating = require("../../assets/icons/verypoorRating.png");
+const veryPoorRating = require("../../assets/icons/veryPoorRating.png");
 const poorRating = require("../../assets/icons/poorRating.png");
 const veryGoodRating = require("../../assets/icons/excellentRating.png");
+const averageRating = require("../../assets/icons/averageRating.png");
 const rating = require("../../assets/icons/rating.png");
 const homeColored = require("../../assets/icons/HomeColored.png");
 const RestaurantColored = require("../../assets/icons/RestaurantColored.png");
@@ -99,6 +100,7 @@ export default {
   goodRating,
   poorRating,
   veryPoorRating,
+  averageRating,
   rating,
   homeColored,
   RestaurantColored,
