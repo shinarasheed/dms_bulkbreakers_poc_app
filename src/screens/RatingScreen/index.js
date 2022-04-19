@@ -49,8 +49,6 @@ const Ratings = () => {
 
   const { productsToOder, theDistributor, item } = route.params;
 
-  // console.log(productsToOder);
-
   const { orderId } = item;
 
   const productsState = useSelector((state) => state.product);
@@ -150,8 +148,6 @@ const Ratings = () => {
         setLoading(false);
         return;
       }
-
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -171,8 +167,16 @@ const Ratings = () => {
         flex: 1,
       }}
     >
-      <View showsVerticalScrollIndicator={false}>
-        <View>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
           <View
             style={{
               justifyContent: "center",

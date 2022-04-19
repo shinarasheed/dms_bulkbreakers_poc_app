@@ -1,13 +1,28 @@
 import React from "react";
 import { Image, TouchableOpacity, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 
 import appTheme from "../../../constants/theme";
 import { formatPrice } from "../../../utils/formatPrice";
 import { icons } from "../../../constants";
 
 const Product = ({ item, productDetails, reorder }) => {
-  const { brand, imageUrl, price, productId, sku, quantity, buyingQuantity } =
-    item;
+  const {
+    brand,
+    imageUrl,
+    price,
+    productId,
+    pocPrice,
+    sku,
+    quantity,
+    buyingQuantity,
+  } = item;
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
+
+  const { CUST_Type } = customer;
 
   return (
     <View
@@ -84,38 +99,60 @@ const Product = ({ item, productDetails, reorder }) => {
             justifyContent: "space-between",
           }}
         >
-          <Text
-            style={{
-              fontFamily: "Gilroy-Medium",
-              color: appTheme.COLORS.black,
-            }}
-          >
-            {"\u20A6"}
-            {buyingQuantity
-              ? formatPrice(price)
-              : formatPrice(price / quantity)}{" "}
-            {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
-          </Text>
+          {CUST_Type === "POC" ? (
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                color: appTheme.COLORS.black,
+              }}
+            >
+              {"\u20A6"}
+              {buyingQuantity
+                ? formatPrice(pocPrice)
+                : formatPrice(price / quantity)}{" "}
+              {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontFamily: "Gilroy-Medium",
+                color: appTheme.COLORS.black,
+              }}
+            >
+              {"\u20A6"}
+              {buyingQuantity
+                ? formatPrice(price)
+                : formatPrice(price / quantity)}{" "}
+              {buyingQuantity ? `x ${buyingQuantity}` : `x ${quantity}`}
+            </Text>
+          )}
+          {CUST_Type === "POC" ? (
+            <Text
+              style={{
+                color: appTheme.COLORS.mainRed,
+                fontFamily: "Gilroy-Bold",
+              }}
+            >
+              {"\u20A6"}
 
-          <Text
-            style={{
-              fontFamily: "Gilroy-Medium",
-              color: appTheme.COLORS.black,
-            }}
-          ></Text>
+              {buyingQuantity
+                ? formatPrice(buyingQuantity * pocPrice)
+                : formatPrice((quantity * price) / quantity)}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                color: appTheme.COLORS.mainRed,
+                fontFamily: "Gilroy-Bold",
+              }}
+            >
+              {"\u20A6"}
 
-          <Text
-            style={{
-              color: appTheme.COLORS.mainRed,
-              fontFamily: "Gilroy-Bold",
-            }}
-          >
-            {"\u20A6"}
-
-            {buyingQuantity
-              ? formatPrice(buyingQuantity * price)
-              : formatPrice((quantity * price) / quantity)}
-          </Text>
+              {buyingQuantity
+                ? formatPrice(buyingQuantity * price)
+                : formatPrice((quantity * price) / quantity)}
+            </Text>
+          )}
         </View>
       </View>
     </View>

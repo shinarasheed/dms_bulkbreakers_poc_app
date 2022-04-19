@@ -175,9 +175,7 @@ export const fetchAllProductsIntheCompany = () => async (dispatch) => {
 
     const {
       data: { data },
-    } = await axios.get(
-      `${PRODUCTS_BASE_URL}/products?limit=12&page=5&country=nigeria`
-    );
+    } = await axios.get(`${PRODUCTS_BASE_URL}/products?country=nigeria`);
 
     dispatch({
       type: GET_ALL_COMPANY_PRODUCTS_SUCCESS,

@@ -27,6 +27,8 @@ const ProductsFooter = ({ distributor }) => {
 
   const { customer } = customerState;
 
+  const { CUST_Type } = customer;
+
   const { products, productsToOder } = productsState;
 
   const createOrderState = useSelector((state) => state.createOrder);
@@ -34,7 +36,10 @@ const ProductsFooter = ({ distributor }) => {
   const { orderPlaced, placedOrder, loading } = createOrderState;
 
   const orderItems = productsToOder?.map((item) => ({
-    price: item?.price * item?.buyingQuantity,
+    price:
+      CUST_Type === "POC"
+        ? item?.pocPrice * item?.buyingQuantity
+        : item?.price * item?.buyingQuantity,
     quantity: item?.buyingQuantity,
     productId: parseInt(item.productId),
     SFlineID: "shopNow",
@@ -61,7 +66,10 @@ const ProductsFooter = ({ distributor }) => {
   };
 
   const totalAmount = products?.reduce(
-    (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
+    (accumulator, item) =>
+      CUST_Type === "POC"
+        ? accumulator + item?.pocPrice * item?.buyingQuantity
+        : accumulator + item?.price * item?.buyingQuantity,
     0
   );
 

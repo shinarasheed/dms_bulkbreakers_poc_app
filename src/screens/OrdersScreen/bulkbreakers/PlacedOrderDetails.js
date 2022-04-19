@@ -41,10 +41,19 @@ const PlacedOrderDetails = () => {
 
   const { productsToOder, theDistributor, item } = route.params;
 
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
+
+  const { CUST_Type } = customer;
+
   const { orderId } = item;
 
   const totalAmount = productsToOder?.reduce(
-    (accumulator, item) => accumulator + item?.price * item?.buyingQuantity,
+    (accumulator, item) =>
+      CUST_Type === "POC"
+        ? accumulator + item?.pocPrice * item?.buyingQuantity
+        : accumulator + item?.price * item?.buyingQuantity,
     0
   );
 
@@ -326,9 +335,9 @@ const PlacedOrderDetails = () => {
                     color: appTheme.COLORS.mainBrown,
                   }}
                 >
-                  {isNaN(getTotalPrice())
-                    ? null
-                    : `\u20A6${formatPrice(getTotalPrice())}`}
+                  {item.totalPrice
+                    ? `\u20A6${formatPrice(item?.totalPrice)}`
+                    : `\u20A6${formatPrice(totalAmount)}`}
                 </Text>
               </View>
             </View>

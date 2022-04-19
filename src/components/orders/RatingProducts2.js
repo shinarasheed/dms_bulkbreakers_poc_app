@@ -19,6 +19,7 @@ const Product = ({ item, productDetails }) => {
     sku,
     quantity,
     buyingQuantity,
+    pocPrice,
   } = item;
 
   return (
@@ -90,8 +91,10 @@ const Product = ({ item, productDetails }) => {
             }}
           >
             {"\u20A6"}
-            {productId !== undefined && formatPrice(price / quantity)} X{" "}
-            {quantity}
+            {pocPrice
+              ? formatPrice(pocPrice)
+              : formatPrice(price / quantity)} X{" "}
+            {buyingQuantity ? buyingQuantity : quantity}
           </Text>
 
           <Text
@@ -102,8 +105,9 @@ const Product = ({ item, productDetails }) => {
             }}
           >
             {"\u20A6"}
-            {productId !== undefined &&
-              formatPrice((price / quantity) * quantity)}
+            {pocPrice
+              ? formatPrice(pocPrice * buyingQuantity)
+              : formatPrice((price / quantity) * quantity)}
           </Text>
         </View>
       </View>

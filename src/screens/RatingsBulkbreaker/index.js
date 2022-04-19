@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView } from "react-native-virtualized-view";
+// import { ScrollView } from "react-native-virtualized-view";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 
@@ -19,8 +20,8 @@ import RatingProduct2 from "../../components/orders/RatingProducts2";
 import OrderCompleteSheetBulk from "../../components/orders/OrderCompleteSheetBulk";
 
 import { AirbnbRating } from "react-native-ratings";
-import { updateOrderStatus } from "../../redux/actions/orderActions";
-import { COMPANY_BASE_URL } from "../../confg";
+// import { updateOrderStatus } from "../../redux/actions/orderActions";
+import { COMPANY_BASE_URL, ORDER_BASE_URL } from "../../confg";
 
 const RatingsBulkbreaker = () => {
   const navigation = useNavigation();
@@ -35,7 +36,8 @@ const RatingsBulkbreaker = () => {
   });
 
   const [ratingValue, setRatingValue] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const dispatch = useDispatch();
   const route = useRoute();
@@ -73,8 +75,52 @@ const RatingsBulkbreaker = () => {
     );
   };
 
+  const { CUST_Type } = customer;
+
+  const totalAmount = productsToOder?.reduce(
+    (accumulator, item) =>
+      CUST_Type === "POC"
+        ? accumulator + item?.pocPrice * item?.buyingQuantity
+        : accumulator + item?.price * item?.buyingQuantity,
+    0
+  );
+
   const ratingCompleted = (rating) => {
     setRatingValue(rating);
+  };
+
+  const updateOrderStatus = async (status) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        status,
+      };
+
+      setUpdating(true);
+
+      const { data } = await axios.patch(
+        `${ORDER_BASE_URL}/UpdateOrder/UpdateStatus/${orderId}`,
+        body,
+        config
+      );
+
+      const { isSuccess } = data;
+
+      if (isSuccess) {
+        setUpdating(false);
+        toggle();
+      } else {
+        setUpdating(false);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const rateDistributor = async (data) => {
@@ -85,6 +131,8 @@ const RatingsBulkbreaker = () => {
           "Content-Type": "application/json",
         },
       };
+
+      setLoading(true);
 
       const body = {
         stars: ratingValue,
@@ -98,9 +146,15 @@ const RatingsBulkbreaker = () => {
         config
       );
 
-      setSuccess(data.success);
-      dispatch(updateOrderStatus("Delivered", orderId));
-      toggle();
+      const { success } = data;
+
+      if (success) {
+        setLoading(false);
+        updateOrderStatus("Delivered");
+      } else {
+        setLoading(false);
+        return;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -113,8 +167,16 @@ const RatingsBulkbreaker = () => {
         flex: 1,
       }}
     >
-      <View showsVerticalScrollIndicator={false}>
-        <View>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
           <View
             style={{
               justifyContent: "center",
@@ -138,7 +200,7 @@ const RatingsBulkbreaker = () => {
                 fontSize: 17,
               }}
             >
-              With {theDistributor?.company_name}
+              With {theDistributor?.companyName}
             </Text>
           </View>
 
@@ -218,15 +280,27 @@ const RatingsBulkbreaker = () => {
                 justifyContent: "center",
               }}
             >
-              <Text
-                style={{
-                  color: appTheme.COLORS.white,
-                  fontSize: 16,
-                  fontFamily: "Gilroy-Bold",
-                }}
-              >
-                Submit
-              </Text>
+              {loading ? (
+                <ActivityIndicator
+                  color={
+                    Platform.OS === "android"
+                      ? appTheme.COLORS.white
+                      : undefined
+                  }
+                  animating={loading}
+                  size="small"
+                />
+              ) : (
+                <Text
+                  style={{
+                    color: appTheme.COLORS.white,
+                    fontSize: 16,
+                    fontFamily: "Gilroy-Bold",
+                  }}
+                >
+                  Submit
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -296,9 +370,9 @@ const RatingsBulkbreaker = () => {
                       color: appTheme.COLORS.mainBrown,
                     }}
                   >
-                    {isNaN(getTotalPrice())
-                      ? null
-                      : `\u20A6${formatPrice(getTotalPrice())}`}
+                    {item.totalPrice
+                      ? `\u20A6${formatPrice(item?.totalPrice)}`
+                      : `\u20A6${formatPrice(totalAmount)}`}
                   </Text>
                 </View>
               </View>

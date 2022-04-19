@@ -115,19 +115,6 @@ const ProductCard = ({ theProduct }) => {
           </View>
         </View>
 
-        {/* <View>
-          <Text
-            style={{
-              fontFamily: "Gilroy-Medium",
-              fontSize: 13,
-              color: appTheme.COLORS.mainTextGray,
-            }}
-          >
-            {formatPrice(quantity)}{" "}
-            {quantity > 1 ? `quantities left` : `quantity left`}
-          </Text>
-        </View> */}
-
         <View
           style={{
             flexDirection: "row",
