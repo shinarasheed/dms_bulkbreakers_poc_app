@@ -130,7 +130,7 @@ export const Bulkbreaker = ({ bulkbreaker }) => {
                     fontFamily: "Gilroy-Light",
                   }}
                 >
-                  ({`${bulkbreaker?.ratings} Orders`})
+                  ({`${bulkbreaker?.raters} Orders`})
                 </Text>
               </View>
             )}

@@ -8,7 +8,6 @@ const MessageModal = ({ showModal, message }) => {
     <View
       style={{
         flex: 1,
-        // backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center",
       }}

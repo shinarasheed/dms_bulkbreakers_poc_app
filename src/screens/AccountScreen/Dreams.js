@@ -109,6 +109,31 @@ const Dreams = () => {
 
               <View
                 style={{
+                  backgroundColor: appTheme.COLORS.black,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderRadius: 5,
+                  // width: 120,
+                  position: "absolute",
+
+                  top: 135,
+                  left: 31,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Gilroy-Medium",
+                    color: appTheme.COLORS.white,
+                    textAlign: "center",
+                  }}
+                >
+                  win a {dream.name}
+                </Text>
+              </View>
+
+              <View
+                style={{
                   position: "absolute",
                   left: 0,
                   paddingLeft: 30,
@@ -148,25 +173,6 @@ const Dreams = () => {
                     }}
                   >
                     Sell {formatPrice(dream.points)} cases of drink
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    backgroundColor: appTheme.COLORS.black,
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    borderRadius: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontFamily: "Gilroy-Medium",
-                      color: appTheme.COLORS.white,
-                    }}
-                  >
-                    win a {dream.name}
                   </Text>
                 </View>
               </View>

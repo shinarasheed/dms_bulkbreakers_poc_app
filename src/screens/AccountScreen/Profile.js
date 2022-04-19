@@ -485,7 +485,7 @@ const Profile = () => {
                     fontSize: 15,
                   }}
                 >
-                  ({`${rating?.ratings} Orders`})
+                  ({`${rating?.raters} Orders`})
                 </Text>
               </View>
 

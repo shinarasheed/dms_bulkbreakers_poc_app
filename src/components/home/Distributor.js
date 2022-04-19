@@ -113,7 +113,7 @@ export const Distributor = ({ distributor }) => {
                     fontFamily: "Gilroy-Light",
                   }}
                 >
-                  ({`${distributor?.ratings} Orders`})
+                  ({`${distributor?.raters} Orders`})
                 </Text>
               </View>
             )}
