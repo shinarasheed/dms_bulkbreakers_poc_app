@@ -1,55 +1,142 @@
 import {
   ImageBackground,
-  Image,
   Text,
   TouchableOpacity,
   View,
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import appTheme from "../../constants/theme";
 import { Header } from "../../components/orders/Header";
 import { formatPrice } from "../../utils/formatPrice";
 import { Routes } from "../../navigation/Routes";
+import { CUSTOMER_BASE_URL } from "../../confg";
 
 const Dreams = () => {
   const navigation = useNavigation();
   const [dream, setDream] = useState(null);
+  const [myDream, setMyDream] = useState(null);
+  const [selectedDream, setSelectedDream] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const customerState = useSelector((state) => state.customer);
+
+  const { customer } = customerState;
+
+  useEffect(() => {
+    const getMyDream = async () => {
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const payload = {
+          BB_Code: customer?.BB_Code,
+          country: customer?.country,
+        };
+
+        const { data } = await axios.post(
+          `${CUSTOMER_BASE_URL}/mydream/getdream`,
+          payload,
+          config
+        );
+
+        const { results } = data;
+
+        setMyDream(results[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getMyDream();
+  }, []);
+
+  const createADream = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = {
+        BB_Code: customer?.BB_Code,
+        dreamName: selectedDream?.name,
+        dreamPoint: selectedDream?.points,
+        dreamDuration: selectedDream?.duration,
+        country: customer?.country,
+      };
+
+      setLoading(true);
+
+      console.log(body);
+
+      const { data } = await axios.post(
+        `${CUSTOMER_BASE_URL}/mydream/create-dream`,
+        body,
+        config
+      );
+
+      setLoading(false);
+
+      const { success, results } = data;
+      if (success) {
+        navigation.navigate(Routes.DREAM_SCREEN, { dream });
+      } else {
+        return;
+      }
+
+      console.log(data, "dream");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const dreams = [
     {
       id: 1,
       name: "keke",
       points: 1000,
+      duration: 60,
       img: require("../../../assets/images/kekedream.png"),
     },
     {
       id: 2,
       name: "chiller",
       points: 400,
+      duration: 60,
       img: require("../../../assets/images/chillerdream.png"),
     },
     {
       id: 3,
       name: "smartphone",
       points: 400,
+      duration: 60,
       img: require("../../../assets/images/phonedream.png"),
     },
     {
       id: 4,
       name: "trolley",
       points: 400,
+      duration: 60,
       img: require("../../../assets/images/trollydream.png"),
     },
     {
       id: 5,
       name: "airtime",
       points: 400,
+      duration: 60,
       img: require("../../../assets/images/airtimedream.png"),
     },
   ];
+
   return (
     <View
       style={{
@@ -92,9 +179,12 @@ const Dreams = () => {
         <View>
           {dreams.map((dream) => (
             <Pressable
-              onPress={() =>
-                navigation.navigate(Routes.DREAM_SCREEN, { dream })
-              }
+              disabled={myDream?.dream_name !== dream?.name}
+              onPress={() => {
+                // setSelectedDream(dream);
+                // createADream();
+                navigation.navigate(Routes.DREAM_SCREEN, { dream });
+              }}
               key={dream.id}
               style={{
                 marginVertical: 15,
