@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar, Image, Text, View, Pressable } from "react-native";
+import moment from "moment";
 
 import appTheme from "../../constants/theme";
 import { icons, images } from "../../constants";
-import { Routes } from "../../navigation/Routes";
 import { formatPrice } from "../../utils/formatPrice";
 
 export const Header = ({ title, uppercase, myDream }) => {
@@ -79,6 +79,45 @@ export const Header = ({ title, uppercase, myDream }) => {
           {accumulated_points}
         </Text>
 
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 20,
+          }}
+        >
+          <Text
+            style={{
+              color: appTheme.COLORS.white,
+              fontSize: 13,
+              fontFamily: "Gilroy-Medium",
+              marginRight: 5,
+            }}
+          >
+            From
+          </Text>
+          <Text
+            style={{
+              color: appTheme.COLORS.white,
+              fontSize: 13,
+              fontFamily: "Gilroy-Medium",
+              // marginRight: 10,
+            }}
+          >
+            {moment(start_date).format("DD/MM/YYYY")} -
+          </Text>
+          <Text
+            style={{
+              color: appTheme.COLORS.white,
+              fontSize: 13,
+              fontFamily: "Gilroy-Medium",
+              marginLeft: 5,
+            }}
+          >
+            {moment(start_date).add(60, "days").format("DD/MM/YYYY")}
+          </Text>
+        </View>
+
         <Image
           style={{
             position: "absolute",
@@ -90,14 +129,14 @@ export const Header = ({ title, uppercase, myDream }) => {
         <Text
           style={{
             color: appTheme.COLORS.white,
-            fontSize: 15,
+            fontSize: 17,
             fontFamily: "Gilroy-Medium",
             marginTop: 50,
           }}
         >
           {`${formatPrice(
             dream_point - accumulated_points
-          )} left to reach your dream`}
+          )} points left to reach your dream`}
         </Text>
       </View>
     </View>
