@@ -22,14 +22,14 @@ const DreamScreen = () => {
     setVisible((visible) => !visible);
   }
 
-  const { dream } = route.params;
+  const { myDream } = route.params;
   return (
     <View
       style={{
         flex: 1,
       }}
     >
-      <Header uppercase title={`${dream?.name} dream`} />
+      <Header uppercase title={`${myDream?.dream_name} dream`} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -49,7 +49,7 @@ const DreamScreen = () => {
               marginBottom: 20,
             }}
           >
-            {dream?.name} dream rules
+            {myDream?.dream_name} dream rules
           </Text>
         </View>
 
@@ -138,7 +138,9 @@ const DreamScreen = () => {
         }}
       >
         <TouchableOpacity
-          onPress={() => navigation.navigate(Routes.MYDREAM_SCREEN, { dream })}
+          onPress={() =>
+            navigation.navigate(Routes.MYDREAM_SCREEN, { myDream })
+          }
           style={{
             backgroundColor: appTheme.COLORS.mainRed,
             width: "100%",

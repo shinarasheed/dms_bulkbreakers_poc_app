@@ -5,9 +5,7 @@ import { Header } from "../../components/account/MyDreamHeader";
 
 const MyDreamScreen = () => {
   const route = useRoute();
-  const { dream } = route.params;
-
-  const { points, name } = dream;
+  const { myDream } = route.params;
 
   return (
     <View
@@ -15,7 +13,7 @@ const MyDreamScreen = () => {
         flex: 1,
       }}
     >
-      <Header title={name} points={points} />
+      <Header myDream={myDream} />
     </View>
   );
 };

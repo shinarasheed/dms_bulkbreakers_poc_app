@@ -80,6 +80,42 @@ const Ratings = () => {
     setRatingValue(rating);
   };
 
+  const casesSold = productsToOder?.reduce(
+    (accumulator, item) =>
+      item?.buyingQuantity
+        ? accumulator + item?.buyingQuantity
+        : accumulator + item?.quantity,
+    0
+  );
+
+  const updateCasesSold = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const payload = {
+        BB_Code: theDistributor?.BB_Code,
+        dreamPoint: casesSold,
+        country: theDistributor?.country,
+      };
+
+      console.log(payload);
+
+      const { data } = await axios.patch(
+        `${CUSTOMER_BASE_URL}/mydream/update-points`,
+        payload,
+        config
+      );
+
+      // console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateOrderStatus = async (status) => {
     try {
       const config = {
@@ -103,6 +139,7 @@ const Ratings = () => {
       const { isSuccess } = data;
 
       if (isSuccess) {
+        updateCasesSold();
         setUpdating(false);
         toggle();
       } else {

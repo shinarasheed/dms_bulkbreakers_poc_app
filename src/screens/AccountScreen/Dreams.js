@@ -76,8 +76,6 @@ const Dreams = () => {
 
       setLoading(true);
 
-      console.log(body);
-
       const { data } = await axios.post(
         `${CUSTOMER_BASE_URL}/mydream/create-dream`,
         body,
@@ -183,7 +181,7 @@ const Dreams = () => {
               onPress={() => {
                 // setSelectedDream(dream);
                 // createADream();
-                navigation.navigate(Routes.DREAM_SCREEN, { dream });
+                navigation.navigate(Routes.DREAM_SCREEN, { myDream });
               }}
               key={dream.id}
               style={{

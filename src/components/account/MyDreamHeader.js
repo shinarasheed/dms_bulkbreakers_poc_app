@@ -7,8 +7,20 @@ import { icons, images } from "../../constants";
 import { Routes } from "../../navigation/Routes";
 import { formatPrice } from "../../utils/formatPrice";
 
-export const Header = ({ title, uppercase, points }) => {
+export const Header = ({ title, uppercase, myDream }) => {
   const navigation = useNavigation();
+
+  const {
+    BB_Code,
+    accumulated_points,
+    country,
+    dream_duration,
+    dream_name,
+    dream_point,
+    dream_status,
+    id,
+    start_date,
+  } = myDream;
   return (
     <View
       style={{
@@ -38,7 +50,7 @@ export const Header = ({ title, uppercase, points }) => {
             textTransform: uppercase ? "uppercase" : "capitalize",
           }}
         >
-          {`My ${title} Dream`}
+          {`My ${dream_name} Dream`}
         </Text>
       </View>
       <View
@@ -64,7 +76,7 @@ export const Header = ({ title, uppercase, points }) => {
             marginTop: 20,
           }}
         >
-          0
+          {accumulated_points}
         </Text>
 
         <Image
@@ -83,7 +95,9 @@ export const Header = ({ title, uppercase, points }) => {
             marginTop: 50,
           }}
         >
-          {`${formatPrice(points)} left to reach your dream`}
+          {`${formatPrice(
+            dream_point - accumulated_points
+          )} left to reach your dream`}
         </Text>
       </View>
     </View>
